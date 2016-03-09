@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ptresult>
+	<ovar>?X1</ovar>
+	<ovar>?X2</ovar>
+	<node>
+		<mapping>
+			<var name="?X1">a</var>
+			<var name="?Y1">b</var>
+		</mapping>
+		<mapping>
+			<var name="?X1">a</var>
+			<var name="?Y1">c</var>
+		</mapping>
+		<node>
+		   <mapping>
+		     <var name="?Y1">b</var>
+			 <var name="?X2">c</var>
+		   </mapping>
+		   <mapping>
+		     <var name="?Y1">b</var>
+			 <var name="?X2">d</var>
+		   </mapping>
+		</node>
+	</node>
+</ptresult>
