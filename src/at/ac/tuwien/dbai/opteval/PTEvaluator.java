@@ -12,6 +12,8 @@ import at.ac.tuwien.dbai.sparql.query.EvalPT;
 import at.ac.tuwien.dbai.sparql.query.Mapping;
 import at.ac.tuwien.dbai.sparql.query.MappingSet;
 import at.ac.tuwien.dbai.sparql.query.MaxMappingSet;
+import at.ac.tuwien.dbai.sparql.query.PatternTree;
+import at.ac.tuwien.dbai.sparql.query.TreeFactory;
 
 public class PTEvaluator {
 
@@ -32,7 +34,8 @@ public class PTEvaluator {
 
 		EvalPT pt = handler.getEvalPT();
 		MaxMappingSet mappings = new MaxMappingSet();
-		mappings.addAll(pt.evaluate());
+		MappingSet m = pt.evaluate();
+		mappings.addAll(m);
 		
 		//Output
 		int numberOfRows = 0;
@@ -54,7 +57,7 @@ public class PTEvaluator {
 	   
 	   	   
 	    outStream.println("---------------------------------------------------------------------------------------");
-	    outStream.println("  The number of rows returned: " + numberOfRows);
+	    outStream.println("  The number of rows returned: " + numberOfRows + "(not maximal: " + m.size() + ")");
 	    outStream.println("=======================================================================================");
 	    outStream.println();
 	}

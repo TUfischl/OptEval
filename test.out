@@ -7659,6 +7659,6 @@
 ?X1 -> <http://www.Department4.University0.edu/GraduateStudent106> | ?X2 -> <http://www.Department0.University0.edu/AssistantProfessor1>
 ?X1 -> <http://www.Department3.University0.edu/GraduateStudent117> | ?X2 -> <http://www.Department0.University0.edu/FullProfessor2>
 ---------------------------------------------------------------------------------------
-  The number of rows returned: 7658
+  The number of rows returned: 7658(not maximal: 10313)
 =======================================================================================
 
