@@ -34,7 +34,7 @@ public class MaxMappingSet extends MappingSet {
 		return false;
 	}
 
-	public void addAll(MaxMappingSet mset) {
+	public void addAll(MappingSet mset) {
 		for (Mapping m : mset) add(m);
 	}
 }

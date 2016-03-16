@@ -27,4 +27,11 @@ public class EvalPT {
 		return result;
 	}
 
+	public void setRoot(EvalTreeNode root) {
+		this.root = root;
+	}
+
+	public EvalTreeNode getRoot() {
+		return root;
+	}
 }

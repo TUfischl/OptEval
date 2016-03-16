@@ -78,4 +78,8 @@ public void add(String var, String value) { mapping.put(var,  value); }
 	  }
 	  return null;
    }
+
+	public Map<String, String> getMap() {
+		return mapping;
+	}
 }

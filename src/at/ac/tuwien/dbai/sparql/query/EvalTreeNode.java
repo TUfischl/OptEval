@@ -36,4 +36,11 @@ public class EvalTreeNode {
 		return results;
 	}
 
+	public MappingSet getMappings() {
+		return mappings;
+	}
+
+	public List<EvalTreeNode> getChildren() {
+		return children;
+	}
 }
