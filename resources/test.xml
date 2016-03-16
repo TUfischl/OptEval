@@ -14,12 +14,13 @@
 		<node>
 		   <mapping>
 		     <var name="?Y1">b</var>
-			 <var name="?X2">c</var>
+			  <var name="?X2">c</var>
 		   </mapping>
 		   <mapping>
 		     <var name="?Y1">b</var>
-			 <var name="?X2">d</var>
+			  <var name="?X2">d</var>
 		   </mapping>
 		</node>
 	</node>
 </ptresult>
+
