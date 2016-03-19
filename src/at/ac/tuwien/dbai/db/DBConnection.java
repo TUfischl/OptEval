@@ -5,12 +5,14 @@ import at.ac.tuwien.dbai.sparql.query.MappingSet;
 
 import java.io.PrintStream;
 import java.sql.*;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by michael on 14.03.16.
  */
-public class H2Con {
+public class DBConnection {
     private static final String DB_DRIVER = "org.h2.Driver";
     private static final String DB_CONNECTION = "jdbc:h2:~/test";
     private static final String DB_USER = "sa";
@@ -37,26 +39,13 @@ public class H2Con {
     public static MappingSet select(String selectSql) throws SQLException {
         Connection dbConnection = null;
         Statement statement = null;
-        MappingSet mappingSet = new MappingSet();
+
         try {
             dbConnection = getDBConnection();
             statement = dbConnection.createStatement();
             //System.out.println(selectSql);
             ResultSet resultSet = statement.executeQuery(selectSql);
-            ResultSetMetaData rsmd = resultSet.getMetaData();
-            int columnsNumber = rsmd.getColumnCount();
-
-            while (resultSet.next()) {
-                Mapping m = new Mapping();
-                for (int i = 1; i <= columnsNumber; i++) {
-                    String columnValue = resultSet.getString(i);
-                    if (columnValue != null) {
-                        m.add("?" + rsmd.getColumnName(i), columnValue);
-                    }
-                }
-                mappingSet.add(m);
-            }
-            return mappingSet;
+            return convertTable(resultSet);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } finally {
@@ -66,33 +55,53 @@ public class H2Con {
         return null;
     }
 
-    public static void insertIntoTable(String name, String[] cols, MappingSet mappingSet) throws SQLException {
+    private static MappingSet convertTable(ResultSet resultSet) throws SQLException {
+        MappingSet mappingSet = new MappingSet();
+        ResultSetMetaData rsmd = resultSet.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+
+        while (resultSet.next()) {
+            Mapping m = new Mapping();
+            for (int i = 1; i <= columnsNumber; i++) {
+                String columnValue = resultSet.getString(i);
+                if (columnValue != null) {
+                    m.add("?" + rsmd.getColumnName(i), columnValue);
+                }
+            }
+            mappingSet.add(m);
+        }
+        return mappingSet;
+    }
+
+    public static void insertIntoTable(String name, Set<String> vars, MappingSet mappingSet) throws SQLException {
+        System.out.println("Insert into " + name);
         Connection dbConnection = null;
         Statement statement = null;
 
-        StringBuilder sbcols = new StringBuilder();
+        String[] cols = vars.toArray(new String[vars.size()]);
+        StringBuilder sbCols = new StringBuilder();
         StringBuilder sbValues = new StringBuilder();
-        sbcols.append("INSERT INTO ").append(name).append("(");
+        sbCols.append("INSERT INTO ").append(name).append("(");
         sbValues.append(" VALUES(");
         for (int i = 0; i < cols.length; i++) {
-            sbcols.append(cols[i].substring(1));
+            sbCols.append(cols[i].substring(1));
             sbValues.append("?");
             if (i != cols.length - 1) {
-                sbcols.append(", ");
+                sbCols.append(", ");
                 sbValues.append(", ");
             } else {
-                sbcols.append(")");
+                sbCols.append(")");
                 sbValues.append(")");
             }
         }
-        sbcols.append(sbValues);
-        String sql = sbcols.toString();
+        sbCols.append(sbValues);
+        String sql = sbCols.toString();
 
         try {
             dbConnection = getDBConnection();
             PreparedStatement ps = dbConnection.prepareStatement(sql);
 
-            final int batchSize = 500;
+            final int batchSize = 1000;
             int count = 0;
 
             for (Mapping mapping: mappingSet) {
@@ -105,10 +114,12 @@ public class H2Con {
 
                 if(++count % batchSize == 0) {
                     ps.executeBatch();
+                    System.out.println("executeBatch for " + name + ": " + count + " - " + mappingSet.size());
                 }
             }
             ps.executeBatch(); // insert remaining records
             //System.out.println("Inserted MappingSet");
+            System.out.println("executeBatch finished for" + name);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } finally {
@@ -117,19 +128,21 @@ public class H2Con {
         }
     }
 
-    public static void createTable(String name, String[] cols) throws SQLException {
+    public static void createTable(String name, Set<String> cols) throws SQLException {
         Connection dbConnection = null;
         Statement statement = null;
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("CREATE TABLE ").append(name).append("(");
-        for (int i = 0; i < cols.length; i++) {
-            stringBuilder.append(cols[i].substring(1)).append(" VARCHAR(200)");
-            if (i != cols.length - 1) {
+        int i = 0;
+        for (String var : cols) {
+            stringBuilder.append(var.substring(1)).append(" VARCHAR(200)");
+            if (i != cols.size() - 1) {
                 stringBuilder.append(", ");
             } else {
                 stringBuilder.append(")");
             }
+            i++;
         }
         String createTableSQL = stringBuilder.toString();
 
