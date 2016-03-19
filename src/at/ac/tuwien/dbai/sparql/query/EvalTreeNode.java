@@ -1,18 +1,27 @@
 package at.ac.tuwien.dbai.sparql.query;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 public class EvalTreeNode {
 	private MappingSet mappings;
 	private List<EvalTreeNode> children;
+    private HashSet<String> localVars;
+    private int id;
 
-	public EvalTreeNode() {
+	public EvalTreeNode(int id) {
 		mappings = new MappingSet();
 		children = new LinkedList<EvalTreeNode>();
+        localVars = new HashSet<>();
+        this.id = id;
 	}
-	
-	public void addMapping(Mapping m) {
+
+    public String getId() {
+        return "t"+id;
+    }
+
+    public void addMapping(Mapping m) {
 		mappings.add(m);
 	}
 	
@@ -43,4 +52,12 @@ public class EvalTreeNode {
 	public List<EvalTreeNode> getChildren() {
 		return children;
 	}
+
+    public HashSet<String> getLocalVars() {
+        return localVars;
+    }
+
+    public void setLocalVars(HashSet<String> localVars) {
+        this.localVars = localVars;
+    }
 }

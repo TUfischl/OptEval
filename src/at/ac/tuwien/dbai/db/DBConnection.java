@@ -2,17 +2,15 @@ package at.ac.tuwien.dbai.db;
 
 import at.ac.tuwien.dbai.sparql.query.Mapping;
 import at.ac.tuwien.dbai.sparql.query.MappingSet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.PrintStream;
 import java.sql.*;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by michael on 14.03.16.
- */
 public class DBConnection {
+    static final Logger logger = LogManager.getLogger(DBConnection.class.getName());
+
     private static final String DB_DRIVER = "org.h2.Driver";
     private static final String DB_CONNECTION = "jdbc:h2:~/test";
     private static final String DB_USER = "sa";
@@ -23,14 +21,13 @@ public class DBConnection {
         try {
             Class.forName(DB_DRIVER);
         } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         try {
             dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER,
                     DB_PASSWORD);
-            return dbConnection;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return dbConnection;
     }
@@ -39,33 +36,35 @@ public class DBConnection {
     public static MappingSet select(String selectSql) throws SQLException {
         Connection dbConnection = null;
         Statement statement = null;
+        MappingSet mappingSet = null;
 
         try {
             dbConnection = getDBConnection();
             statement = dbConnection.createStatement();
-            //System.out.println(selectSql);
+            logger.info("Query: " + selectSql);
             ResultSet resultSet = statement.executeQuery(selectSql);
-            return convertTable(resultSet);
+            logger.info("Query: finished");
+            mappingSet = convertTable(resultSet);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         } finally {
             if (statement != null) statement.close();
             if (dbConnection != null) dbConnection.close();
         }
-        return null;
+        return mappingSet;
     }
 
     private static MappingSet convertTable(ResultSet resultSet) throws SQLException {
         MappingSet mappingSet = new MappingSet();
-        ResultSetMetaData rsmd = resultSet.getMetaData();
-        int columnsNumber = rsmd.getColumnCount();
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnsNumber = metaData.getColumnCount();
 
         while (resultSet.next()) {
             Mapping m = new Mapping();
             for (int i = 1; i <= columnsNumber; i++) {
                 String columnValue = resultSet.getString(i);
                 if (columnValue != null) {
-                    m.add("?" + rsmd.getColumnName(i), columnValue);
+                    m.add("?" + metaData.getColumnName(i), columnValue);
                 }
             }
             mappingSet.add(m);
@@ -74,9 +73,9 @@ public class DBConnection {
     }
 
     public static void insertIntoTable(String name, Set<String> vars, MappingSet mappingSet) throws SQLException {
-        System.out.println("Insert into " + name);
+        logger.info("Insert into " + name);
         Connection dbConnection = null;
-        Statement statement = null;
+        PreparedStatement ps = null;
 
         String[] cols = vars.toArray(new String[vars.size()]);
         StringBuilder sbCols = new StringBuilder();
@@ -99,7 +98,7 @@ public class DBConnection {
 
         try {
             dbConnection = getDBConnection();
-            PreparedStatement ps = dbConnection.prepareStatement(sql);
+            ps = dbConnection.prepareStatement(sql);
 
             final int batchSize = 1000;
             int count = 0;
@@ -109,29 +108,23 @@ public class DBConnection {
                     String value = mapping.getMap().get(cols[i]);
                     ps.setString(i+1, value);
                 }
-
                 ps.addBatch();
-
                 if(++count % batchSize == 0) {
                     ps.executeBatch();
-                    System.out.println("executeBatch for " + name + ": " + count + " - " + mappingSet.size());
+                    logger.info("executeBatch for " + name + ": " + count + " - " + mappingSet.size());
                 }
             }
             ps.executeBatch(); // insert remaining records
-            //System.out.println("Inserted MappingSet");
-            System.out.println("executeBatch finished for" + name);
+            logger.info("executeBatch for " + name + ": finished");
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         } finally {
-            if (statement != null) statement.close();
+            if (ps != null) ps.close();
             if (dbConnection != null) dbConnection.close();
         }
     }
 
     public static void createTable(String name, Set<String> cols) throws SQLException {
-        Connection dbConnection = null;
-        Statement statement = null;
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("CREATE TABLE ").append(name).append("(");
         int i = 0;
@@ -144,36 +137,25 @@ public class DBConnection {
             }
             i++;
         }
-        String createTableSQL = stringBuilder.toString();
 
-        try {
-            dbConnection = getDBConnection();
-            statement = dbConnection.createStatement();
-            //System.out.println(createTableSQL);
-            statement.execute(createTableSQL);
-            //System.out.println("Table '" + name + "' is created!");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            if (statement != null) statement.close();
-            if (dbConnection != null) dbConnection.close();
-        }
+        executeDDLStatement(stringBuilder.toString());
     }
 
     public static void dropTableIfExists(String name) throws SQLException {
+        String dropTableSQL = "DROP TABLE IF EXISTS " + name + ";";
+        executeDDLStatement(dropTableSQL);
+    }
+
+    private static void executeDDLStatement(String createTableSQL) throws SQLException {
         Connection dbConnection = null;
         Statement statement = null;
-
-        String dropTableSQL = "DROP TABLE IF EXISTS " + name + ";";
 
         try {
             dbConnection = getDBConnection();
             statement = dbConnection.createStatement();
-            //System.out.println(dropTableSQL);
-            statement.execute(dropTableSQL);
-            //System.out.println("Table '" + name + "' is dropped!");
+            statement.execute(createTableSQL);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         } finally {
             if (statement != null) statement.close();
             if (dbConnection != null) dbConnection.close();

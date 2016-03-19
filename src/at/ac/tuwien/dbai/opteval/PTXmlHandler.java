@@ -19,10 +19,12 @@ public class PTXmlHandler extends DefaultHandler {
     private String currentString;
     private String currentVar;
     private Mapping currentMapping;
+    private int nodeCount;
 	
 	public PTXmlHandler() {
 		pt = new EvalPT();
-		helperStack = new Stack<EvalTreeNode>();
+		helperStack = new Stack<>();
+        nodeCount = 0;
 	}
 
 	public void characters(char[] text, int start, int length) throws SAXException {
@@ -37,7 +39,8 @@ public class PTXmlHandler extends DefaultHandler {
 		if ("ovar".equals(localName)) currentString = "";
 		
 		if ("node".equals(localName)) {
-			EvalTreeNode n = new EvalTreeNode();
+			EvalTreeNode n = new EvalTreeNode(nodeCount);
+            nodeCount++;
 			helperStack.push(n);
 		}
 		
@@ -47,6 +50,8 @@ public class PTXmlHandler extends DefaultHandler {
 			currentString = "";
 			currentVar = atts.getValue("name");
 		}
+
+        if ("nodeVar".equals(localName)) currentString = "";
 	}
 
 	public void endElement(String namespaceURI, String localName, String qualifiedName) throws SAXException {
@@ -64,9 +69,7 @@ public class PTXmlHandler extends DefaultHandler {
 		
 		if ("var".equals(localName)) currentMapping.add(currentVar, StringEscapeUtils.unescapeXml(currentString));
 
-		
-		
-		
+        if ("nodeVar".equals(localName)) helperStack.peek().getLocalVars().add(currentString);
 	}
 
 	public EvalPT getEvalPT() {
