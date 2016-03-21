@@ -10,22 +10,22 @@ import java.util.Set;
 
 public class DBConnection {
     static final Logger logger = LogManager.getLogger(DBConnection.class.getName());
+    private static DBMetaData metaData = DBMetaData.getMetaData(DBMetaData.DBType.HSQLDB);
 
-    private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:~/test";
-    private static final String DB_USER = "sa";
-    private static final String DB_PASSWORD = "";
+    public static void setMetaData(DBMetaData.DBType type) {
+        DBConnection.metaData = DBMetaData.getMetaData(type);
+    }
 
     private static Connection getDBConnection() {
         Connection dbConnection = null;
         try {
-            Class.forName(DB_DRIVER);
+            Class.forName(metaData.getDriver());
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
         }
         try {
-            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER,
-                    DB_PASSWORD);
+            dbConnection = DriverManager.getConnection(metaData.getConnection(), metaData.getUser(),
+                    metaData.getPassword());
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }

@@ -1,7 +1,6 @@
 package at.ac.tuwien.dbai.sparql.query;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import at.ac.tuwien.dbai.db.DBManager;
@@ -18,7 +17,7 @@ public class EvalPT {
 	private EvalTreeNode root;
 
 	public EvalPT() {
-		outputVars = new HashSet<String>();
+		outputVars = new HashSet<>();
 	}
 	
 	public void addOutputVar(String var) {

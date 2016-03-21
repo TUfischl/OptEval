@@ -2,3 +2,5 @@
 /target/
 .idea
 output
+derbyDB
+derby.log

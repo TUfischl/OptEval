@@ -3,8 +3,6 @@ package at.ac.tuwien.dbai.db;
 import at.ac.tuwien.dbai.sparql.query.EvalPT;
 import at.ac.tuwien.dbai.sparql.query.EvalTreeNode;
 import at.ac.tuwien.dbai.sparql.query.MappingSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -19,13 +17,14 @@ public class DBManager {
     }
 
     public MappingSet evaluate() {
+        MappingSet set = null;
         try {
             createAllTables();
-            return DBConnection.select(select.toString());
+            set = DBConnection.select(select.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return set;
     }
 
     private void createAllTables() throws SQLException {
@@ -45,8 +44,6 @@ public class DBManager {
         for (EvalTreeNode child : node.getChildren()) {
             String childTableName = child.getId();
             select.append("\nLEFT OUTER JOIN ")
-                    .append(childTableName)
-                    .append(" ")
                     .append(childTableName)
                     .append("\n\ton ")
                     .append(onClause(child));
@@ -91,7 +88,8 @@ public class DBManager {
         int i = 0;
         for (String varTemp : rootVars) {
             String var = varTemp.substring(1);
-            sb.append("t0.")
+            sb.append(evalPT.getRoot().getId())
+                    .append(".")
                     .append(var)
                     .append("=")
                     .append(node.getId())
