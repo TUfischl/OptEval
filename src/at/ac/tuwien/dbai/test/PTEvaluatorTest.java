@@ -1,4 +1,3 @@
-import at.ac.tuwien.dbai.db.DBConnection;
 import at.ac.tuwien.dbai.db.DBMetaData;
 import at.ac.tuwien.dbai.opteval.PTXmlHandler;
 import at.ac.tuwien.dbai.sparql.query.EvalPT;
@@ -7,7 +6,8 @@ import at.ac.tuwien.dbai.sparql.query.MaxMappingSet;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PTEvaluatorTest {
 
@@ -20,20 +20,19 @@ public class PTEvaluatorTest {
         parser.parse("resources/test.xml");
 
         EvalPT pt = handler.getEvalPT();
-        MaxMappingSet mappingsIter = testEval(EvalPT.EvaluationType.ITERATIVE, pt);
+        MaxMappingSet mappingsIter = testEval(EvalPT.EvaluationType.ITERATIVE, null, pt);
         System.out.println("Finished evaluate ITERATIVE");
         for (DBMetaData.DBType type : DBMetaData.DBType.values()) {
-            DBConnection.setMetaData(type);
-            MaxMappingSet mappingsDB = testEval(EvalPT.EvaluationType.DB, pt);
+            MaxMappingSet mappingsDB = testEval(EvalPT.EvaluationType.DB, type, pt);
             System.out.println("Finished evaluate DB - " + type.toString());
             assertEquals(mappingsDB.size(), mappingsIter.size());
             assertTrue(mappingsIter.containsAll(mappingsDB));
         }
     }
 
-    private MaxMappingSet testEval(EvalPT.EvaluationType evalType, EvalPT pt) {
+    private MaxMappingSet testEval(EvalPT.EvaluationType evalType, DBMetaData.DBType type, EvalPT pt) {
         MaxMappingSet mappingsDB = new MaxMappingSet();
-        MappingSet setDB = pt.evaluate(evalType);
+        MappingSet setDB = pt.evaluate(evalType, type);
         mappingsDB.addAll(setDB);
         return mappingsDB;
     }

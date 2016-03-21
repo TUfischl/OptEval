@@ -1,10 +1,11 @@
 package at.ac.tuwien.dbai.sparql.query;
 
+import at.ac.tuwien.dbai.db.DBManager;
+import at.ac.tuwien.dbai.db.DBMetaData;
+import lombok.Data;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import at.ac.tuwien.dbai.db.DBManager;
-import lombok.Data;
 
 @Data
 public class EvalPT {
@@ -24,12 +25,12 @@ public class EvalPT {
 		outputVars.add(var);
 	}
 	
-	public MappingSet evaluate(EvaluationType type) {
+	public MappingSet evaluate(EvaluationType type, DBMetaData.DBType dbType) {
 		switch (type) {
 			case ITERATIVE:
 				return this.iterativeEvaluation();
 			case DB:
-				return this.dbEvaluation();
+				return this.dbEvaluation(dbType);
 			default:
 				return null;
 		}
@@ -41,8 +42,8 @@ public class EvalPT {
 		return result;
 	}
 
-    private MappingSet dbEvaluation() {
-        DBManager manager = new DBManager(this);
+    private MappingSet dbEvaluation(DBMetaData.DBType dbType) {
+        DBManager manager = new DBManager(this, dbType);
         return manager.evaluate();
     }
 

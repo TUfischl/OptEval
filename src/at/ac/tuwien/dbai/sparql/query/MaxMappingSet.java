@@ -1,9 +1,9 @@
 package at.ac.tuwien.dbai.sparql.query;
 
-import java.util.Iterator;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.Iterator;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -32,9 +32,5 @@ public class MaxMappingSet extends MappingSet {
 			}
 		}
 		return false;
-	}
-
-	public void addAll(MappingSet mset) {
-		for (Mapping m : mset) add(m);
 	}
 }

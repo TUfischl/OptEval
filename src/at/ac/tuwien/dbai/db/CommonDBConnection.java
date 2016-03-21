@@ -8,15 +8,15 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.Set;
 
-public class DBConnection {
-    static final Logger logger = LogManager.getLogger(DBConnection.class.getName());
-    private static DBMetaData metaData = DBMetaData.getMetaData(DBMetaData.DBType.HSQLDB);
+public class CommonDBConnection {
+    static final Logger logger = LogManager.getLogger(CommonDBConnection.class.getName());
+    private DBMetaData metaData;
 
-    public static void setMetaData(DBMetaData.DBType type) {
-        DBConnection.metaData = DBMetaData.getMetaData(type);
+    public CommonDBConnection(DBMetaData.DBType type) {
+        this.metaData = DBMetaData.getMetaData(type);
     }
 
-    private static Connection getDBConnection() {
+    private Connection getDBConnection() {
         Connection dbConnection = null;
         try {
             Class.forName(metaData.getDriver());
@@ -33,7 +33,7 @@ public class DBConnection {
     }
 
 
-    public static MappingSet select(String selectSql) throws SQLException {
+    public MappingSet select(String selectSql) throws SQLException {
         Connection dbConnection = null;
         Statement statement = null;
         MappingSet mappingSet = null;
@@ -54,7 +54,7 @@ public class DBConnection {
         return mappingSet;
     }
 
-    private static MappingSet convertTable(ResultSet resultSet) throws SQLException {
+    private MappingSet convertTable(ResultSet resultSet) throws SQLException {
         MappingSet mappingSet = new MappingSet();
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnsNumber = metaData.getColumnCount();
@@ -72,7 +72,7 @@ public class DBConnection {
         return mappingSet;
     }
 
-    public static void insertIntoTable(String name, Set<String> vars, MappingSet mappingSet) throws SQLException {
+    public void insertIntoTable(String name, Set<String> vars, MappingSet mappingSet) throws SQLException {
         logger.info("Insert into " + name);
         Connection dbConnection = null;
         PreparedStatement ps = null;
@@ -103,13 +103,13 @@ public class DBConnection {
             final int batchSize = 1000;
             int count = 0;
 
-            for (Mapping mapping: mappingSet) {
+            for (Mapping mapping : mappingSet) {
                 for (int i = 0; i < cols.length; i++) {
                     String value = mapping.getMap().get(cols[i]);
-                    ps.setString(i+1, value);
+                    ps.setString(i + 1, value);
                 }
                 ps.addBatch();
-                if(++count % batchSize == 0) {
+                if (++count % batchSize == 0) {
                     ps.executeBatch();
                     logger.info("executeBatch for " + name + ": " + count + " - " + mappingSet.size());
                 }
@@ -124,7 +124,7 @@ public class DBConnection {
         }
     }
 
-    public static void createTable(String name, Set<String> cols) throws SQLException {
+    public void createTable(String name, Set<String> cols) throws SQLException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("CREATE TABLE ").append(name).append("(");
         int i = 0;
@@ -141,12 +141,12 @@ public class DBConnection {
         executeDDLStatement(stringBuilder.toString());
     }
 
-    public static void dropTableIfExists(String name) throws SQLException {
+    public void dropTableIfExists(String name) throws SQLException {
         String dropTableSQL = "DROP TABLE IF EXISTS " + name + ";";
         executeDDLStatement(dropTableSQL);
     }
 
-    private static void executeDDLStatement(String createTableSQL) throws SQLException {
+    void executeDDLStatement(String createTableSQL) throws SQLException {
         Connection dbConnection = null;
         Statement statement = null;
 

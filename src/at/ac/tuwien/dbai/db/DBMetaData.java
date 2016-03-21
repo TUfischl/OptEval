@@ -1,21 +1,20 @@
 package at.ac.tuwien.dbai.db;
 
-/**
- * Created by michael on 21.03.16.
- */
 public class DBMetaData {
 
     public enum DBType {
-        H2, HSQLDB, Derby
+        H2, HSQLDB, DERBY
     }
 
     private String driver;
     private String connection;
     private String user;
     private String password;
+    private DBType type;
 
     public static DBMetaData getMetaData(DBType type) {
         DBMetaData meta = new DBMetaData();
+        meta.type = type;
         switch (type) {
             case H2:
                 meta.driver = "org.h2.Driver";
@@ -29,7 +28,7 @@ public class DBMetaData {
                 meta.user = "SA";
                 meta.password = "";
                 break;
-            case Derby:
+            case DERBY:
                 meta.driver = "org.apache.derby.jdbc.EmbeddedDriver";
                 meta.connection = "jdbc:derby:derbyDB;create=true";
                 meta.user = "";
@@ -53,5 +52,9 @@ public class DBMetaData {
 
     public String getPassword() {
         return password;
+    }
+
+    public DBType getType() {
+        return type;
     }
 }

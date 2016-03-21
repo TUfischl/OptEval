@@ -11,16 +11,18 @@ import java.util.Set;
 public class DBManager {
     private EvalPT evalPT;
     private StringBuilder select;
+    private CommonDBConnection dbConnection;
 
-    public DBManager(EvalPT evalPT) {
+    public DBManager(EvalPT evalPT, DBMetaData.DBType type) {
         this.evalPT = evalPT;
+        this.dbConnection = DBConnectionFactory.getConnection(type);
     }
 
     public MappingSet evaluate() {
         MappingSet set = null;
         try {
             createAllTables();
-            set = DBConnection.select(select.toString());
+            set = dbConnection.select(select.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,9 +39,9 @@ public class DBManager {
     }
 
     private void createSingleTable(EvalTreeNode node, String tableName) throws SQLException {
-        DBConnection.dropTableIfExists(tableName);
-        DBConnection.createTable(tableName, node.getLocalVars());
-        DBConnection.insertIntoTable(tableName, node.getLocalVars(), node.getMappings());
+        dbConnection.dropTableIfExists(tableName);
+        dbConnection.createTable(tableName, node.getLocalVars());
+        dbConnection.insertIntoTable(tableName, node.getLocalVars(), node.getMappings());
 
         for (EvalTreeNode child : node.getChildren()) {
             String childTableName = child.getId();
