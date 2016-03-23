@@ -5,6 +5,7 @@ import at.ac.tuwien.dbai.sparql.query.EvalTreeNode;
 import at.ac.tuwien.dbai.sparql.query.MappingSet;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,10 +13,39 @@ public class DBManager {
     private EvalPT evalPT;
     private StringBuilder select;
     private CommonDBConnection dbConnection;
+    private HashMap<String, HashSet<String>> joinCols;
+    private Boolean useIndices;
 
-    public DBManager(EvalPT evalPT, DBMetaData.DBType type) {
+    public DBManager(EvalPT evalPT, DBMetaData.DBType type, Boolean useIndices) {
         this.evalPT = evalPT;
         this.dbConnection = DBConnectionFactory.getConnection(type);
+        this.useIndices = useIndices;
+        this.joinCols = new HashMap<>();
+        joinCols.put(evalPT.getRoot().getId(), new HashSet<>());
+        evalPT.getRoot().getChildren().forEach(this::findJoinCols);
+    }
+
+    private void findJoinCols(EvalTreeNode node) {
+        EvalTreeNode root = evalPT.getRoot();
+
+        HashSet<String> varsForNode = joinCols.get(node.getId());
+        if (varsForNode == null) {
+            varsForNode = new HashSet<>();
+            joinCols.put(node.getId(), varsForNode);
+        }
+
+        HashSet<String> equalVars = new HashSet<>(root.getLocalVars());
+        Set<String> nodeVars = node.getLocalVars();
+        equalVars.retainAll(nodeVars);
+
+        //Add to node
+        varsForNode.addAll(equalVars);
+
+        //Add to root
+        HashSet<String> rootVars = joinCols.get(root.getId());
+        rootVars.addAll(equalVars);
+
+        node.getChildren().forEach(this::findJoinCols);
     }
 
     public MappingSet evaluate() {
@@ -35,12 +65,15 @@ public class DBManager {
                 .append(stringFromVars(evalPT.getOutputVars()))
                 .append("\nFROM ")
                 .append(evalPT.getRoot().getId());
-        createSingleTable(evalPT.getRoot(), evalPT.getRoot().getId());
+        createSingleTable(evalPT.getRoot());
     }
 
-    private void createSingleTable(EvalTreeNode node, String tableName) throws SQLException {
+    private void createSingleTable(EvalTreeNode node) throws SQLException {
+        String tableName = node.getId();
+
         dbConnection.dropTableIfExists(tableName);
         dbConnection.createTable(tableName, node.getLocalVars());
+        if (useIndices) createIndicesForNode(node);
         dbConnection.insertIntoTable(tableName, node.getLocalVars(), node.getMappings());
 
         for (EvalTreeNode child : node.getChildren()) {
@@ -50,7 +83,16 @@ public class DBManager {
                     .append("\n\ton ")
                     .append(onClause(child));
 
-            this.createSingleTable(child, childTableName);
+            this.createSingleTable(child);
+        }
+    }
+
+    private void createIndicesForNode(EvalTreeNode node) throws SQLException {
+        HashSet<String> equalVars = joinCols.get(node.getId());
+        for (String tmpCol : equalVars) {
+            String col = tmpCol.substring(1);
+            String indexName = "eval_index_" + node.getId() + "_" + col;
+            dbConnection.createIndex(node.getId(), col, indexName);
         }
     }
 
@@ -82,13 +124,11 @@ public class DBManager {
     }
 
     private String onClause(EvalTreeNode node) {
-        HashSet<String> rootVars = new HashSet<>(evalPT.getRoot().getLocalVars());
-        Set<String> nodeVars = node.getLocalVars();
+        HashSet<String> equalCols = joinCols.get(node.getId());
         StringBuilder sb = new StringBuilder();
 
-        rootVars.retainAll(nodeVars);
         int i = 0;
-        for (String varTemp : rootVars) {
+        for (String varTemp : equalCols) {
             String var = varTemp.substring(1);
             sb.append(evalPT.getRoot().getId())
                     .append(".")
@@ -98,7 +138,7 @@ public class DBManager {
                     .append(".")
                     .append(var)
                     .append(" ");
-            if (i != rootVars.size() - 1) {
+            if (i != equalCols.size() - 1) {
                 sb.append("AND ");
             }
             i++;

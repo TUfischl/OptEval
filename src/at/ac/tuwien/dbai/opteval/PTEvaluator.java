@@ -1,5 +1,6 @@
 package at.ac.tuwien.dbai.opteval;
 
+import at.ac.tuwien.dbai.benchmark.Benchmark;
 import at.ac.tuwien.dbai.db.DBMetaData;
 import at.ac.tuwien.dbai.sparql.query.EvalPT;
 import at.ac.tuwien.dbai.sparql.query.Mapping;
@@ -8,15 +9,19 @@ import at.ac.tuwien.dbai.sparql.query.MaxMappingSet;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class PTEvaluator {
     static final Logger logger = LogManager.getLogger(PTEvaluator.class.getName());
-    private long startTime;
+    static final Benchmark benchmark = new Benchmark(new ArrayList<>(Arrays.asList("Read", "Evaluation", "MaxSet")));
     private String[] args = null;
     private Options options = new Options();
 
@@ -33,6 +38,8 @@ public class PTEvaluator {
         options.addOption("o", "output", true, "use this file as output");
         options.addOption("h", "help", false, "prints help");
         options.addOption("b", "benchmark", false, "benchmarks all algorithms");
+        options.addOption("r", "runs", true, "number of runs");
+        options.addOption("ni", "noIndices", false, "does NOT use indices");
     }
 
     public void parse() throws Exception {
@@ -40,23 +47,30 @@ public class PTEvaluator {
         CommandLine cmd = commandLineParser.parse(options, args);
         if (cmd.hasOption("h")) help();
 
-        startTime = System.nanoTime();
-        XMLReader parser = XMLReaderFactory.createXMLReader();
-        PTXmlHandler handler = new PTXmlHandler();
-        parser.setContentHandler(handler);
 
+        Boolean useIndices = !cmd.hasOption("ni");
         String inputFilePath = "resources/test.xml";
         if (cmd.hasOption("i")) {
             inputFilePath = cmd.getOptionValue("i");
         }
-        parser.parse(inputFilePath);
-        EvalPT pt = handler.getEvalPT();
-        printTime("XML");
+        int runs = 1;
+        if (cmd.hasOption("r")) {
+            String runsString = cmd.getOptionValue("r");
+            try {
+                runs = Integer.parseInt(runsString);
+                if (runs <= 0) help();
+            } catch (NumberFormatException ex) {
+                help();
+            }
+        }
 
         if (cmd.hasOption("b")) {
-            evaluateAlgorithm(EvalPT.EvaluationType.ITERATIVE, null, pt);
-            for (DBMetaData.DBType dbType : DBMetaData.DBType.values()) {
-                evaluateAlgorithm(EvalPT.EvaluationType.DB, dbType, pt);
+            for (int i = 0; i < runs; i++) {
+                benchmark.addRun();
+                evaluateAlgorithm(EvalPT.EvaluationType.ITERATIVE, null, inputFilePath, false);
+                for (DBMetaData.DBType dbType : DBMetaData.DBType.values()) {
+                    evaluateAlgorithm(EvalPT.EvaluationType.DB, dbType, inputFilePath, useIndices);
+                }
             }
         } else {
             EvalPT.EvaluationType evaluationType;
@@ -81,29 +95,48 @@ public class PTEvaluator {
                 outputFilePath = cmd.getOptionValue("o");
             }
 
-            MaxMappingSet mappings = evaluateAlgorithm(evaluationType, dbType, pt);
+            MaxMappingSet mappings = null;
+            for (int i = 0; i < runs; i++) {
+                benchmark.addRun();
+                mappings = evaluateAlgorithm(evaluationType, dbType, inputFilePath, useIndices);
+            }
 
             PrintStream outStream = new PrintStream(outputFilePath);
-            writeToPrintStream(outStream, mappings);
-            printTime("Output");
+            writeToPrintStream(outStream, mappings); //outputs last run
         }
+        benchmark.print();
     }
 
-    private MaxMappingSet evaluateAlgorithm(EvalPT.EvaluationType evaluationType, DBMetaData.DBType dbType, EvalPT pt) {
-        MappingSet set = pt.evaluate(evaluationType, dbType);
-        printTime("evaluate");
+    private EvalPT getEvalPT(String inputFilePath) throws SAXException, IOException {
+        XMLReader parser = XMLReaderFactory.createXMLReader();
+        PTXmlHandler handler = new PTXmlHandler();
+        parser.setContentHandler(handler);
+        parser.parse(inputFilePath);
+        return handler.getEvalPT();
+    }
+
+    private MaxMappingSet evaluateAlgorithm(EvalPT.EvaluationType evaluationType, DBMetaData.DBType dbType, String inputFilePath, Boolean useIndices) throws IOException, SAXException {
+        benchmark.addEntry(modeString(evaluationType, dbType));
+
+        EvalPT pt = getEvalPT(inputFilePath);
+        benchmark.addTime();
+
+        MappingSet set = pt.evaluate(evaluationType, dbType, useIndices);
+        benchmark.addTime();
 
         MaxMappingSet mappings = new MaxMappingSet();
         mappings.addAll(set);
-        printTime("MaxSet");
+        benchmark.addTime();
 
         return mappings;
     }
 
-    private void printTime(String event) {
-        long estimatedTime = System.nanoTime() - startTime;
-        double seconds = (double) estimatedTime / 1000000000.0;
-        logger.info("TIME - " + event + ": " + seconds + " sec");
+    private String modeString(EvalPT.EvaluationType evaluationType, DBMetaData.DBType dbType) {
+        String temp = evaluationType.toString();
+        if (dbType != null) {
+            temp += " - " + dbType.toString();
+        }
+        return temp;
     }
 
     private void help() {

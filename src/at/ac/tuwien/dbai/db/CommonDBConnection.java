@@ -141,6 +141,16 @@ public class CommonDBConnection {
         executeDDLStatement(stringBuilder.toString());
     }
 
+    public void createIndex(String table, String column, String indexName) throws SQLException {
+        String createIndexSQL = "CREATE INDEX " + indexName + " ON " + table + "(" + column + ")";
+        executeDDLStatement(createIndexSQL);
+    }
+
+    public void dropIndex(String table, String indexName) throws SQLException {
+        String createIndexSQL = "DROP INDEX IF EXISTS " + table + "." + indexName;
+        executeDDLStatement(createIndexSQL);
+    }
+
     public void dropTableIfExists(String name) throws SQLException {
         String dropTableSQL = "DROP TABLE IF EXISTS " + name + ";";
         executeDDLStatement(dropTableSQL);

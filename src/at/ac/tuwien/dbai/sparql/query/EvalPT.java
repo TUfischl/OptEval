@@ -25,12 +25,12 @@ public class EvalPT {
 		outputVars.add(var);
 	}
 	
-	public MappingSet evaluate(EvaluationType type, DBMetaData.DBType dbType) {
+	public MappingSet evaluate(EvaluationType type, DBMetaData.DBType dbType, Boolean useIndices) {
 		switch (type) {
 			case ITERATIVE:
 				return this.iterativeEvaluation();
 			case DB:
-				return this.dbEvaluation(dbType);
+				return this.dbEvaluation(dbType, useIndices);
 			default:
 				return null;
 		}
@@ -42,8 +42,8 @@ public class EvalPT {
 		return result;
 	}
 
-    private MappingSet dbEvaluation(DBMetaData.DBType dbType) {
-        DBManager manager = new DBManager(this, dbType);
+    private MappingSet dbEvaluation(DBMetaData.DBType dbType, Boolean useIndices) {
+        DBManager manager = new DBManager(this, dbType, useIndices);
         return manager.evaluate();
     }
 
