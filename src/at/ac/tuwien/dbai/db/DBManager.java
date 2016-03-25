@@ -3,6 +3,7 @@ package at.ac.tuwien.dbai.db;
 import at.ac.tuwien.dbai.sparql.query.EvalPT;
 import at.ac.tuwien.dbai.sparql.query.EvalTreeNode;
 import at.ac.tuwien.dbai.sparql.query.MappingSet;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -13,38 +14,65 @@ public class DBManager {
     private EvalPT evalPT;
     private StringBuilder select;
     private CommonDBConnection dbConnection;
-    private HashMap<String, HashSet<String>> joinCols;
+    private HashMap<String, HashSet<TableCol>> joinCols;
     private Boolean useIndices;
+
+
+    public class TableCol {
+        private String col;
+        private String table;
+
+        public TableCol(String col, String table) {
+            this.col = col;
+            this.table = table;
+        }
+
+        @Override
+        public String toString() {
+            return table + "." + col.substring(1);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof TableCol))
+                return false;
+            if (obj == this)
+                return true;
+
+            TableCol rhs = (TableCol) obj;
+            return new EqualsBuilder().
+                    append(col, rhs.col).
+                    append(table, rhs.table).
+                    isEquals();
+        }
+    }
 
     public DBManager(EvalPT evalPT, DBMetaData.DBType type, Boolean useIndices) {
         this.evalPT = evalPT;
         this.dbConnection = DBConnectionFactory.getConnection(type);
         this.useIndices = useIndices;
+
         this.joinCols = new HashMap<>();
-        joinCols.put(evalPT.getRoot().getId(), new HashSet<>());
-        evalPT.getRoot().getChildren().forEach(this::findJoinCols);
+        findJoinCols(evalPT.getRoot());
     }
 
     private void findJoinCols(EvalTreeNode node) {
-        EvalTreeNode root = evalPT.getRoot();
-
-        HashSet<String> varsForNode = joinCols.get(node.getId());
+        HashSet<TableCol> varsForNode = joinCols.get(node.getId());
         if (varsForNode == null) {
             varsForNode = new HashSet<>();
             joinCols.put(node.getId(), varsForNode);
         }
 
-        HashSet<String> equalVars = new HashSet<>(root.getLocalVars());
-        Set<String> nodeVars = node.getLocalVars();
-        equalVars.retainAll(nodeVars);
+        EvalTreeNode parent = node.getParent();
+        if (parent != null) {
+            HashSet<String> equalVars = new HashSet<>(parent.getLocalVars());
+            Set<String> nodeVars = node.getLocalVars();
+            equalVars.retainAll(nodeVars);
 
-        //Add to node
-        varsForNode.addAll(equalVars);
-
-        //Add to root
-        HashSet<String> rootVars = joinCols.get(root.getId());
-        rootVars.addAll(equalVars);
-
+            for (String col : equalVars) {
+                varsForNode.add(new TableCol(col, parent.getId()));
+            }
+        }
         node.getChildren().forEach(this::findJoinCols);
     }
 
@@ -88,11 +116,14 @@ public class DBManager {
     }
 
     private void createIndicesForNode(EvalTreeNode node) throws SQLException {
-        HashSet<String> equalVars = joinCols.get(node.getId());
-        for (String tmpCol : equalVars) {
-            String col = tmpCol.substring(1);
+        HashSet<TableCol> equalVars = joinCols.get(node.getId());
+        for (TableCol tableCol : equalVars) {
+            String col = tableCol.col.substring(1);
             String indexName = "eval_index_" + node.getId() + "_" + col;
             dbConnection.createIndex(node.getId(), col, indexName);
+
+            String indexNameParent = "eval_index_" + tableCol.table + "_" + col;
+            dbConnection.createIndex(tableCol.table, col, indexNameParent);
         }
     }
 
@@ -124,19 +155,17 @@ public class DBManager {
     }
 
     private String onClause(EvalTreeNode node) {
-        HashSet<String> equalCols = joinCols.get(node.getId());
+        HashSet<TableCol> equalCols = joinCols.get(node.getId());
         StringBuilder sb = new StringBuilder();
 
         int i = 0;
-        for (String varTemp : equalCols) {
-            String var = varTemp.substring(1);
-            sb.append(evalPT.getRoot().getId())
+        for (TableCol tableCol : equalCols) {
+            String rhs = tableCol.toString();
+            sb.append(node.getId())
                     .append(".")
-                    .append(var)
+                    .append(tableCol.col.substring(1))
                     .append("=")
-                    .append(node.getId())
-                    .append(".")
-                    .append(var)
+                    .append(rhs)
                     .append(" ");
             if (i != equalCols.size() - 1) {
                 sb.append("AND ");

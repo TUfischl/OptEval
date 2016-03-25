@@ -1,83 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ptresult>
     <ovar>?X1</ovar>
-    <ovar>?X2</ovar>
-    <ovar>?X3</ovar>
-    <ovar>?X4</ovar>
-    <ovar>?X5</ovar>
+    <ovar>?Y1</ovar>
+    <ovar>?Z1</ovar>
     <node>
         <variables>
             <nodeVar>?X1</nodeVar>
             <nodeVar>?X2</nodeVar>
             <nodeVar>?X3</nodeVar>
-            <nodeVar>?X4</nodeVar>
         </variables>
         <mapping>
             <var name="?X1">a</var>
             <var name="?X2">b</var>
             <var name="?X3">a</var>
-            <var name="?X4">b</var>
         </mapping>
         <mapping>
             <var name="?X1">a</var>
             <var name="?X2">c</var>
             <var name="?X3">a</var>
-            <var name="?X4">b</var>
         </mapping>
         <node>
             <variables>
                 <nodeVar>?X1</nodeVar>
-                <nodeVar>?X2</nodeVar>
+                <nodeVar>?Y1</nodeVar>
+                <nodeVar>?Z1</nodeVar>
             </variables>
             <mapping>
                 <var name="?X1">a</var>
-                <var name="?X2">b</var>
-            </mapping>
-            <mapping>
-                <var name="?X1">a</var>
-                <var name="?X2">c</var>
+                <var name="?Y1">c</var>
+                <var name="?Z1">c</var>
             </mapping>
             <node>
                 <variables>
-                    <nodeVar>?X1</nodeVar>
-                    <nodeVar>?X2</nodeVar>
+                    <nodeVar>?Z1</nodeVar>
                 </variables>
                 <mapping>
-                    <var name="?X1">a</var>
-                    <var name="?X2">b</var>
+                    <var name="?Z1">a</var>
                 </mapping>
-                <mapping>
-                    <var name="?X1">a</var>
-                    <var name="?X2">c</var>
-                </mapping>
-                <node>
-                    <variables>
-                        <nodeVar>?X1</nodeVar>
-                        <nodeVar>?X5</nodeVar>
-                    </variables>
-                    <mapping>
-                        <var name="?X1">a</var>
-                        <var name="?X5">b</var>
-                    </mapping>
-                    <mapping>
-                        <var name="?X1">a</var>
-                        <var name="?X5">c</var>
-                    </mapping>
-                </node>
             </node>
         </node>
         <node>
             <variables>
                 <nodeVar>?X1</nodeVar>
-                <nodeVar>?X2</nodeVar>
+                <nodeVar>?A1</nodeVar>
+                <nodeVar>?A2</nodeVar>
             </variables>
             <mapping>
                 <var name="?X1">a</var>
-                <var name="?X2">b</var>
-            </mapping>
-            <mapping>
-                <var name="?X1">a</var>
-                <var name="?X2">c</var>
+                <var name="?A1">c</var>
+                <var name="?A2">c</var>
             </mapping>
         </node>
     </node>

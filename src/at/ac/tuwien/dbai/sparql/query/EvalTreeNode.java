@@ -7,6 +7,7 @@ import java.util.List;
 public class EvalTreeNode {
     private MappingSet mappings;
     private List<EvalTreeNode> children;
+    private EvalTreeNode parent;
     private HashSet<String> localVars;
     private int id;
 
@@ -16,8 +17,6 @@ public class EvalTreeNode {
         localVars = new HashSet<>();
         this.id = id;
     }
-
-    private EvalTreeNode() {}
 
     public String getId() {
         return "T" + id;
@@ -64,4 +63,11 @@ public class EvalTreeNode {
         this.localVars = localVars;
     }
 
+    public EvalTreeNode getParent() {
+        return parent;
+    }
+
+    public void setParent(EvalTreeNode parent) {
+        this.parent = parent;
+    }
 }
