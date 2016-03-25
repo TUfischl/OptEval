@@ -21,12 +21,13 @@ import java.util.Iterator;
 
 public class PTEvaluator {
     static final Logger logger = LogManager.getLogger(PTEvaluator.class.getName());
-    static final Benchmark benchmark = new Benchmark(new ArrayList<>(Arrays.asList("Read", "Evaluation", "MaxSet")));
+    static Benchmark benchmark;
     private String[] args = null;
     private Options options = new Options();
 
 
     public static void main(String[] args) throws Exception {
+        DBMetaData.preLoadClasses();
         new PTEvaluator(args).parse();
     }
 
@@ -64,10 +65,11 @@ public class PTEvaluator {
             }
         }
 
+        benchmark = new Benchmark(new ArrayList<>(Arrays.asList("Read", "Evaluation", "MaxSet")));
         if (cmd.hasOption("b")) {
             for (int i = 0; i < runs; i++) {
                 benchmark.addRun();
-                evaluateAlgorithm(EvalPT.EvaluationType.ITERATIVE, null, inputFilePath, false);
+                //evaluateAlgorithm(EvalPT.EvaluationType.ITERATIVE, null, inputFilePath, false);
                 for (DBMetaData.DBType dbType : DBMetaData.DBType.values()) {
                     evaluateAlgorithm(EvalPT.EvaluationType.DB, dbType, inputFilePath, useIndices);
                 }

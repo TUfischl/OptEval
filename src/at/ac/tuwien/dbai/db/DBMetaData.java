@@ -57,4 +57,15 @@ public class DBMetaData {
     public DBType getType() {
         return type;
     }
+
+    public void loadClass() throws ClassNotFoundException {
+        Class.forName(this.getDriver());
+    }
+
+    public static void preLoadClasses() throws ClassNotFoundException {
+        for (DBMetaData.DBType dbType : DBMetaData.DBType.values()) {
+            DBMetaData metaData = DBMetaData.getMetaData(dbType);
+            metaData.loadClass();
+        }
+    }
 }

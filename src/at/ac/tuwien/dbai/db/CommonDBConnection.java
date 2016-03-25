@@ -19,7 +19,7 @@ public class CommonDBConnection {
     private Connection getDBConnection() {
         Connection dbConnection = null;
         try {
-            Class.forName(metaData.getDriver());
+            metaData.loadClass();
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
         }
@@ -100,7 +100,7 @@ public class CommonDBConnection {
             dbConnection = getDBConnection();
             ps = dbConnection.prepareStatement(sql);
 
-            final int batchSize = 1000;
+            final int batchSize = 5000;
             int count = 0;
 
             for (Mapping mapping : mappingSet) {
@@ -156,14 +156,15 @@ public class CommonDBConnection {
         executeDDLStatement(dropTableSQL);
     }
 
-    void executeDDLStatement(String createTableSQL) throws SQLException {
+    void executeDDLStatement(String ddlStatment) throws SQLException {
+        logger.info(ddlStatment);
         Connection dbConnection = null;
         Statement statement = null;
 
         try {
             dbConnection = getDBConnection();
             statement = dbConnection.createStatement();
-            statement.execute(createTableSQL);
+            statement.execute(ddlStatment);
         } catch (SQLException e) {
             logger.error(e.getMessage());
         } finally {
