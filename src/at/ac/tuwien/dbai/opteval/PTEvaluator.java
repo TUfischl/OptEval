@@ -1,7 +1,7 @@
 package at.ac.tuwien.dbai.opteval;
 
 import at.ac.tuwien.dbai.benchmark.Benchmark;
-import at.ac.tuwien.dbai.db.DBMetaData;
+import at.ac.tuwien.dbai.db.DBConnectionFactory;
 import at.ac.tuwien.dbai.sparql.query.EvalPT;
 import at.ac.tuwien.dbai.sparql.query.Mapping;
 import at.ac.tuwien.dbai.sparql.query.MappingSet;
@@ -27,7 +27,6 @@ public class PTEvaluator {
 
 
     public static void main(String[] args) throws Exception {
-        DBMetaData.preLoadClasses();
         new PTEvaluator(args).parse();
     }
 
@@ -70,13 +69,13 @@ public class PTEvaluator {
             for (int i = 0; i < runs; i++) {
                 benchmark.addRun();
                 //evaluateAlgorithm(EvalPT.EvaluationType.ITERATIVE, null, inputFilePath, false);
-                for (DBMetaData.DBType dbType : DBMetaData.DBType.values()) {
+                for (DBConnectionFactory.DBType dbType : DBConnectionFactory.DBType.values()) {
                     evaluateAlgorithm(EvalPT.EvaluationType.DB, dbType, inputFilePath, useIndices);
                 }
             }
         } else {
             EvalPT.EvaluationType evaluationType;
-            DBMetaData.DBType dbType = null;
+            DBConnectionFactory.DBType dbType = null;
             String outputFilePath;
 
             if (cmd.hasOption("db")) {
@@ -84,7 +83,7 @@ public class PTEvaluator {
                 evaluationType = EvalPT.EvaluationType.DB;
                 String db = cmd.getOptionValue("db").toUpperCase();
                 try {
-                    dbType = DBMetaData.DBType.valueOf(db);
+                    dbType = DBConnectionFactory.DBType.valueOf(db);
                 } catch (IllegalArgumentException ex) {
                     help();
                 }
@@ -117,7 +116,7 @@ public class PTEvaluator {
         return handler.getEvalPT();
     }
 
-    private MaxMappingSet evaluateAlgorithm(EvalPT.EvaluationType evaluationType, DBMetaData.DBType dbType, String inputFilePath, Boolean useIndices) throws IOException, SAXException {
+    private MaxMappingSet evaluateAlgorithm(EvalPT.EvaluationType evaluationType, DBConnectionFactory.DBType dbType, String inputFilePath, Boolean useIndices) throws IOException, SAXException {
         benchmark.addEntry(modeString(evaluationType, dbType));
 
         EvalPT pt = getEvalPT(inputFilePath);
@@ -133,7 +132,7 @@ public class PTEvaluator {
         return mappings;
     }
 
-    private String modeString(EvalPT.EvaluationType evaluationType, DBMetaData.DBType dbType) {
+    private String modeString(EvalPT.EvaluationType evaluationType, DBConnectionFactory.DBType dbType) {
         String temp = evaluationType.toString();
         if (dbType != null) {
             temp += " - " + dbType.toString();

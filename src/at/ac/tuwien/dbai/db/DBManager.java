@@ -47,7 +47,7 @@ public class DBManager {
         }
     }
 
-    public DBManager(EvalPT evalPT, DBMetaData.DBType type, Boolean useIndices) {
+    public DBManager(EvalPT evalPT, DBConnectionFactory.DBType type, Boolean useIndices) {
         this.evalPT = evalPT;
         this.dbConnection = DBConnectionFactory.getConnection(type);
         this.useIndices = useIndices;

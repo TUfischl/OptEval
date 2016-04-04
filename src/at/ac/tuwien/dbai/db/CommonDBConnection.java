@@ -8,24 +8,23 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.Set;
 
-public class CommonDBConnection {
+public abstract class CommonDBConnection {
     static final Logger logger = LogManager.getLogger(CommonDBConnection.class.getName());
-    private DBMetaData metaData;
 
-    public CommonDBConnection(DBMetaData.DBType type) {
-        this.metaData = DBMetaData.getMetaData(type);
-    }
+    protected abstract String getDriver();
+    protected abstract String getConnection();
+    protected abstract String getUser();
+    protected abstract String getPassword();
 
-    private Connection getDBConnection() {
+    Connection getDBConnection() {
         Connection dbConnection = null;
         try {
-            metaData.loadClass();
+            Class.forName(getDriver());
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage());
         }
         try {
-            dbConnection = DriverManager.getConnection(metaData.getConnection(), metaData.getUser(),
-                    metaData.getPassword());
+            dbConnection = DriverManager.getConnection(getConnection(), getUser(), getPassword());
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
@@ -156,7 +155,7 @@ public class CommonDBConnection {
         executeDDLStatement(dropTableSQL);
     }
 
-    void executeDDLStatement(String ddlStatment) throws SQLException {
+    protected void executeDDLStatement(String ddlStatment) throws SQLException {
         logger.info(ddlStatment);
         Connection dbConnection = null;
         Statement statement = null;
