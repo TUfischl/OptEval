@@ -171,4 +171,12 @@ public abstract class CommonDBConnection {
             if (dbConnection != null) dbConnection.close();
         }
     }
+
+    public void deleteData() throws SQLException {
+        executeDDLStatement("DROP ALL OBJECTS DELETE FILES");
+    }
+
+    public void shutdown() throws SQLException {
+        executeDDLStatement("SHUTDOWN");
+    }
 }

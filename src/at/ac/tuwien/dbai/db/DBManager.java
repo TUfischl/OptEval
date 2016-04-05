@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DBManger contains the logic part of DB algorithms.
+ */
 public class DBManager {
     private EvalPT evalPT;
     private StringBuilder select;
@@ -17,8 +20,11 @@ public class DBManager {
     private HashMap<String, HashSet<TableCol>> joinCols;
     private Boolean useIndices;
 
-
-    public class TableCol {
+    /**
+     * TableCol is a helper class only used in DBManger.
+     * It represents a pair of table name and column name used in SQL Statements e.g. Employee.name
+     */
+    private class TableCol {
         private String col;
         private String table;
 
@@ -47,13 +53,37 @@ public class DBManager {
         }
     }
 
+    /**
+     * At the initialization a concrete DB connection is created depending on db type.
+     * @param evalPT contains data used in algorithm
+     * @param type db algorithm to use
+     * @param useIndices create indices if true
+     */
     public DBManager(EvalPT evalPT, DBConnectionFactory.DBType type, Boolean useIndices) {
         this.evalPT = evalPT;
         this.dbConnection = DBConnectionFactory.getConnection(type);
         this.useIndices = useIndices;
-
         this.joinCols = new HashMap<>();
-        findJoinCols(evalPT.getRoot());
+    }
+
+    /**
+     * Step 1 find join columns (used in create table and create indices)
+     * Step 2 create tables and parallel generate select statement
+     * Step 3 execute select statement and retrieve data from DB
+     * Step 4 clean up DB and shutdown
+     * @return result of evaluation
+     */
+    public MappingSet evaluate() {
+        MappingSet set = null;
+        try {
+            findJoinCols(evalPT.getRoot());
+            createAllTables();
+            set = dbConnection.select(select.toString());
+            cleanUp();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return set;
     }
 
     private void findJoinCols(EvalTreeNode node) {
@@ -76,24 +106,17 @@ public class DBManager {
         node.getChildren().forEach(this::findJoinCols);
     }
 
-    public MappingSet evaluate() {
-        MappingSet set = null;
-        try {
-            createAllTables();
-            set = dbConnection.select(select.toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return set;
+    private void createAllTables() throws SQLException {
+        initSelectStatement();
+        createSingleTable(evalPT.getRoot());
     }
 
-    private void createAllTables() throws SQLException {
+    private void initSelectStatement() {
         select = new StringBuilder();
         select.append("SELECT ")
                 .append(stringFromVars(evalPT.getOutputVars()))
                 .append("\nFROM ")
                 .append(evalPT.getRoot().getId());
-        createSingleTable(evalPT.getRoot());
     }
 
     private void createSingleTable(EvalTreeNode node) throws SQLException {
@@ -105,14 +128,23 @@ public class DBManager {
         dbConnection.insertIntoTable(tableName, node.getLocalVars(), node.getMappings());
 
         for (EvalTreeNode child : node.getChildren()) {
-            String childTableName = child.getId();
-            select.append("\nLEFT OUTER JOIN ")
-                    .append(childTableName)
-                    .append("\n\ton ")
-                    .append(onClause(child));
-
+            appendSelectStatement(child);
             this.createSingleTable(child);
         }
+    }
+
+    private void appendSelectStatement(EvalTreeNode child) {
+        String childTableName = child.getId();
+        select.append("\nLEFT OUTER JOIN ")
+                .append(childTableName)
+                .append("\n\ton ")
+                .append(onClause(child));
+    }
+
+
+    private void cleanUp() throws SQLException {
+        dbConnection.deleteData();
+        dbConnection.shutdown();
     }
 
     private void createIndicesForNode(EvalTreeNode node) throws SQLException {

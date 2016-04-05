@@ -44,4 +44,14 @@ public class DerbyDBConnection extends CommonDBConnection {
             throw e;
         }
     }
+
+    @Override
+    public void deleteData() throws SQLException {
+        //no need to
+    }
+
+    @Override
+    public void shutdown() throws SQLException {
+        //no need to
+    }
 }
