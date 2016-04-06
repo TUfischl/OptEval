@@ -5,7 +5,8 @@ import at.ac.tuwien.dbai.db.CommonDBConnection;
 import java.sql.SQLException;
 
 /**
- * Created by michael on 04.04.16.
+ * H2 DB connection
+ * Specific DB behaviour can be customized here by overriding methods from CommonDBConnection
  */
 public class H2DBConnection extends CommonDBConnection {
     private static final String DRIVER      = "org.h2.Driver";

@@ -7,6 +7,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+/**
+ * Measures elapsed time during multiple stages of evaluation and runs
+ */
 public class Benchmark {
     static final Logger logger = LogManager.getLogger(Benchmark.class.getName());
 
@@ -33,18 +36,28 @@ public class Benchmark {
         this.lineWidth = (rowWidth + 3) * header.size() + 1;
     }
 
+    /**
+     * Adds a new run
+     */
     public void addRun() {
         currentRun = new ArrayList<>();
         data.add(currentRun);
         logger.info("====================== Run #" + data.size() + " ======================");
     }
 
+    /**
+     * Add a new Entry to current run
+     * @param mode
+     */
     public void addEntry(String mode) {
         rowHeader.add(mode);
         currentEntry = new ArrayList<>();
         currentRun.add(currentEntry);
     }
 
+    /**
+     * Adds a new time stamp to current entry
+     */
     public void addTime() {
         long estimatedTime = System.nanoTime() - startTime;
         double seconds = (double) estimatedTime / 1000000000.0;
@@ -52,6 +65,9 @@ public class Benchmark {
         startTime = System.nanoTime();
     }
 
+    /**
+     * Prints all runs, entries and time stamps in a fancy table
+     */
     public void print() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PrintStream stream = new PrintStream(byteArrayOutputStream);
@@ -124,6 +140,8 @@ public class Benchmark {
         }
         logger.info(byteArrayOutputStream.toString());
     }
+
+    // Helper methods used in print
 
     private String lineSeparator() {
         return lineSeparator("-");

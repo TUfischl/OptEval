@@ -37,11 +37,15 @@ public class PTEvaluator {
         options.addOption("i", "input", true, "use this xml file as input");
         options.addOption("o", "output", true, "use this file as output");
         options.addOption("h", "help", false, "prints help");
-        options.addOption("b", "benchmark", false, "benchmarks all algorithms");
+        options.addOption("b", "benchmark", false, "benchmarks all DB algorithms");
         options.addOption("r", "runs", true, "number of runs");
         options.addOption("ni", "noIndices", false, "does NOT use indices");
     }
 
+    /**
+     * The main method ob PTEvaluator, command line arguments are parsed here
+     * @throws Exception
+     */
     public void parse() throws Exception {
         CommandLineParser commandLineParser = new DefaultParser();
         CommandLine cmd = commandLineParser.parse(options, args);
@@ -49,7 +53,7 @@ public class PTEvaluator {
 
 
         Boolean useIndices = !cmd.hasOption("ni");
-        String inputFilePath = "resources/test.xml";
+        String inputFilePath = "resources/test.xml"; //Default input file path
         if (cmd.hasOption("i")) {
             inputFilePath = cmd.getOptionValue("i");
         }
@@ -65,7 +69,7 @@ public class PTEvaluator {
         }
 
         benchmark = new Benchmark(new ArrayList<>(Arrays.asList("Read", "Evaluation", "MaxSet")));
-        if (cmd.hasOption("b")) {
+        if (cmd.hasOption("b")) { //Benchmark
             for (int i = 0; i < runs; i++) {
                 benchmark.addRun();
                 //evaluateAlgorithm(EvalPT.EvaluationType.ITERATIVE, null, inputFilePath, false);
@@ -73,13 +77,13 @@ public class PTEvaluator {
                     evaluateAlgorithm(EvalPT.EvaluationType.DB, dbType, inputFilePath, useIndices);
                 }
             }
-        } else {
+        } else { //Single algorithm
             EvalPT.EvaluationType evaluationType;
             DBConnectionFactory.DBType dbType = null;
             String outputFilePath;
 
-            if (cmd.hasOption("db")) {
-                outputFilePath = "output/test-db.txt";
+            if (cmd.hasOption("db")) { //DB
+                outputFilePath = "output/test-db.txt"; //Default output file path for db algorithm
                 evaluationType = EvalPT.EvaluationType.DB;
                 String db = cmd.getOptionValue("db").toUpperCase();
                 try {
@@ -87,8 +91,8 @@ public class PTEvaluator {
                 } catch (IllegalArgumentException ex) {
                     help();
                 }
-            } else {
-                outputFilePath = "output/test.txt";
+            } else { //ITERATIVE
+                outputFilePath = "output/test.txt"; //Default output file path for iterative algorithm
                 evaluationType = EvalPT.EvaluationType.ITERATIVE;
             }
 
@@ -108,6 +112,12 @@ public class PTEvaluator {
         benchmark.print();
     }
 
+    /**
+     * @param inputFilePath file path to XML input file
+     * @return the EvalPT Object for the given XML file path
+     * @throws SAXException
+     * @throws IOException
+     */
     private EvalPT getEvalPT(String inputFilePath) throws SAXException, IOException {
         XMLReader parser = XMLReaderFactory.createXMLReader();
         PTXmlHandler handler = new PTXmlHandler();
@@ -116,6 +126,16 @@ public class PTEvaluator {
         return handler.getEvalPT();
     }
 
+    /**
+     * Evaluates one xml document with given algorithm and returns a MaxMappingSet
+     * @param evaluationType algorithm to use
+     * @param dbType DB to use
+     * @param inputFilePath path to xml file
+     * @param useIndices should use indices
+     * @return the MaxMappingSet of the evaluation
+     * @throws IOException
+     * @throws SAXException
+     */
     private MaxMappingSet evaluateAlgorithm(EvalPT.EvaluationType evaluationType, DBConnectionFactory.DBType dbType, String inputFilePath, Boolean useIndices) throws IOException, SAXException {
         benchmark.addEntry(modeString(evaluationType, dbType));
 
@@ -132,6 +152,12 @@ public class PTEvaluator {
         return mappings;
     }
 
+    /**
+     * Helper method to generate a name from an algorithm and/or DB name
+     * @param evaluationType
+     * @param dbType
+     * @return name of algorithm and/or DB name
+     */
     private String modeString(EvalPT.EvaluationType evaluationType, DBConnectionFactory.DBType dbType) {
         String temp = evaluationType.toString();
         if (dbType != null) {
@@ -140,12 +166,20 @@ public class PTEvaluator {
         return temp;
     }
 
+    /**
+     * Prints the generated help text and exits application
+     */
     private void help() {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("PTEvaluator", options);
         System.exit(0);
     }
 
+    /**
+     * Writes a MaxMapping set to an PrintStream, includes number of rows
+     * @param outStream
+     * @param mappings
+     */
     private void writeToPrintStream(PrintStream outStream, MaxMappingSet mappings) {
         int numberOfRows = 0;
         outStream.println();

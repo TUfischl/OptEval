@@ -4,7 +4,10 @@ import at.ac.tuwien.dbai.db.CommonDBConnection;
 
 import java.sql.SQLException;
 
-
+/**
+ * Apache Derby DB connection
+ * Specific DB behaviour can be customized here by overriding methods from CommonDBConnection
+ */
 public class DerbyDBConnection extends CommonDBConnection {
     private static final String DRIVER      = "org.apache.derby.jdbc.EmbeddedDriver";
     private static final String CONNECTION  = "jdbc:derby:memory:myDB;create=true";

@@ -86,6 +86,11 @@ public class DBManager {
         return set;
     }
 
+    /**
+     * Searches a node and recursively all sub nodes to add all join columns.
+     * All required join columns are located in the parent node of the designated node
+     * @param node
+     */
     private void findJoinCols(EvalTreeNode node) {
         HashSet<TableCol> varsForNode = joinCols.get(node.getId());
         if (varsForNode == null) {
@@ -106,11 +111,20 @@ public class DBManager {
         node.getChildren().forEach(this::findJoinCols);
     }
 
+    /**
+     * Initial call of createSingleTable with root node
+     * and setup of the select statement
+     * @throws SQLException
+     */
     private void createAllTables() throws SQLException {
         initSelectStatement();
         createSingleTable(evalPT.getRoot());
     }
 
+    /**
+     * Initial setup of the select statement
+     * by adding the root table
+     */
     private void initSelectStatement() {
         select = new StringBuilder();
         select.append("SELECT ")
@@ -119,6 +133,16 @@ public class DBManager {
                 .append(evalPT.getRoot().getId());
     }
 
+    /**
+     * Sets up one table for a given node by
+     * dropping the table,
+     * creating the table,
+     * create optional indices and
+     * inserting data of the given node.
+     * Calls itself for all child nodes.
+     * @param node
+     * @throws SQLException
+     */
     private void createSingleTable(EvalTreeNode node) throws SQLException {
         String tableName = node.getId();
 
@@ -129,10 +153,14 @@ public class DBManager {
 
         for (EvalTreeNode child : node.getChildren()) {
             appendSelectStatement(child);
-            this.createSingleTable(child);
+            createSingleTable(child);
         }
     }
 
+    /**
+     * Extends the select statement for a given node
+     * @param child
+     */
     private void appendSelectStatement(EvalTreeNode child) {
         String childTableName = child.getId();
         select.append("\nLEFT OUTER JOIN ")
@@ -142,11 +170,21 @@ public class DBManager {
     }
 
 
+    /**
+     * Cleans up the DB by deleting all data and shutting it down
+     * @throws SQLException
+     */
     private void cleanUp() throws SQLException {
         dbConnection.deleteData();
         dbConnection.shutdown();
     }
 
+    /**
+     * Creates all relevant indices for a given node.
+     * Indices are created for all join columns on both relevant tables.
+     * @param node
+     * @throws SQLException
+     */
     private void createIndicesForNode(EvalTreeNode node) throws SQLException {
         HashSet<TableCol> equalVars = joinCols.get(node.getId());
         for (TableCol tableCol : equalVars) {
@@ -159,6 +197,12 @@ public class DBManager {
         }
     }
 
+    /**
+     * Returns a comma separated list of the variables in given set as a String e.g. T1.X1, T2.X2, T1.X3
+     * For each variable the corresponding table has to be found.
+     * @param set of variables
+     * @return a comma separated list of the variables in given set as a String
+     */
     private String stringFromVars(Set<String> set) {
         StringBuilder sb = new StringBuilder();
         int i = 0;
@@ -175,6 +219,12 @@ public class DBManager {
         return sb.toString();
     }
 
+    /**
+     * Returns the corresponding table for a given var and searching recursively all child nodes.
+     * @param var to search for
+     * @param node to start at
+     * @return the corresponding table for a given var and searching recursively all child nodes.
+     */
     private String idFromVar(String var, EvalTreeNode node) {
         if (node.getLocalVars().contains(var)) {
             return node.getId();
@@ -186,6 +236,12 @@ public class DBManager {
         return null;
     }
 
+    /**
+     * Returns the on clause as part of the select statement
+     * by combining all join columns of a given node.
+     * @param node
+     * @return on clause
+     */
     private String onClause(EvalTreeNode node) {
         HashSet<TableCol> equalCols = joinCols.get(node.getId());
         StringBuilder sb = new StringBuilder();

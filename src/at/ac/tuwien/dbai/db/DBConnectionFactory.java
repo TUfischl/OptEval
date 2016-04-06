@@ -5,7 +5,7 @@ import at.ac.tuwien.dbai.db.dbConnectionImpl.H2DBConnection;
 import at.ac.tuwien.dbai.db.dbConnectionImpl.HSQLDBConnection;
 
 /**
- * Created by michael on 21.03.16.
+ * Factory to create specific DB connection
  */
 public class DBConnectionFactory {
 
@@ -13,6 +13,11 @@ public class DBConnectionFactory {
         H2, HSQLDB, DERBY
     }
 
+    /**
+     * Returns specific DB connection for DBType
+     * @param type
+     * @return specific DB connection for DBType
+     */
     public static CommonDBConnection getConnection(DBType type) {
         switch (type) {
             case DERBY:
