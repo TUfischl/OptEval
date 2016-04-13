@@ -33,7 +33,7 @@ public class PTEvaluator {
     public PTEvaluator(String[] args) {
         this.args = args;
 
-        options.addOption("db", true, "use In-Memory-DB with type eg. 'h2'");
+        options.addOption("db", "database", true, "use In-Memory-DB with type eg. 'h2'");
         options.addOption("i", "input", true, "use this xml file as input");
         options.addOption("o", "output", true, "use this file as output");
         options.addOption("h", "help", false, "prints help");

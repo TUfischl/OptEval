@@ -14,6 +14,8 @@ import java.util.Set;
  */
 public abstract class CommonDBConnection {
     static final Logger logger = LogManager.getLogger(CommonDBConnection.class.getName());
+    private final int batchSize = 5000;
+    private final int varcharSize = 200; //maybe has to be adapted
 
     //Use this abstract methods in subclass to specify DB connection
     protected abstract String getDriver();
@@ -129,9 +131,7 @@ public abstract class CommonDBConnection {
             ps = dbConnection.prepareStatement(sql);
 
             //using batch insert
-            final int batchSize = 5000;
             int count = 0;
-
             for (Mapping mapping : mappingSet) {
                 for (int i = 0; i < cols.length; i++) {
                     String value = mapping.getMap().get(cols[i]);
@@ -165,7 +165,6 @@ public abstract class CommonDBConnection {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("CREATE TABLE ").append(name).append("(");
         int i = 0;
-        final String varcharSize = "200"; //maybe has to be adapted
 
         for (String var : cols) {
             stringBuilder.append(var.substring(1)).append(" VARCHAR(").append(varcharSize).append(")");

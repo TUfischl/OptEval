@@ -17,7 +17,7 @@ public class Benchmark {
     private ArrayList<String> rowHeader;
     private ArrayList<ArrayList<ArrayList<Double>>> data;
     private long startTime;
-    private final int rowWidth = 15;
+    private final int rowWidth = 12;
     private int lineWidth;
     private int timeCount;
 
@@ -46,7 +46,7 @@ public class Benchmark {
     }
 
     /**
-     * Add a new Entry to current run
+     * Adds a new Entry to current run
      * @param mode
      */
     public void addEntry(String mode) {
