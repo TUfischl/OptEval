@@ -1,0 +1,20 @@
+Datei,Algorithmus,Typ,Laufzeit,Differenz,Zeitersparnis
+lubm-ex-20-15,Ohne IMDB,,14.360s,,
+,,,,,
+,IMDB ohne Indizes,H2,12.266s,2.094s,14.58\%
+,,HSQLDB,12.237s,2.123s,14.78\%
+,,DERBY,8.986s,5.374s,37.43\%
+,,,,,
+,IMDB mit Indizes,H2,8.782s,5.578s,38.84\%
+,,HSQLDB,8.408s,5.952s,41.45\%
+,,DERBY,8.812s,5.548s,38.63\%
+,,,,,
+lubm-ex-20-17,Ohne IMDB,,485.998s,,
+,,,,,
+,IMDB ohne Indizes,H2,154.292s,331.706s,68.25\%
+,,HSQLDB,190.675s,295.323s,60.77\%
+,,DERBY,356.831s,129.168s,26.58\%
+,,,,,
+,IMDB mit Indizes,H2,2.929s,483.070s,99.40\%
+,,HSQLDB,1.617s,484.381s,99.67\%
+,,DERBY,4.474s,481.524s,99.08\%

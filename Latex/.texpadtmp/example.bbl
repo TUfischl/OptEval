@@ -1,0 +1,48 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{AFK{\etalchar{+}}16}
+
+\bibitem[AFK{\etalchar{+}}16]{OptMat}
+Shqiponja Ahmetaj, Wolfgang Fischl, Markus Kröll, Reinhard Pichler, Mantas
+  Šimkus, and Sebastian Skritek.
+\newblock The challenge of optional matching in sparql.
+\newblock 2016.
+
+\bibitem[AFP{\etalchar{+}}15]{CertainAnswers}
+Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Šimkus, and
+  Sebastian Skritek.
+\newblock Towards reconciling sparql and certain answers.
+\newblock 2015.
+
+\bibitem[Apa15]{ApaDoc}
+Apache.
+\newblock {Apache Derby: Documentation}.
+\newblock \url{https://db.apache.org/derby/manuals/index.html}, 2015.
+\newblock [Online; accessed 01.04.2016].
+
+\bibitem[Eng16]{H2Adv}
+H2~Database Engine.
+\newblock {H2 Advanced}.
+\newblock \url{http://www.h2database.com/html/advanced.html}, 2016.
+\newblock [Online; accessed 31.03.2016].
+
+\bibitem[Gro15]{HSQLGuide}
+The HSQL~Development Group.
+\newblock {HyperSQL User Guide}.
+\newblock \url{http://hsqldb.org/doc/2.0/guide/index.html}, 2015.
+\newblock [Online; accessed 31.03.2016].
+
+\bibitem[Ora16]{AddBatch}
+Oracle.
+\newblock {PreparedStatement}.
+\newblock
+  \url{https://docs.oracle.com/javase/8/docs/api/java/sql/PreparedStatement.html#addBatch--},
+  2016.
+\newblock [Online; accessed 06.04.2016].
+
+\bibitem[Pla13]{BookInMem}
+Hasso Plattner.
+\newblock {\em A Course in In-Memory Data Management: The Inner Mechanics of
+  In-Memory Databases}.
+\newblock Springer, 2013.
+
+\end{thebibliography}
