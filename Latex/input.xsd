@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="ptresult">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ovar" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="node" type="nodeType" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="nodeType">
+        <xs:sequence>
+            <xs:element name="variables" type="variablesType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="mapping" type="mappingType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="node" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="variablesType">
+        <xs:sequence>
+            <xs:element name="nodeVar" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="mappingType">
+        <xs:sequence>
+            <xs:element name="var" type="varType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="varType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

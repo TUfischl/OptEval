@@ -5,31 +5,31 @@
 \select@language {naustrian}
 \contentsline {chapter}{Inhaltsverzeichnis}{vii}{section*.2}
 \contentsline {chapter}{\chapternumberline {1}Einleitung}{1}{chapter.1}
-\contentsline {chapter}{\chapternumberline {2}Ist-Zustand}{3}{chapter.2}
-\contentsline {section}{\numberline {2.1}Datenstruktur}{3}{section.2.1}
-\contentsline {section}{\numberline {2.2}Implementierung}{7}{section.2.2}
-\contentsline {paragraph}{Maximierung}{8}{section*.9}
-\contentsline {section}{\numberline {2.3}Benchmarking}{8}{section.2.3}
-\contentsline {chapter}{\chapternumberline {3}In-Memory Datenbanken}{11}{chapter.3}
-\contentsline {section}{\numberline {3.1}Neue Anforderungen an Datenbanksysteme}{11}{section.3.1}
-\contentsline {section}{\numberline {3.2}Konzepte}{13}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Verwendung des Hauptspeichers}{13}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Spaltenorientierung}{13}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Aktive und passive Daten}{14}{subsection.3.2.3}
-\contentsline {section}{\numberline {3.3}Konkrete In-Memory Datenbanken}{14}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}H2 Database Engine}{14}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}HyperSQL DataBase}{16}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Apache Derby}{18}{subsection.3.3.3}
-\contentsline {chapter}{\chapternumberline {4}Umsetzung}{21}{chapter.4}
-\contentsline {section}{\numberline {4.1}Konzept}{21}{section.4.1}
-\contentsline {section}{\numberline {4.2}Implementierung}{22}{section.4.2}
-\contentsline {paragraph}{Identifizieren der Spalten der \textit {JOIN} Bedingung}{24}{section*.19}
-\contentsline {paragraph}{Anlegen der Tabellen}{24}{section*.20}
-\contentsline {paragraph}{Einfügen der Daten}{25}{section*.21}
-\contentsline {paragraph}{Generieren und ausführen der \textit {SELECT} Abfrage}{25}{section*.22}
-\contentsline {section}{\numberline {4.3}Benchmarking}{25}{section.4.3}
-\contentsline {chapter}{\chapternumberline {5}Ergebnis}{29}{chapter.5}
-\contentsline {chapter}{Abbildungsverzeichnis}{31}{section*.24}
-\contentsline {chapter}{Tabellenverzeichnis}{31}{section*.25}
-\contentsline {chapter}{List of Algorithms}{33}{chapter*.26}
-\contentsline {chapter}{Literaturverzeichnis}{35}{section*.28}
+\contentsline {chapter}{\chapternumberline {2}Ist-Zustand}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Datenstruktur}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Implementierung}{9}{section.2.2}
+\contentsline {paragraph}{Maximierung}{10}{section*.12}
+\contentsline {section}{\numberline {2.3}Benchmarking}{10}{section.2.3}
+\contentsline {chapter}{\chapternumberline {3}In-Memory Datenbanken}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Neue Anforderungen an Datenbanksysteme}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}Konzepte}{15}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Verwendung des Hauptspeichers}{15}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Spaltenorientierung}{15}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Aktive und passive Daten}{16}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.3}Konkrete In-Memory Datenbanken}{16}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}H2 Database Engine}{16}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}HyperSQL DataBase}{18}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Apache Derby}{20}{subsection.3.3.3}
+\contentsline {chapter}{\chapternumberline {4}Umsetzung}{23}{chapter.4}
+\contentsline {section}{\numberline {4.1}Konzept}{23}{section.4.1}
+\contentsline {section}{\numberline {4.2}Implementierung}{24}{section.4.2}
+\contentsline {paragraph}{Identifizieren der Spalten der \textit {JOIN} Bedingung}{26}{section*.22}
+\contentsline {paragraph}{Anlegen der Tabellen}{26}{section*.23}
+\contentsline {paragraph}{Einfügen der Daten}{27}{section*.24}
+\contentsline {paragraph}{Generieren und ausführen der \textit {SELECT} Abfrage}{27}{section*.25}
+\contentsline {section}{\numberline {4.3}Benchmarking}{27}{section.4.3}
+\contentsline {chapter}{\chapternumberline {5}Ergebnis}{31}{chapter.5}
+\contentsline {chapter}{Abbildungsverzeichnis}{33}{section*.27}
+\contentsline {chapter}{Tabellenverzeichnis}{33}{section*.28}
+\contentsline {chapter}{List of Algorithms}{35}{chapter*.29}
+\contentsline {chapter}{Literaturverzeichnis}{37}{section*.31}

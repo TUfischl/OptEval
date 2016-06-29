@@ -29,7 +29,7 @@
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Michael Heinzl} % The author name without titles.
-\newcommand{\thesistitle}{Performante Evaluierung von Well-Designed Pattern Trees mit Hilfe von In-Memory Datenbanken} % The title of the thesis. The English version should be used, if it exists.
+\newcommand{\thesistitle}{Efficient Evaluation of Well-Designed Pattern Trees with the help of In-Memory Databases} % The title of the thesis. The English version should be used, if it exists.
 
 % Set PDF document properties
 \hypersetup{
@@ -57,7 +57,7 @@
 \setadvisor{Univ.-Prof. Mag. Dr.}{Reinhard Pichler}{}{male}
 
 % For bachelor and master theses:
-\setfirstassistant{}{Wolfgang Fischl}{MSc}{male}
+\setfirstassistant{DI}{Wolfgang Fischl}{BSc}{male}
 
 % For dissertations:
 \setfirstreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
@@ -70,7 +70,7 @@
 \setaddress{Xaveriweg 4, 7000 Eisenstadt}
 \setregnumber{1325545}
 \setdate{01}{01}{2001} % Set date with 3 arguments: {day}{month}{year}.
-\settitle{\thesistitle}{Performante Evaluierung von Well-Designed Pattern Trees mit Hilfe von In-Memory Datenbanken} % Sets English and German version of the title (both can be English or German).
+\settitle{\thesistitle}{Effiziente Evaluierung von Well-Designed Pattern Trees mit Hilfe von In-Memory Datenbanken} % Sets English and German version of the title (both can be English or German).
 
 % Select the thesis type: bachelor / master / doctor / phd-school.
 % Bachelor:
@@ -125,6 +125,11 @@
 	frame = single, 
 }
 
+\lstdefinelanguage{Sparql}{
+  language     = SQL,
+  morekeywords = {OPTIONAL},
+}
+
 
 \begin{document}
 
@@ -162,9 +167,56 @@
 \mainmatter
 
 \chapter{Einleitung}
-\section*{Motivation}Das Abfragen von Information ist heutzutage einer der wichtigsten Bestandteile unseres täglichen Lebens. Vieler dieser täglichen Abfragen verwenden im Hintergrund für den Benutzer nicht sichtbar, durch eine relationale Datenbank abgewickelt. Ähnlich dazu verwendet man im Semantic Web die Abfragesprache SPARQL. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language}. Herkömmliche Abfragesprachen wären für die Anforderungen im Semantic Web zu restriktiv.
-SPARQL beinhaltet deswegen den OPTIONAL Operator. Diese äu{\ss}erst wichtige Funktion ermöglicht Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Ergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern sind auch Teil der Lösung.
-Die Arbeit beschäftigt sich im Weiteren mit einem Teilproblem des Modular Query Rewriting \cite[S.~5]{CertainAnswers} . Die Auswertung einer konkreten Abfrage dieses Algorithmus ist der Einstiegspunkt in diese Arbeit.\section*{Ziel}Die derzeitige Implementierung basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn wird der derzeitige Algorithmus beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für den derzeitigen Algorithmus, als auch als Eingabe für den zukünftigen Algorithmus.
+\section*{Motivation}
+Heutzutage steht uns eine gro\ss e Menge an Daten zur Verfügung. Diese Daten werden meist in relationalen Datenbanksystemen (DBS) verwaltet. In den 1970er wurden die ersten relationalen DBS entwickelt und auch die Abfragesprache SQL. Zu dem Zeitpunkt der Entwicklung wurde die Annahme getroffen, dass die Daten in relationalen DBS vollständig sind. Dies ist aber häufig nicht der Fall. In der folgenden Abbildung \ref{dbBsp} ist eine Datenbank schematisch dargestellt, welche in den nächsten Beispielen verwendet wird.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{DB-Beispiel}
+	\caption{Datenbank Beispiel}
+	\label{dbBsp}
+\end{figure}
+
+Die SQL Abfrage (Listing \ref{sqlQueryExampleDB}) liefert in diesem Fall keinen Treffer, da der Gipfel \textbf{K2} mit der Höhe von \textbf{8611} noch nie im Winter bestiegen worden ist. Diese Ergebnis kommt zu Stande, da die Tabelle \textit{ErstbesteigungWinter} unvollständig ist. Würde man auf die zusätzlichen Information der Tabelle \textit{ErstbesteigungWinter} verzichten, liefert diese Abfrage ein Ergebnis.
+
+\begin{lstlisting}[language=SQL,caption={SELECT DB Beispiel},frame = single,label={sqlQueryExampleDB}]
+SELECT Gebirge.A, Gebirge.B, ErstbesteigungWinter.D, Kontinent.E
+	FROM Gebirge 
+		JOIN Höhe
+			ON Gebirge.A = Höhe.A
+		JOIN ErstbesteigungWinter 
+			ON Gebirge.A = ErstbesteigungWinter.D
+		JOIN Kontinent
+			ON Gebirge.A = Kontinent.E
+	WHERE Höhe.C = "8611"
+\end{lstlisting}
+ Ähnlich dazu verwendet man im Semantic Web die Abfragesprache SPARQL. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language}. Herkömmliche Abfragesprachen wären für die Anforderungen im Semantic Web zu restriktiv, da es sich hierbei oft um unvollständige Datensätze handelt.
+SPARQL beinhaltet deswegen den OPTIONAL Operator. Diese äu{\ss}erst wichtige Funktion ermöglicht Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Ergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern sind auch Teil der Lösung. In Listing \ref{sparqlQueryExampleDB} wird gezeigt wie man durch den Einsatz des OPTIONAL Operators auch Teilergebnisse der Abfrage erhält.
+
+\begin{lstlisting}[language=Sparql,caption={SPARQL DB Beispiel},frame = single,label={sparqlQueryExampleDB}]
+SELECT ?A, ?B, ?D, ?E
+	WHERE { ?A Gebirge ?B . ?A Höhe "8611" . 
+	OPTIONAL { ?A ErstbesteigungWinter ?D } .
+	OPTIONAL { ?B Kontinent ?E }}
+\end{lstlisting}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{SPARQL}
+	\caption{SPARQL Tree}
+	\label{sparqlTree}
+\end{figure}
+
+Das Ergebnis der SPARQL Abfrage (Listing \ref{sparqlQueryExampleDB}) enthält das Ergebnis der Wurzel, so wie die Teilergebnisse der OPTIONAL Knoten. (Abbildung )
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{sparqlErgebnis}
+	\caption{SPARQL Ergebnis}
+	\label{sparqlErgebnis}
+\end{figure}
+Die Arbeit beschäftigt sich im Weiteren mit der effizienten Evaluierung der Ergebnisse dieser Abfragen mit Hilfe einer In-Memory Datenbank berechnet. Im speziellen wird dafür der LEFT OUTER JOIN verwendet.
+\section*{Ziel}Die derzeitige Implementierung basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn wird der derzeitige Algorithmus beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für den derzeitigen Algorithmus, als auch als Eingabe für den zukünftigen Algorithmus.
 Die nächsten Kapitel beschäftigen sich mit dem Soll-Zustand. Im speziellen mit der Verwendung von In-Memory Datenbanken und dem Vergleich zu herkömmlichen Datenbanken.Danach wird die neue Implementierung unter der Verwendung von einer In-Memory Datenbank erläutert. Abschlie{\ss}end wird der neue Algorithmus mit dem bisherigen Algorithmus verglichen.
 
 
@@ -176,7 +228,7 @@ Der Ausgangspunkt des Algorithmus ist eine XML-Datei, diese repräsentiert die A
 Das \textit{variables} Element enthält mehrere \textit{nodeVar} Elemente. Diese repräsentieren die Variablen, welche innerhalb der zugehörigen OPTIONAL-Klausel des Knotens verwendet werden.
 Nun zum eigentlichen Kernstück der XML-Datei. Das \textit{mapping} Element ist eine konkrete Belegung von Variablen der SPARQL-Abfrage. Diese enthalten die eigentlichen Daten. Somit enthält das \textit{var} Element die konkreten Ausprägungen der SPARQL-Variablen, der Name dieser Variable ist dazu in dem Attribut \textit{name} des \textit{var} Elements hinterlegt.\\
 
-\lstinputlisting[style=XML,caption={XML Schema der Eingabedatei},label={lst:xsd}]{../input.xsd}
+\lstinputlisting[style=XML,caption={XML Schema der Eingabedatei},label={lst:xsd}]{input.xsd}
 Weiters ist unter Listing \ref{lst:xml} eine Beispiel XML-Datei angegeben, welche später als Referenz dient.
 \lstinputlisting[style=XML,caption={Beispiel XML Eingabedatei},label={lst:xml}]{test.xml}
 
