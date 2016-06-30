@@ -8,28 +8,29 @@
 \contentsline {chapter}{\chapternumberline {2}Ist-Zustand}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}Datenstruktur}{5}{section.2.1}
 \contentsline {section}{\numberline {2.2}Implementierung}{9}{section.2.2}
-\contentsline {paragraph}{Maximierung}{10}{section*.12}
-\contentsline {section}{\numberline {2.3}Benchmarking}{10}{section.2.3}
-\contentsline {chapter}{\chapternumberline {3}In-Memory Datenbanken}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}Neue Anforderungen an Datenbanksysteme}{13}{section.3.1}
-\contentsline {section}{\numberline {3.2}Konzepte}{15}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Verwendung des Hauptspeichers}{15}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Spaltenorientierung}{15}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Aktive und passive Daten}{16}{subsection.3.2.3}
-\contentsline {section}{\numberline {3.3}Konkrete In-Memory Datenbanken}{16}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}H2 Database Engine}{16}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}HyperSQL DataBase}{18}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Apache Derby}{20}{subsection.3.3.3}
-\contentsline {chapter}{\chapternumberline {4}Umsetzung}{23}{chapter.4}
-\contentsline {section}{\numberline {4.1}Konzept}{23}{section.4.1}
-\contentsline {section}{\numberline {4.2}Implementierung}{24}{section.4.2}
-\contentsline {paragraph}{Identifizieren der Spalten der \textit {JOIN} Bedingung}{26}{section*.22}
-\contentsline {paragraph}{Anlegen der Tabellen}{26}{section*.23}
-\contentsline {paragraph}{Einfügen der Daten}{27}{section*.24}
-\contentsline {paragraph}{Generieren und ausführen der \textit {SELECT} Abfrage}{27}{section*.25}
-\contentsline {section}{\numberline {4.3}Benchmarking}{27}{section.4.3}
-\contentsline {chapter}{\chapternumberline {5}Ergebnis}{31}{chapter.5}
-\contentsline {chapter}{Abbildungsverzeichnis}{33}{section*.27}
-\contentsline {chapter}{Tabellenverzeichnis}{33}{section*.28}
-\contentsline {chapter}{List of Algorithms}{35}{chapter*.29}
-\contentsline {chapter}{Literaturverzeichnis}{37}{section*.31}
+\contentsline {paragraph}{Kompatibilität}{9}{section*.11}
+\contentsline {paragraph}{Maximierung}{11}{section*.15}
+\contentsline {section}{\numberline {2.3}Benchmarking}{12}{section.2.3}
+\contentsline {chapter}{\chapternumberline {3}In-Memory Datenbanken}{15}{chapter.3}
+\contentsline {section}{\numberline {3.1}Neue Anforderungen an Datenbanksysteme}{15}{section.3.1}
+\contentsline {section}{\numberline {3.2}Konzepte}{17}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Verwendung des Hauptspeichers}{17}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Spaltenorientierung}{17}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Aktive und passive Daten}{18}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.3}Konkrete In-Memory Datenbanken}{18}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}H2 Database Engine}{18}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}HyperSQL DataBase}{20}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Apache Derby}{22}{subsection.3.3.3}
+\contentsline {chapter}{\chapternumberline {4}Umsetzung}{25}{chapter.4}
+\contentsline {section}{\numberline {4.1}Konzept}{25}{section.4.1}
+\contentsline {section}{\numberline {4.2}Implementierung}{26}{section.4.2}
+\contentsline {paragraph}{Identifizieren der Spalten der \textit {JOIN} Bedingung}{28}{section*.25}
+\contentsline {paragraph}{Anlegen der Tabellen}{28}{section*.26}
+\contentsline {paragraph}{Einfügen der Daten}{29}{section*.27}
+\contentsline {paragraph}{Generieren und ausführen der \textit {SELECT} Abfrage}{29}{section*.28}
+\contentsline {section}{\numberline {4.3}Benchmarking}{29}{section.4.3}
+\contentsline {chapter}{\chapternumberline {5}Ergebnis}{33}{chapter.5}
+\contentsline {chapter}{Abbildungsverzeichnis}{35}{section*.30}
+\contentsline {chapter}{Tabellenverzeichnis}{35}{section*.31}
+\contentsline {chapter}{List of Algorithms}{37}{chapter*.32}
+\contentsline {chapter}{Literaturverzeichnis}{39}{section*.34}

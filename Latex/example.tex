@@ -222,9 +222,9 @@ Das Ergebnis der SPARQL Abfrage (Listing \ref{sparqlQueryExampleDB}) enthält da
 
 \chapter{Ist-Zustand}
 \section{Datenstruktur} \label{dataStruk}
-Der Ausgangspunkt des Algorithmus ist eine XML-Datei, diese repräsentiert die Auswertung einer SPARQL-Abfrage mit einer oder mehreren OPTIONAL-Klauseln. Die XML-Datei stellt einen Well-Designed Pattern Tree (WDPT) wie in \cite[S.~172]{OptMat} beschrieben da. Das Schema der XML-Datei ist unter Listing \ref{lst:xsd} definiert und wird im weiteren genauer erläutert.
-Die XML-Dateien enthält ein Hauptelement \textit{ptresult}. Diese wiederum enthält das Elemente \textit{ovar}, welche die Variablen der Projektion der SPARQL-Abfrage abbilden \cite[S.~171]{OptMat}. Des Weiteren enthält \textit{ptresult} den Wurzelknoten des Well-Designed Pattern Tree. Dieser wird durch ein \textit{node} Element dargestellt.
-Der Wurzelknoten des Baums ist die Basis der SPARQL-Abfrage. Alle weiteren Kindknoten stellen die Auswertung einer OPTIONAL-Klausel da. Die OPTIONAL-Klauseln können auch geschachtelt verwendet werden, infolgedessen ergibt sich eine Baumstruktur. Diese Knoten sind ebenfalls durch die Elemente \textit{node} abgebildet. Ein \textit{node} Element besteht aus genau einem \textit{variables} Element, beliebig vielen \textit{mapping} Elementen und danach beliebig vielen \textit{node} Elementen. Diese \textit{node} Elemente stellen die Kindknoten da.
+Der Ausgangspunkt des Algorithmus ist eine XML-Datei, diese repräsentiert die Auswertung einer mehrerer Abfragen in einem Well-Designed Pattern Tree (WDPT). Das Schema der XML-Datei ist unter Listing \ref{lst:xsd} definiert und wird im weiteren genauer erläutert.
+Die XML-Dateien enthält ein Hauptelement \textit{ptresult}. Diese wiederum enthält das Elemente \textit{ovar}, welche die Variablen der Projektion des WDPT abbilden \cite[S.~171]{OptMat}. Des Weiteren enthält \textit{ptresult} den Wurzelknoten des Well-Designed Pattern Tree. Dieser wird durch ein \textit{node} Element dargestellt.
+Der Wurzelknoten des Baums ist die Basis des WDPT. Alle weiteren Kindknoten stellen die Auswertung einer OPTIONAL-Klausel da. Die OPTIONAL-Klauseln können auch geschachtelt verwendet werden, infolgedessen ergibt sich eine Baumstruktur. Diese Knoten sind ebenfalls durch die Elemente \textit{node} abgebildet. Ein \textit{node} Element besteht aus genau einem \textit{variables} Element, beliebig vielen \textit{mapping} Elementen und danach beliebig vielen \textit{node} Elementen. Diese \textit{node} Elemente stellen die Kindknoten da.
 Das \textit{variables} Element enthält mehrere \textit{nodeVar} Elemente. Diese repräsentieren die Variablen, welche innerhalb der zugehörigen OPTIONAL-Klausel des Knotens verwendet werden.
 Nun zum eigentlichen Kernstück der XML-Datei. Das \textit{mapping} Element ist eine konkrete Belegung von Variablen der SPARQL-Abfrage. Diese enthalten die eigentlichen Daten. Somit enthält das \textit{var} Element die konkreten Ausprägungen der SPARQL-Variablen, der Name dieser Variable ist dazu in dem Attribut \textit{name} des \textit{var} Elements hinterlegt.\\
 
@@ -242,9 +242,17 @@ Der Well-Designed Pattern Tree (WDPT) der XML-Datei (Listing \ref{lst:xml}) ist 
 
 \section{Implementierung} \label{istImp}
 
-Die aktuelle Implementierung ohne In-Memory Datenbank besteht aus mehreren Phasen:Die erste Phase besteht darin eine oben beschriebene XML-Datei einzulesen und die XML-Strukturen in folgende Java Objekte zu konvertieren.Die Klasse \textit{EvalPT} spiegelt das Hauptelement \textit{ptresult} der XML-Datei wieder. Die Klasse enthält den Wurzelknoten, so wie die Variablen der \textit{ovar} Elemente. Die \textit{node} Elemente werden in in der Klasse \textit{EvalTreeNode} abgebildet. Die Einträge aus dem \textit{variables} Element werden als \textit{Set} in dieser Klasse gespeichert. Zusätzlich enthält die Klasse auch eine Liste von Kindknoten des Typs \textit{EvalTreeNode}. Der Gro\ss teil der zu verarbeitenden Daten besteht aus den \textit{mapping} Elementen, dies werden in dem entsprechenden \textit{EvalTreeNode} Objekt in einem \textit{Set} gespeichert. Die \textit{mapping} Elemente werden in Java als \textit{Map} abgebildet. Die Variablennamen bilden die Schlüssel und die konkreten Ausprägungen der SPARQL-Variablen bilden die Werte der \textit{Map}. Diese \textit{Map} Objekte werden im Folgenden als Mapping bezeichnet.
+Die aktuelle Implementierung ohne In-Memory Datenbank besteht aus mehreren Phasen:Die erste Phase besteht darin eine oben beschriebene XML-Datei einzulesen und die XML-Strukturen in folgende Java Objekte zu konvertieren.Die Klasse \textit{EvalPT} spiegelt das Hauptelement \textit{ptresult} der XML-Datei wieder. Die Klasse enthält den Wurzelknoten, so wie die Variablen der \textit{ovar} Elemente. Die \textit{node} Elemente werden in in der Klasse \textit{EvalTreeNode} abgebildet. Die Einträge aus dem \textit{variables} Element werden als \textit{Set} in dieser Klasse gespeichert. Zusätzlich enthält die Klasse auch eine Liste von Kindknoten des Typs \textit{EvalTreeNode}. Der Gro\ss teil der zu verarbeitenden Daten besteht aus den \textit{mapping} Elementen, dies werden in dem entsprechenden \textit{EvalTreeNode} Objekt in einem \textit{Set} gespeichert. Die \textit{mapping} Elemente werden in Java als \textit{Map} abgebildet. Die Variablennamen bilden die Schlüssel und die konkreten Ausprägungen der SPARQL-Variablen bilden die Werte der \textit{Map}. Diese \textit{Map} Objekte werden im Folgenden als Mapping bezeichnet. In Abbildung \ref{klassendiagramm} sind die die Klassen als Klassendiagramm dargestellt. 
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Klassendiagramm}
+	\caption{Klassendiagramm}
+	\label{klassendiagramm}
+\end{figure}
 Die zweite Phase des Algorithmus beschäftigt sich mit der eigentlichen Vereinigung des Wurzelknotens und aller Kindknoten. Der Vorgang beginnt bei dem Wurzelknoten, es wird hierbei ein neues \textit{Set} aus Mapping Objekten angelegt, dieses wird im Folgenden als \textit{results} bezeichnet. Als Initialwerte wird \textit{results} mit den Mappings des Wurzelknoten befüllt. Nun werden diese Mappings um passende Mappings aller Kindknoten erweitert. Für jeden Kindknoten werden folgende Schritte durchgeführt:
-Für jedes Mapping in \textit{results} wird für jedes Mapping im Kindknoten überprüft ob dieses Mappings mit einander kompatibel sind. Zwei Mappings sind mit einander kompatibel, wenn bei dem paarweisen Vergleich alle übereinstimmenden SPARQL-Variablen auch den selben Wert aufweisen. Der Pseudo-Code für die Kompatibilität zweier Mappings ist unter \ref{alg:komp} zu finden.
+
+\paragraph{Kompatibilität}Für jedes Mapping in \textit{results} wird für jedes Mapping im Kindknoten überprüft ob dieses Mappings mit einander kompatibel sind. Zwei Mappings sind mit einander kompatibel, wenn bei dem paarweisen Vergleich alle übereinstimmenden Variablen auch den selben Wert aufweisen. Der Pseudo-Code für die Kompatibilität zweier Mappings ist unter \ref{alg:komp} zu finden. Unter Listing \ref{bspKompMap} sind zwei Beispiele zu finden. \textit{m1} und \textit{m2} sind kompatible Mappings, da die gemeinsamen Variablen (\textit{?X}, \textit{?Y}) auch den gleichen Wert aufweisen. Hingegen sind \textit{m3} und \textit{m4} nicht kompatibel, da die Variable \textit{?Z} unterschiedliche Werte aufweist.
 \begin{algorithm}\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}\Input{Mapping $m1$ und Mapping $m2$}\Output{true wenn $m1$ mit $m2$ kompatibel sind, sonst false}\BlankLine$keys1\leftarrow$ Menge der Schlüssel von $m1$\;
 $keys2\leftarrow$ Menge der Schlüssel von $m2$\;
 $interKeys\leftarrow m1\cap m2$\;\ForEach{Schlüssel k aus $interKeys$}{
@@ -253,15 +261,35 @@ $interKeys\leftarrow m1\cap m2$\;\ForEach{Schlüssel k aus $interKeys$}{
     \Return false\;  }}
 \Return true\;\caption{Kompatibilität von zwei Mappings}\label{alg:komp}\end{algorithm}
 
+\begin{lstlisting}[float,caption={Beispiele für Kompatibilität von zwei Mappings},frame=single,label={bspKompMap}]
+// Kompatibel
+m1 = {
+	(?X, "x"), (?Y, "y"), (?Z, "z")	
+}
+
+m2 = {
+	(?X, "x"), (?Y, "y"), (?A, "a")	
+}
+
+// Nicht Kompatibel
+m3 = {
+	(?X, "x"), (?Y, "y"), (?Z, "z")	
+}
+
+m4 = {
+	(?X, "x"), (?Y, "y"), (?Z, "a")	
+}
+\end{lstlisting}
+
 Wenn das Mapping aus \textit{results} mit dem Mapping aus dem Kindknoten kompatibel ist, wir das Mapping aus \textit{results} um die neuen Variablen und deren Werten erweitert (siehe \ref{alg:erw}). Nach dem jedes Mapping aus \textit{results} mit allen Mappings des Kindknoten abgeglichen wurde, ist dieser Kindknoten fertig abgearbeitet. Danach durchlaufen die Kindknoten des jetzigen Knoten die selbe Prozedur. Bei jedem Kindknoten wird \textit{results} um einige Werte erweitert. Diese Phase ist beendet, wenn alle Knoten im Baum abgearbeitet sind. Nun enthält \textit{results} alle erweiterten Mappings.
 
 \begin{algorithm}\SetKwInOut{Input}{input}\Input{Set $results$ aus Mappings, Set $M$ aus Mappings}\BlankLine\ForEach{Mapping $m1$ aus $results$}{
   \ForEach{Mapping $m2$ aus $M$}{    \If{$m1$ kompatibel mit $m2$}{
       Erweitere $m1$ mit $m2$
-    }  }}\caption{Erweiterung der Mappings}\label{alg:erw}\end{algorithm}In der dritten Phase findet die Projektion der Daten statt. Hierbei wird über alle Mappings iteriert und alle SPARQL-Variablen entfernt, welche nicht in der Projektion (\textit{ovar} Elemente) enthalten sind. 
+    }  }}\caption{Erweiterung der Mappings}\label{alg:erw}\end{algorithm}In der dritten Phase findet die Projektion der Daten statt. Hierbei wird über alle Mappings iteriert und alle Variablen entfernt, welche nicht in der Projektion (\textit{ovar} Elemente) enthalten sind. 
 
 \paragraph{Maximierung} \label{maxMapPar}
-Die vierte und letzte Phase beschäftigt sich mit der Maximierung der Mappings (\cite[S.~4]{CertainAnswers} unter CERTAIN ANSWER SEMANTICS) aus \textit{results}. Alle Elemente aus \textit{results} werden in eine neue Menge \textit{maxResults} überführt. Zu Beginn ist die Menge \textit{maxResults} leer. Die Elemente aus \textit{results} werden einzeln in \textit{maxResults} eingefügt. Um ein Element zur Menge hinzuzufügen wird folgender Algorithmus \ref{alg:max} angewandt.
+Die vierte und letzte Phase beschäftigt sich mit der Maximierung der Mappings (\cite[S.~4]{CertainAnswers} unter CERTAIN ANSWER SEMANTICS) aus \textit{results}. Alle Elemente aus \textit{results} werden in eine neue Menge \textit{maxResults} überführt. Zu Beginn ist die Menge \textit{maxResults} leer. Die Elemente aus \textit{results} werden einzeln in \textit{maxResults} eingefügt. Um ein Element zur Menge hinzuzufügen wird Algorithmus \ref{alg:max} angewandt.
 
 \begin{algorithm}\SetKwInOut{Input}{input}
 \SetKwFunction{Subsums}{subsums}\Input{Set $maxResults$, Mapping $newM$}\BlankLine
@@ -315,13 +343,13 @@ Diese Dateien wurden zum Test herangezogen:
 	\begin{itemize}
 		\item Dateigrö{\ss}e: 2,44 MB
 		\item Zeilenanzahl: 40.827
-		\item Auswertungsergebnis siehe \ref{lst:bi15}
+		\item Auswertungsergebnis siehe Listing \ref{lst:bi15}
 	\end{itemize}
 	\item lubm-ex-20-17.sparql.xml
 	\begin{itemize}
 		\item Dateigrö{\ss}e: 24,95 MB
 		\item Zeilenanzahl: 378.450
-		\item Auswertungsergebnis siehe \ref{lst:bi17}
+		\item Auswertungsergebnis siehe Listing \ref{lst:bi17}
 	\end{itemize}
 \end{itemize}
 
