@@ -252,7 +252,7 @@ Die aktuelle Implementierung ohne In-Memory Datenbank besteht aus mehreren Phase
 \end{figure}
 Die zweite Phase des Algorithmus beschäftigt sich mit der eigentlichen Vereinigung des Wurzelknotens und aller Kindknoten. Der Vorgang beginnt bei dem Wurzelknoten, es wird hierbei ein neues \textit{Set} aus Mapping Objekten angelegt, dieses wird im Folgenden als \textit{results} bezeichnet. Als Initialwerte wird \textit{results} mit den Mappings des Wurzelknoten befüllt. Nun werden diese Mappings um passende Mappings aller Kindknoten erweitert. Für jeden Kindknoten werden folgende Schritte durchgeführt:
 
-\paragraph{Kompatibilität}Für jedes Mapping in \textit{results} wird für jedes Mapping im Kindknoten überprüft ob dieses Mappings mit einander kompatibel sind. Zwei Mappings sind mit einander kompatibel, wenn bei dem paarweisen Vergleich alle übereinstimmenden Variablen auch den selben Wert aufweisen. Der Pseudo-Code für die Kompatibilität zweier Mappings ist unter \ref{alg:komp} zu finden. Unter Listing \ref{bspKompMap} sind zwei Beispiele zu finden. \textit{m1} und \textit{m2} sind kompatible Mappings, da die gemeinsamen Variablen (\textit{?X}, \textit{?Y}) auch den gleichen Wert aufweisen. Hingegen sind \textit{m3} und \textit{m4} nicht kompatibel, da die Variable \textit{?Z} unterschiedliche Werte aufweist.
+\paragraph{Kompatibilität}Für jedes Mapping in \textit{results} wird für jedes Mapping im Kindknoten überprüft ob dieses Mappings mit einander kompatibel sind. Zwei Mappings sind mit einander kompatibel, wenn bei dem paarweisen Vergleich alle übereinstimmenden Variablen auch den selben Wert aufweisen. Der Pseudo-Code für die Kompatibilität zweier Mappings ist unter Algorithmus \ref{alg:komp} zu finden. \\ Unter Listing \ref{bspKompMap} sind zwei Beispiele zu finden. \textit{m1} und \textit{m2} sind kompatible Mappings, da die gemeinsamen Variablen (\textit{?X}, \textit{?Y}) auch den gleichen Wert aufweisen. Hingegen sind \textit{m3} und \textit{m4} nicht kompatibel, da die Variable \textit{?Z} unterschiedliche Werte aufweist.
 \begin{algorithm}\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}\Input{Mapping $m1$ und Mapping $m2$}\Output{true wenn $m1$ mit $m2$ kompatibel sind, sonst false}\BlankLine$keys1\leftarrow$ Menge der Schlüssel von $m1$\;
 $keys2\leftarrow$ Menge der Schlüssel von $m2$\;
 $interKeys\leftarrow m1\cap m2$\;\ForEach{Schlüssel k aus $interKeys$}{
@@ -281,12 +281,40 @@ m4 = {
 }
 \end{lstlisting}
 
-Wenn das Mapping aus \textit{results} mit dem Mapping aus dem Kindknoten kompatibel ist, wir das Mapping aus \textit{results} um die neuen Variablen und deren Werten erweitert (siehe \ref{alg:erw}). Nach dem jedes Mapping aus \textit{results} mit allen Mappings des Kindknoten abgeglichen wurde, ist dieser Kindknoten fertig abgearbeitet. Danach durchlaufen die Kindknoten des jetzigen Knoten die selbe Prozedur. Bei jedem Kindknoten wird \textit{results} um einige Werte erweitert. Diese Phase ist beendet, wenn alle Knoten im Baum abgearbeitet sind. Nun enthält \textit{results} alle erweiterten Mappings.
+Wenn das Mapping aus \textit{results} mit dem Mapping aus dem Kindknoten kompatibel ist, wir das Mapping aus \textit{results} um die neuen Variablen und deren Werten erweitert (siehe Algorithmus \ref{alg:erw}). Nach dem jedes Mapping aus \textit{results} mit allen Mappings des Kindknoten abgeglichen wurde, ist dieser Kindknoten fertig abgearbeitet. Danach durchlaufen die Kindknoten des jetzigen Knoten die selbe Prozedur. Bei jedem Kindknoten wird \textit{results} um einige Werte erweitert. Diese Phase ist beendet, wenn alle Knoten im Baum abgearbeitet sind. Nun enthält \textit{results} alle erweiterten Mappings.
 
-\begin{algorithm}\SetKwInOut{Input}{input}\Input{Set $results$ aus Mappings, Set $M$ aus Mappings}\BlankLine\ForEach{Mapping $m1$ aus $results$}{
+\begin{algorithm}\SetKwInOut{Input}{input}\Input{Set $results$ aus Mappings, Set $M$ aus Mappings}\BlankLine
+MappingSet $toAdd \leftarrow$ leeres Set\;\ForEach{Mapping $m1$ aus $results$}{
+  $added\leftarrow false$\;
   \ForEach{Mapping $m2$ aus $M$}{    \If{$m1$ kompatibel mit $m2$}{
-      Erweitere $m1$ mit $m2$
-    }  }}\caption{Erweiterung der Mappings}\label{alg:erw}\end{algorithm}In der dritten Phase findet die Projektion der Daten statt. Hierbei wird über alle Mappings iteriert und alle Variablen entfernt, welche nicht in der Projektion (\textit{ovar} Elemente) enthalten sind. 
+      Mapping $extendedMapping \leftarrow$ Erweitere $m1$ mit $m2$\;
+	  Füge $extendedMapping$ zu $toAdd$ hinzu\;
+	  $added\leftarrow true$\;
+    }  }
+  \If{$added$}{
+    Entferne $m1$ aus $results$ da $m1$ mindestens einmal erweitert wurde und am Ende hinzugefügt wird\;
+  }}
+Füge alle Mappings aus $toAdd$ zu $results$ hinzu\;\caption{Erweiterung der MappingSets}\label{alg:erw}\end{algorithm}
+
+\begin{lstlisting}[float,caption={Beispiele für Erweiterung der MappingSets},frame=single,label={bspKompMap}]
+MappingSet results = { 
+	{ (?X, "x1"), (?Y, "y1") }, 
+	{ (?X, "x2"), (?Y, "y2") } 
+}
+
+MappingSet M = { 
+	{ (?X, "x1"), (?A, "b1") }, 
+	{ (?X, "x2"), (?B, "b2") },
+	{ (?X, "x2"), (?C, "c1") }
+}
+
+//Erweiterung von results mit M
+results = { 
+	{ (?X, "x1"), (?Y, "y1"), (?A, "b1") }, 
+	{ (?X, "x2"), (?Y, "y2"), (?B, "b2") },
+	{ (?X, "x2"), (?Y, "y2"), (?C, "c1") }
+}
+\end{lstlisting}In der dritten Phase findet die Projektion der Daten statt. Hierbei wird über alle Mappings iteriert und alle Variablen entfernt, welche nicht in der Projektion (\textit{ovar} Elemente) enthalten sind. 
 
 \paragraph{Maximierung} \label{maxMapPar}
 Die vierte und letzte Phase beschäftigt sich mit der Maximierung der Mappings (\cite[S.~4]{CertainAnswers} unter CERTAIN ANSWER SEMANTICS) aus \textit{results}. Alle Elemente aus \textit{results} werden in eine neue Menge \textit{maxResults} überführt. Zu Beginn ist die Menge \textit{maxResults} leer. Die Elemente aus \textit{results} werden einzeln in \textit{maxResults} eingefügt. Um ein Element zur Menge hinzuzufügen wird Algorithmus \ref{alg:max} angewandt.
