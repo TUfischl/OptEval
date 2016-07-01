@@ -319,27 +319,45 @@ results = {
 \paragraph{Maximierung} \label{maxMapPar}
 Die vierte und letzte Phase beschäftigt sich mit der Maximierung der Mappings (\cite[S.~4]{CertainAnswers} unter CERTAIN ANSWER SEMANTICS) aus \textit{results}. Alle Elemente aus \textit{results} werden in eine neue Menge \textit{maxResults} überführt. Zu Beginn ist die Menge \textit{maxResults} leer. Die Elemente aus \textit{results} werden einzeln in \textit{maxResults} eingefügt. Um ein Element zur Menge hinzuzufügen wird Algorithmus \ref{alg:max} angewandt.
 
+Der Algorithmus verwendet die Funktion \textit{subsums}. Diese erhält zwei Eingabeparameter Mapping \textit{m1} und Mapping \textit{m2}. Sie überprüft wie folgt, ob \textit{m1} \textit{m2} subsumiert. Ist die Anzahl der Elemente von \textit{m1} kleiner als die von \textit{m2}, subsumiert \textit{m1} nicht \textit{m2}. Ist das nicht der Fall wird die Schlüssel der Mappings verglichen. Wenn \textit{keys1} die Schlüssel von \textit{m1} sind und \textit{keys2} die Schlüssel von \textit{m2} sind, dann subsumiert \textit{m1} \textit{m2} nicht, wenn \textit{keys1} nicht alle Schlüssel aus \textit{keys2} beinhaltet. Ist das nicht der Fall wird über alle Schlüssel aus \textit{keys2} iteriert. Wenn \textit{k} ein Schlüssel aus \textit{keys2} ist, müssen die Werte der Mappings für \textit{k} für alle Elemente aus \textit{keys2} gleich sein. Trifft das zu, dann subsumiert \textit{m1} \textit{m2}. Unter Listing \ref{subsumBsp} ist ein Beispiel zu finden. 
+
+Zu Beginn des eigentlichen Algorithmus wird überprüft ob das einzufügende Element \textit{newM} schon in dem Set \textit{maxResults} vorhanden ist, wenn das der Fall ist, wird das Element nicht erneut eingefügt und der Algorithmus ist beendet. Danach wird über das Set \textit{maxResults} iteriert. Wenn \textit{oldM} ein Mapping aus dem Set \textit{maxResults} ist, wird überprüft ob \textit{oldM} \textit{newM} subsumiert. Ist das der Fall, wird \textit{newM} nicht in das Set eingefügt und der Algorithmus ist beendet. Wenn \textit{newM} \textit{oldM} subsumiert wird \textit{oldM} aus \textit{maxResults} entfernt. Subsumiert keines der Mappings aus \textit{maxResults} \textit{newM}, wird \textit{newM} zu \textit{maxResults} hinzugefügt.
+
+\begin{lstlisting}[float,caption={Beispiel für Subsumierung},frame=single,label={bspKompMap}]
+Mapping m1 = { ("?X","x"), ("?Y","y"), ("?Z","z"), ("?A","a") }
+
+Mapping m2 = { ("?X","x"), ("?Y","y"), ("?B","b") }
+//m1 subsumiert NICHT m2
+
+Mapping m3 = { ("?X","x"), ("?Y","y"), ("?Z","b") }
+//m1 subsumiert NICHT m3
+
+Mapping m4 = { ("?X","x"), ("?Y","y"), ("?Z","z") }
+//m1 subsumiert m4
+\end{lstlisting}
+
 \begin{algorithm}\SetKwInOut{Input}{input}
 \SetKwFunction{Subsums}{subsums}\Input{Set $maxResults$, Mapping $newM$}\BlankLine
 $isSubsumed\leftarrow false$\;
 \If{$maxResults$ enthält $newM$}{return\;}\ForEach{Mapping $oldM$ aus $maxResults$}{  \If{\Subsums{oldM, newM}}{
     $isSubsumed\leftarrow true$\;
+    break\;
   }
   \If{\Subsums{newM, oldM}}{
     Entferne $oldM$ aus $maxResults$\;
   }
 }
-\If{isSubsumed}{
+\If{!isSubsumed}{
   Füge $newM$ in $maxResults$ ein\;
 }
 \SetKwProg{Fn}{function}{}{end}
 \BlankLine
 \Fn{Boolean subsums(Mapping m1, Mapping m2)}{
   \eIf{Anzahl der Elemente von m1 $\geq$ Anzahl der Elemente von m2}{
-    $keys1\leftarrow$ Menge der Schlüssel von $m1$\;
-    $keys2\leftarrow$ Menge der Schlüssel von $m2$\;
-    \eIf{$keys1$ beinhaltet alle Elemente aus $m2$}{
-      \ForEach{Schlüssel $k$ aus $keys1$}{
+    $keys1\leftarrow$ Schlüssel von $m1$\;
+    $keys2\leftarrow$ Schlüssel von $m2$\;
+    \eIf{$keys1$ beinhaltet alle Elemente aus $keys2$}{
+      \ForEach{Schlüssel $k$ aus $keys2$}{
         $v1\leftarrow m1[k]$\;
         $v2\leftarrow m2[k]$\;        \If{$v1\neq v2$ AND $v2\neq null$}{
           \Return false\;        }
@@ -383,7 +401,7 @@ Diese Dateien wurden zum Test herangezogen:
 
 Alle Zeitangaben sind in Sekunden angegeben.
 
-\begin{lstlisting}[basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-15.sparql.xml},label={lst:bi15}]
+\begin{lstlisting}[float,basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-15.sparql.xml},label={lst:bi15}]
 +=================================================================================================+
 | Mode            | Run   | Read            | Evaluation      | MaxSet          | Sum             | 
 +=================================================================================================+
@@ -397,7 +415,7 @@ Alle Zeitangaben sind in Sekunden angegeben.
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \end{lstlisting}
 
-\begin{lstlisting}[basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-17.sparql.xml},label={lst:bi17}]
+\begin{lstlisting}[float,basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-17.sparql.xml},label={lst:bi17}]
 +=================================================================================================+
 | Mode            | Run   | Read            | Evaluation      | MaxSet          | Sum             | 
 +=================================================================================================+

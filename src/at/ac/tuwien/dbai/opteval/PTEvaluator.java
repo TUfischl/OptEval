@@ -27,7 +27,40 @@ public class PTEvaluator {
 
 
     public static void main(String[] args) throws Exception {
-        new PTEvaluator(args).parse();
+        Mapping m1 = new Mapping();
+        m1.add("?X","x1");
+        m1.add("?Y","y1");
+        m1.add("?Z","z1");
+        m1.add("?A","a");
+
+        Mapping m2 = new Mapping();
+        m2.add("?X","x1");
+        m2.add("?Y","y1");
+        m2.add("?B","b1");
+
+        Mapping m3 = new Mapping();
+        m3.add("?X","x1");
+        m3.add("?Y","y1");
+        m3.add("?Z","b1");
+
+        Mapping m4 = new Mapping();
+        m4.add("?X","x1");
+        m4.add("?Y","y1");
+        m4.add("?Z","z1");
+
+        Mapping m5 = new Mapping();
+        m5.add("?X","x1");
+        m5.add("?Y","y1");
+        m5.add("?Z","z1");
+        m5.add("?A","a");
+        m5.add("?B", "b");
+
+        System.out.println(m1.subsumes(m2));
+        System.out.println(m1.subsumes(m3));
+        System.out.println(m1.subsumes(m4));
+        System.out.println(m1.subsumes(m5));
+
+        //new PTEvaluator(args).parse();
     }
 
     public PTEvaluator(String[] args) {
