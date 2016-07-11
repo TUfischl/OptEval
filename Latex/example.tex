@@ -222,7 +222,7 @@ Das Ergebnis der SPARQL Abfrage (Listing \ref{sparqlQueryExampleDB}) enthält da
 
 \chapter{Ist-Zustand}
 \section{Datenstruktur} \label{dataStruk}
-Der Ausgangspunkt des Algorithmus ist eine XML-Datei, diese repräsentiert die Auswertung einer mehrerer Abfragen in einem Well-Designed Pattern Tree (WDPT). Das Schema der XML-Datei ist unter Listing \ref{lst:xsd} definiert und wird im weiteren genauer erläutert.
+Der Ausgangspunkt des Algorithmus ist eine XML-Datei, diese repräsentiert die Auswertung  mehrerer Knoten in einem Well-Designed Pattern Tree (WDPT). Das Schema der XML-Datei ist unter Listing \ref{lst:xsd} definiert und wird im weiteren genauer erläutert.
 Die XML-Dateien enthält ein Hauptelement \textit{ptresult}. Diese wiederum enthält das Elemente \textit{ovar}, welche die Variablen der Projektion des WDPT abbilden \cite[S.~171]{OptMat}. Des Weiteren enthält \textit{ptresult} den Wurzelknoten des Well-Designed Pattern Tree. Dieser wird durch ein \textit{node} Element dargestellt.
 Der Wurzelknoten des Baums ist die Basis des WDPT. Alle weiteren Kindknoten stellen die Auswertung einer OPTIONAL-Klausel da. Die OPTIONAL-Klauseln können auch geschachtelt verwendet werden, infolgedessen ergibt sich eine Baumstruktur. Diese Knoten sind ebenfalls durch die Elemente \textit{node} abgebildet. Ein \textit{node} Element besteht aus genau einem \textit{variables} Element, beliebig vielen \textit{mapping} Elementen und danach beliebig vielen \textit{node} Elementen. Diese \textit{node} Elemente stellen die Kindknoten da.
 Das \textit{variables} Element enthält mehrere \textit{nodeVar} Elemente. Diese repräsentieren die Variablen, welche innerhalb der zugehörigen OPTIONAL-Klausel des Knotens verwendet werden.
@@ -702,10 +702,6 @@ Hier ist auch gut der Unterschied zwischen \textit{IMDB ohne Indizes} und \texti
 
 Alle Zeitangaben sind in Sekunden angegeben.
 
-\chapter{Schlussfolgerung}
-Nach Evaluierung des Ist-Zustandes und der Evaluierung des neuen Systems konnten die Ergebnisse dieser beiden Systeme verglichen werden.
-
-
 \begin{table}[]
 \caption{Zeitersparnis}
 \label{zeit}
@@ -733,6 +729,43 @@ lubm-ex-20-17 & Ohne IMDB         &        & 485.998s &           &             
               &                   & DERBY  & 4.474s   & 481.524s  & 99.08\%       \\ \bottomrule
 \end{tabular}
 \end{table}
+
+
+\chapter{Schlussfolgerung}
+
+\begin{itemize}
+	\item In dieser Arbeit wurde die Evaluierung von WDPT untersucht. Ausgangspunkt der Arbeit war ein bereits vorhandener Algorithmus, welcher auf einer iterativen Vorgehensweise basiert.
+	\item Die Eingabe ist eine XML-Datei, welche die Auswertung mehrerer Knoten in einem WDPT darstellt. Für dieses Format wurde ein XML Schema erstellt.
+	\item Der iterative Algorithmus wurde beschrieben und analysiert. Im speziellen wurden folgende Teilbereiche betrachtet:
+	\begin{itemize}
+		\item Kompatibilität
+		\item Maximierung
+		\item Sumsumierung 
+	\end{itemize}
+	\item Um einen Ausgangswert zu bestimmen, wurde eine Zeitmessung mit unterschiedlichen Dateien durchgeführt. 
+	\item Grundkonzepte und Funktionsweisen einer In-Memory Datenbanken wurden beschrieben. 
+	\item Es wurden drei konkrete In-Memory Datenbanken ausgewählt, welche in dem neuen Algorithmus Anwendung finden.
+	\begin{itemize}
+		\item H2 Database Engine
+		\item HyperSQL DataBase
+		\item Apache Derby 
+	\end{itemize}
+	\item Für den neuen Algorithmus wurde ein Konzept erstellt, welches auf relationalen DBMS so wie dem LEFT OUTER JOIN basiert. 
+	\item Der neue Algorithmus beruht auf diesen Kernpunkten:
+	\begin{itemize}
+		\item Identifizieren der Spalten der \textit{JOIN} Bedingung
+		\item Anlegen der Tabellen und Indizes
+		\item Einfügen der Daten
+		\item Generieren und ausführen der \textit{SELECT} Abfrage
+		\item Zurücksetzen der Datenbank
+	\end{itemize} 
+	\item Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden.
+\end{itemize}
+   
+ 
+
+
+
 
 \chapter*{Appendix}
 
