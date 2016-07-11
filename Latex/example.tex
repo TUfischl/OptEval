@@ -177,7 +177,7 @@ Heutzutage steht uns eine gro\ss e Menge an Daten zur Verfügung. Diese Daten we
 	\label{dbBsp}
 \end{figure}
 
-Die SQL Abfrage (Listing \ref{sqlQueryExampleDB}) liefert in diesem Fall keinen Treffer, da der Gipfel \textbf{K2} mit der Höhe von \textbf{8611} noch nie im Winter bestiegen worden ist. Diese Ergebnis kommt zu Stande, da die Tabelle \textit{ErstbesteigungWinter} unvollständig ist. Würde man auf die zusätzlichen Information der Tabelle \textit{ErstbesteigungWinter} verzichten, liefert diese Abfrage ein Ergebnis.
+Die SQL Abfrage (Listing \ref{sqlQueryExampleDB}) liefert in diesem Fall keinen Treffer, da der Gipfel \textbf{K2} mit der Höhe von \textbf{8611} noch nie im Winter bestiegen worden ist. Diese Ergebnis kommt zu Stande, da die Tabelle \textit{ErstbesteigungWinter} unvollständig ist. Wenn man auf die zusätzlichen Information der Tabelle \textit{ErstbesteigungWinter} verzichtet, liefert diese Abfrage ein Ergebnis.
 
 \begin{lstlisting}[language=SQL,caption={SELECT DB Beispiel},frame = single,label={sqlQueryExampleDB}]
 SELECT Gebirge.A, Gebirge.B, ErstbesteigungWinter.D, Kontinent.E
@@ -190,8 +190,8 @@ SELECT Gebirge.A, Gebirge.B, ErstbesteigungWinter.D, Kontinent.E
 			ON Gebirge.A = Kontinent.E
 	WHERE Höhe.C = "8611"
 \end{lstlisting}
- Ähnlich dazu verwendet man im Semantic Web die Abfragesprache SPARQL. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language}. Herkömmliche Abfragesprachen wären für die Anforderungen im Semantic Web zu restriktiv, da es sich hierbei oft um unvollständige Datensätze handelt.
-SPARQL beinhaltet deswegen den OPTIONAL Operator. Diese äu{\ss}erst wichtige Funktion ermöglicht Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Ergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern sind auch Teil der Lösung. In Listing \ref{sparqlQueryExampleDB} wird gezeigt wie man durch den Einsatz des OPTIONAL Operators auch Teilergebnisse der Abfrage erhält.
+ Ähnlich dazu verwendet man im Semantic Web die Abfragesprache SPARQL. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language}. Herkömmliche Abfragesprachen sind für die Anforderungen im Semantic Web zu restriktiv, da es sich hierbei oft um unvollständige Datensätze handelt.
+SPARQL beinhaltet deswegen den OPTIONAL Operator. Diese äu{\ss}erst wichtige Funktion ermöglicht Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Teilergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern bleiben Teil der Lösung. In Listing \ref{sparqlQueryExampleDB} wird gezeigt wie man durch den Einsatz des OPTIONAL Operators auch Teilergebnisse einer Abfrage erhält.
 
 \begin{lstlisting}[language=Sparql,caption={SPARQL DB Beispiel},frame = single,label={sparqlQueryExampleDB}]
 SELECT ?A, ?B, ?D, ?E
@@ -242,7 +242,7 @@ Der Well-Designed Pattern Tree (WDPT) der XML-Datei (Listing \ref{lst:xml}) ist 
 
 \section{Implementierung} \label{istImp}
 
-Die aktuelle Implementierung ohne In-Memory Datenbank besteht aus mehreren Phasen:Die erste Phase besteht darin eine oben beschriebene XML-Datei einzulesen und die XML-Strukturen in folgende Java Objekte zu konvertieren.Die Klasse \textit{EvalPT} spiegelt das Hauptelement \textit{ptresult} der XML-Datei wieder. Die Klasse enthält den Wurzelknoten, so wie die Variablen der \textit{ovar} Elemente. Die \textit{node} Elemente werden in in der Klasse \textit{EvalTreeNode} abgebildet. Die Einträge aus dem \textit{variables} Element werden als \textit{Set} in dieser Klasse gespeichert. Zusätzlich enthält die Klasse auch eine Liste von Kindknoten des Typs \textit{EvalTreeNode}. Der Gro\ss teil der zu verarbeitenden Daten besteht aus den \textit{mapping} Elementen, dies werden in dem entsprechenden \textit{EvalTreeNode} Objekt in einem \textit{Set} gespeichert. Die \textit{mapping} Elemente werden in Java als \textit{Map} abgebildet. Die Variablennamen bilden die Schlüssel und die konkreten Ausprägungen der SPARQL-Variablen bilden die Werte der \textit{Map}. Diese \textit{Map} Objekte werden im Folgenden als Mapping bezeichnet. In Abbildung \ref{klassendiagramm} sind die die Klassen als Klassendiagramm dargestellt. 
+Die aktuelle Implementierung ohne In-Memory Datenbank besteht aus mehreren Phasen:Die erste Phase besteht darin eine oben beschriebene XML-Datei einzulesen und die XML-Strukturen in folgende Java Objekte zu konvertieren.Die Klasse \textit{EvalPT} spiegelt das Hauptelement \textit{ptresult} der XML-Datei wieder. Die Klasse enthält den Wurzelknoten, so wie die Variablen der \textit{ovar} Elemente. Die \textit{node} Elemente werden in in der Klasse \textit{EvalTreeNode} abgebildet. Die Einträge aus dem \textit{variables} Element werden als \textit{Set} in dieser Klasse gespeichert. Zusätzlich enthält die Klasse auch eine Liste von Kindknoten des Typs \textit{EvalTreeNode}. Der Gro\ss teil der zu verarbeitenden Daten besteht aus den \textit{mapping} Elementen, dies werden in dem entsprechenden \textit{EvalTreeNode} Objekt in einem \textit{Set} gespeichert. Die \textit{mapping} Elemente werden in Java als \textit{Map} abgebildet. Die Variablennamen bilden die Schlüssel und die konkreten Ausprägungen der SPARQL-Variablen bilden die Werte der \textit{Map}. Diese \textit{Map} Objekte werden im Folgenden als Mapping bezeichnet. In Abbildung \ref{klassendiagramm} sind die Klassen als Klassendiagramm dargestellt. 
 
 \begin{figure}[ht]
 	\centering
@@ -323,7 +323,7 @@ Der Algorithmus verwendet die Funktion \textit{subsums}. Diese erhält zwei Eing
 
 Zu Beginn des eigentlichen Algorithmus wird überprüft ob das einzufügende Element \textit{newM} schon in dem Set \textit{maxResults} vorhanden ist, wenn das der Fall ist, wird das Element nicht erneut eingefügt und der Algorithmus ist beendet. Danach wird über das Set \textit{maxResults} iteriert. Wenn \textit{oldM} ein Mapping aus dem Set \textit{maxResults} ist, wird überprüft ob \textit{oldM} \textit{newM} subsumiert. Ist das der Fall, wird \textit{newM} nicht in das Set eingefügt und der Algorithmus ist beendet. Wenn \textit{newM} \textit{oldM} subsumiert wird \textit{oldM} aus \textit{maxResults} entfernt. Subsumiert keines der Mappings aus \textit{maxResults} \textit{newM}, wird \textit{newM} zu \textit{maxResults} hinzugefügt.
 
-\begin{lstlisting}[float,caption={Beispiel für Subsumierung},frame=single,label={bspKompMap}]
+\begin{lstlisting}[float,caption={Beispiel für Subsumierung},frame=single,label={subsumBsp}]
 Mapping m1 = { ("?X","x"), ("?Y","y"), ("?Z","z"), ("?A","a") }
 
 Mapping m2 = { ("?X","x"), ("?Y","y"), ("?B","b") }
@@ -432,7 +432,7 @@ Alle Zeitangaben sind in Sekunden angegeben.
 \chapter{In-Memory Datenbanken}
 Die folgenden Abschnitte befassen sich mit neuen Anforderungen und Konzepte im Bereich In-Memory Datenbanken. Verwendete Literatur: \cite{BookInMem}
 \section{Neue Anforderungen an Datenbanksysteme}
-Wenn man heutzutage ein von Grund auf neues Datenbanksystem entwickeln würde, hätte dieses andere Anforderungen als konventionelle Datenbanksysteme. Moderen Unternehmen arbeiten im täglichen Geschäft mit einer Fülle von Daten, welche vor ein paar Jahren noch undenkbar war. Fertigungsunternehmen sind ein Beispiel, für solche datenlastigen Betriebe. Während des Fertigungsprozesses werden enorme Mengen an Daten produziert, diese müssen oft in Echtzeit verarbeitet werden und liefern Grundlagen für weitere Entscheidungsprozesse. Dies ist nur ein Beispiel der steigenden Bedürfnisse moderne Datenbanksysteme. 
+Wenn man heutzutage ein von Grund auf neues Datenbanksystem entwickeln würde, hätte dieses andere Anforderungen als konventionelle Datenbanksysteme. Moderne Unternehmen arbeiten täglich mit einer Fülle von Daten, was vor ein paar Jahren noch undenkbar war. Fertigungsunternehmen sind ein Beispiel, für solche datenlastige Betriebe. Während des Fertigungsprozesses werden enorme Mengen an Daten produziert. Diese müssen oft in Echtzeit verarbeitet werden und liefern Grundlagen für weitere Entscheidungsprozesse. Dies ist nur ein Beispiel der steigenden Bedürfnisse moderner Datenbanksysteme. 
 
 Es gibt zwei wesentliche Anforderungen für moderne Datenbanksysteme. Daten aus unterschiedlichen Eingabequellen müssen in einem Datenbanksystem aufgenommen werden und diese Daten müssen in Echtzeit verarbeitet werden um abgestimmte Entscheidungen treffen zu können. Die weiteren Abschnitte beschreiben verschiedene Einsatzgebiete, in denen diese Anforderungen zu tragen kommen.
 
@@ -444,9 +444,9 @@ In der Produktion von alltäglichen Produkten kommen eine Vielzahl von Sensoren 
 BigPoint ist eine Spieleentwickler mit dem Sitz in Deutschland. In der Spieleindustrie sind Ereignisdaten von zentraler Bedeutung. BigPoint verwendet diese Daten um in Echtzeit den Spielern in schwierigen Situationen zahlungspflichtige Hilfen anzubieten. Diese Spiele produzieren 10.000 Ereignisse pro Sekunde. Herkömmliche Datenbanken sind für diesen Anwendungszweck nur begrenzt einsetzbar. Flexible und auf den Anwendungsfall zugeschnittene Abfragen von Entwicklern können nicht interaktiv beantwortet werden. In-Memory Datenbanken werden eingesetzt, um in kürzester Zeit Entscheidungen über den Einsatz von zahlungspflichtigen Hilfen zu treffen. Es werden verschiedene Gruppen von Spielern analysiert und entschieden ob alle Spieler diese Angebote bekommen.
 
 \subsection*{Strukturierte und unstrukturierte Daten}
-Man muss zwischen strukturierten und unstrukturierten Daten unterscheiden. Strukturierte Daten weisen ein Schema auf, auf Basis dessen man die Daten analysieren kann. Daten welche in relationalen Datenbanken gespeichert werden sind zum Beispiel strukturierte Daten. Im Gegensatz dazu weisen unstrukturierte Daten kein Schema auf, somit kann nicht so einfach eine Analyse der Daten vorgenommen werden, z.B.: Bilder, Videos, freie Texte, etc. Im laufe der Zeit sind in vielen Unternehmen eine gro\ss e Menge von unstrukturierten Daten wie Berichte, Tabellen oder Textdokumente angefallen. In diesen unstrukturierten Daten verbirgt sich eine Menge an Informationen, es besteht eine enorme Nachfrage in diesen Dokumenten schnell und flexibel nach Informationen zu suchen.
+Man muss zwischen strukturierten und unstrukturierten Daten unterscheiden. Strukturierte Daten weisen ein Schema auf, auf Basis dessen man die Daten analysieren kann. Daten welche in relationalen Datenbanken gespeichert werden sind zum Beispiel strukturierte Daten. Im Gegensatz dazu weisen unstrukturierte Daten kein Schema auf, somit kann nicht so einfach eine Analyse der Daten vorgenommen werden, z.B.: Bilder, Videos, freie Texte, etc. Im Laufe der Zeit sind in vielen Unternehmen eine gro\ss e Menge von unstrukturierten Daten wie Berichte, Tabellen oder Textdokumente angefallen. In diesen unstrukturierten Daten verbirgt sich eine Menge an Informationen. Es besteht eine enorme Nachfrage in diesen Dokumenten schnell und flexibel nach Informationen zu suchen.
 
-In Spitälern sammeln sich gro\ss e Mengen von strukturierten und unstrukturierten Patientendaten an. In-Memory Datenbanken ermöglichen die Kombination von strukturierten und unstrukturierten Daten, so wie die Einbindung von externen Daten z.B. klinischen Studien oder Nebenwirkungen. Somit können Ärzte in Echtzeit, die benötigten Daten interaktive kombinieren und schneller Diagnosen stellen. Dieser Prozess verringert die manuelle und zeitaufwendige Arbeit der Ärzte enorm.
+In Spitälern sammeln sich gro\ss e Mengen von strukturierten und unstrukturierten Patientendaten an. In-Memory Datenbanken ermöglichen die Kombination von strukturierten und unstrukturierten Daten, so wie die Einbindung von externen Daten z.B. klinischen Studien oder Nebenwirkungen. Somit können Ärzte in Echtzeit, die benötigten Daten interaktiv kombinieren und schneller Diagnosen stellen. Dieser Prozess verringert die manuelle und zeitaufwendige Arbeit der Ärzte enorm.
 
 Auch bei Wartungsarbeiten von Flugzeugen werden In-Memory Datenbanken eingesetzt. Bei der Bearbeitung von Wartungsaufträgen fallen strukturierte wie auch unstrukturierte Daten an. Mit Hilfe der In-Memory Technologie können Korrelationen zwischen Schwachstellen erkannt werden und dies wiederum verringertndas Risiko eines Fehlers.
 
@@ -461,17 +461,15 @@ Ein zusätzlicher Vorteil des Hauptspeichers sind die konstanten Zugriffszeiten.
 \subsection{Spaltenorientierung}
 In herkömmlichen Datenbanken werden die Daten zeilenweise abgespeichert, in Gegensatz zu SanssouciDB. Hier werden die Daten spaltenweise abgelegt. Bei Spaltenorientierung werden alle Werte einer Spalte in benachbarten Blöcken gespeichert. Wenn die Daten zeilenorientiert abgespeichert werden, werden ganze Zeilen in benachbarten Blöcken abgelegt. Spaltenorientierung eignet sich also zum lesen von einzelnen Spalten. Vorteilhaft sind hierbei Spaltenaggregation oder Spalten-Scans.
 
-Viele Datenbanksystem verwenden spaltenorientierte Speicherung um diese Vorteile zu nutzen. Bei einem gro{\ss}teil der SQL Abfragen, werden alle Spalten abgefragt, aber es wird nur ein kleiner Teil der Spalten verwendet. Um den Vorteil der spaltenorientierten Speicherung optimal zu nutzen, sollten \textit{SELECT *} Abfragen vermieden werden. Eine Analyse von Unternehmensapplikationen hat gezeigt, das fast nie alle Spalten einer Tabelle im Endeffekt verwendet werden. Ein Beispiel dieser Analyse zeigte, dass bei einer konkreten Tabelle mit 300 Spalten, nur 17 Spalten benötigt wurden. Hier kann bei der Verwendung von Spaltenorientierung bedeutender Vorteil erreicht werden.
+Viele Datenbanksystem verwenden spaltenorientierte Speicherung um diese Vorteile zu nutzen. Bei einem gro{\ss}teil der SQL Abfragen, werden alle Spalten abgefragt, aber es wird nur ein kleiner Teil der Spalten verwendet. Um den Vorteil der spaltenorientierten Speicherung optimal zu nutzen, sollten \textit{SELECT *} Abfragen vermieden werden. Eine Analyse von Unternehmensapplikationen hat gezeigt, das fast nie alle Spalten einer Tabelle im Endeffekt verwendet werden. Ein Beispiel dieser Analyse zeigte, dass bei einer konkreten Tabelle mit 300 Spalten, nur 17 Spalten benötigt wurden. Hier kann bei der Verwendung von Spaltenorientierung ein bedeutender Vorteil erreicht werden.
 
-Bei der Verwendung von In-Memory Datenbanken spielt die Latenz der Festplatte keine Rolle. Jedoch muss man den Zugriff auf den Hauptspeicher beachten. In der Praxis tendieren viele Entwickler dazu alle Spalten abzufragen, also \textit{SELECT *} Abfragen zu verwenden. Bei zeilenorientierter Speicherung ist die Leistungseinbu\ss e bei dieser Art von Abfrage minimal. Im Gegensatz zur spaltenorientierten Speicherung steigt bei dieser Art von Abfragen die Leistung relativ zur Anzahl der Spalten der jeweiligen Tabelle. Oft wachsen die Spalten im Laufe der Entwicklung, dies trägt weiter zu einer Leistungsverschlechterung bei.
-
-Ein weiterer Vorteil entsteht bei der Verwendung von Indizes. Da die Daten spaltenweise Angeordnet sind, können die einzelnen Spalten als Indizes verwendet werden. Nachdem alle Daten im Hauptspeicher liegen und die Daten einer Spalten nacheinander angeordnet sind, ist die Leistung eines Scan-Vorgangs meist ausreichend. Es können dennoch bestimmte Indizes angelegt werden.
+Ein weiterer Vorteil entsteht bei der Verwendung von Indizes. Da die Daten spaltenweise angeordnet sind, können die einzelnen Spalten als Indizes verwendet werden. Nachdem alle Daten im Hauptspeicher liegen und die Daten einer Spalten nacheinander angeordnet sind, ist die Leistung eines Scan-Vorgangs meist ausreichend. Es können dennoch bestimmte Indizes angelegt werden.
 
 Jedoch gibt es bei spaltenorientierter Speicherung auch Nachteile. Das Einfügen von gro\ss en Datenmengen ist komplizierter, deswegen werden Differentialspeicher verwendet. Wenn neue Daten eingefügt werden, werden diese zuerst in den Differentialspeicher eingefügt. Nach einem gewissen Schwellenwert, z.B. Anzahl an Neudaten, werden diese Daten in die eigentliche Datenbank überführt.
 
 
 \subsection{Aktive und passive Daten}
-In SanssouciDB wird zwischen aktiven und passiven Daten unterschieden. Aktive Daten sind Datenbestände, welche noch nicht abgeschlossen sind und noch im Arbeitsspeicher verarbeitet werden. Passive Daten sind schon komplett abgeschlossen und nicht mehr in Verwendung, diese Datenbestände werden auf langsamere Speichermedien ausgelagert. Diese Vorgehensweise entlastet den Hauptspeicher, da ein Teil der Daten ausgelagert wird. Wenn neue Daten eingefügt oder bestehende Daten geändert werden müssen Log-Dateien erstellet werden. Diese können aber nicht im Hauptspeicher abgelegt werden, sondern müssen auf ein nicht-flüchtiges Speichermedium (Festplatte) gespeichert werden.
+In SanssouciDB wird zwischen aktiven und passiven Daten unterschieden. Aktive Daten sind Datenbestände, welche noch nicht abgeschlossen sind und noch im Arbeitsspeicher verarbeitet werden. Passive Daten sind schon komplett abgeschlossen und nicht mehr in Verwendung, diese Datenbestände werden auf langsamere Speichermedien ausgelagert. Diese Vorgehensweise entlastet den Hauptspeicher, da ein Teil der Daten ausgelagert wird. Wenn neue Daten eingefügt oder bestehende Daten geändert werden müssen Log-Dateien erstellt werden. Diese können aber nicht im Hauptspeicher abgelegt werden, sondern müssen auf ein nicht-flüchtiges Speichermedium (Festplatte) gespeichert werden.
 
 
 \section{Konkrete In-Memory Datenbanken}
@@ -479,7 +477,7 @@ Zur Umsetzung wurden drei In-Memory Datenbanken ausgewählt, diese werden im Fol
 
 \subsection{H2 Database Engine}
 
-Die H2 Database Engine (H2) ist ein relationalen Datenbankmanagementsystem (RDBMS), welches in Java geschrieben wurde. Der Programmcode ist Open Source und somit öffentlich zugänglich. H2 unterstütz Standard SQL und als Schnittstelle die JDBC API. Weiters kann der PostgreSQL ODBC Treiber verwendet werden.
+Die H2 Database Engine (H2) ist ein relationalen Datenbankmanagementsystem (RDBMS), welches in Java geschrieben wurde. Der Programmcode ist Open Source und somit öffentlich zugänglich. H2 unterstützt Standard SQL und als Schnittstelle die JDBC API. Weiters kann der PostgreSQL ODBC Treiber verwendet werden.
 
 \subsubsection*{ACID}
 Die ACID-Eigenschaften finden in H2 wie folgt Anwendung:
@@ -498,19 +496,19 @@ Die ACID-Eigenschaften finden in H2 wie folgt Anwendung:
 	\end{itemize}
 	\item Durability
 	\begin{itemize}
-		\item Die Eigenschaft der Dauerhaftigkeit ist im Bereich der In-Memory Datenbanken ein grundsätzliches Problem, da der verwendetet Speicher, der Hauptspeicher, ohne Stromversorgung die Daten nicht halten kann. H2 garantiert also nicht das alle Transaktionen einen Stromausfall überstehen. Wenn die Dauerhaftigkeit der Daten hohe Priorität hat, kann der von H2 zur verfügung gestellte \textit{clustering mode} verwendet werden. 
+		\item Die Eigenschaft der Dauerhaftigkeit ist im Bereich der In-Memory Datenbanken ein grundsätzliches Problem, da der verwendetet Speicher, der Hauptspeicher, ohne Stromversorgung die Daten nicht halten kann. H2 garantiert also nicht das alle Transaktionen einen Stromausfall überstehen. Wenn die Dauerhaftigkeit der Daten hohe Priorität hat, kann der von H2 zur Verfügung gestellte \textit{clustering mode} verwendet werden. 
 	\end{itemize}
 \end{itemize}
 
 \subsubsection*{Problem bei der Dauerhaftigkeit}
 Dauerhaftigkeit in einer In-Memory Datenbank wie H2 zu erreichen, gestaltet sich schwieriger als man glaubt. Das Limit wird hier durch die Schreibgeschwindigkeit der Festplatte festgelegt. Die Log-Dateien werden auf die Festplatte geschrieben, um im Fehlerfall einen konsistenten Zustand wieder herstellen zu können. Um das durchschreiben auf die Festplatte bei jedem Eintrag zu erreichen, verwendet H2 \textit{synchronous write}. Hierbei benutzt H2 in Java \textit{RandomAccessFile}, diese Klasse unterstützt zwei Modelle \textit{rwd} und \textit{rws}. Bei \textit{rwd} wird jede Aktualisierung der Datei synchron auf die Festplatte geschrieben. Zusätzlich wird bei \textit{rws} bei jeder Änderung der Metadaten synchron auf die Festplatte geschrieben.
 
-H2 hat einen Test \textit{org.h2.test.poweroff.TestWrite} mit diesen Model implementiert. Dabei werden 50.000 Schreiboperationen erreicht. Auch wenn die Buffer des Betriebssystem deaktiviert werden, können nicht alle Daten synchron auf die Festplatte geschrieben werden. Eine herkömmliche Festplatte läuft mit 7200 RPM, die Umdrehungszahl reicht dafür nicht aus. Der Buffer kann in Java manuell über \textit{FileDescriptor.sync()} und \textit{FileChannel.force()} geleert werden. Doch ein Aufruf dieser Funktionen stellt nicht sicher, dass die Daten auch wirklich auf die Festplatte geschrieben werden.
+H2 hat einen Test \textit{org.h2.test.poweroff.TestWrite} mit diesem Model implementiert. Dabei werden 50.000 Schreiboperationen erreicht. Auch wenn die Buffer des Betriebssystem deaktiviert werden, können nicht alle Daten synchron auf die Festplatte geschrieben werden. Eine herkömmliche Festplatte läuft mit 7200 RPM, die Umdrehungszahl reicht dafür nicht aus. Der Buffer kann in Java manuell über \textit{FileDescriptor.sync()} und \textit{FileChannel.force()} geleert werden. Doch ein Aufruf dieser Funktionen stellt nicht sicher, dass die Daten auch wirklich auf der Festplatte sind.
 
 Abgesehen davon, dass man nicht garantieren kann, dass bei jedem Schreibvorgang die Daten auf der Festplatte persistiert werden, sollte man den Buffer nicht manuell leeren. Das manuelle Leeren des Buffer ist also schwer und verschlechtert die Leistung dramatisch. Um die Verzögerung des Schreibvorgangs auszugleichen, kann in H2 die Funktion \textit{SET WRITE DELAY} verwendet werden.
 
 
-\subsubsection*{Verbindungsmöglichkeiten}H2 unterstützt drei verschiedene Verbindungsmöglichkeiten. Im eingebetteten Modus (embedded mode) wird die Datenbank in der selben JVM wie die Applikation geöffnet. Dies hat den Vorteil, einer hohen Zugriffsgeschwindigkeit und ist auch die einfachste Variante. Es gibt keine Einschränkung in der Anzahl der offenen Datenbanken bzw. offenen Verbindungen.Weiters stellt H2 einen Server Modus zur Verfügung. Dabei wird ein Server gestartet auf welchen intern eine Datenbank im eingebetteten Modus geöffnet wird. Um auf die Datenbank zu zugreifen, muss man sich mit dem Server verbinden. Die Client Applikation kann über JDBC oder ODBC API auf die Datenbank zugreifen. Anders wie beim eingebetteten Modus können beim Server Modus mehrere Client Applikationen gleichzeitig auf die Datenbank zugreifen.Der Nachteil dabei ist, dass alle Daten über TCP/IP transportiert werden müssen. Dieser zusätzliche Schritt hemmt die Geschwindigkeit des Systems. Wie auch bei dem eingebetteten Modus gibt es keine Einschränkungen in der Anzahl der offenen Datenbanken bzw. offenen Verbindungen.Der dritte Modus stellt eine Mischung aus dem eingebetteten Modus und dem Server Modus dar. Zuerst wird eine Applikation gestartet, welche sich zur Datenbank im eingebetteten Modus verbindet. Die selbe Applikation startet einen Server, damit sich auch andere Applikationen zur Datenbank verbinden können. Die Verbindung der lokalen Applikation ist sehr gut, da diese den eingebetteten Modus verwendet. Applikationen die sich über den Server zur Datenbank verbinden, haben eine etwas langsamere Verbindung. Über die Server API kann die lokale Applikation den Server starten bzw. stoppen.
+\subsubsection*{Verbindungsmöglichkeiten}H2 unterstützt drei verschiedene Verbindungsmöglichkeiten. Im eingebetteten Modus (embedded mode) wird die Datenbank in der selben JVM wie die Applikation geöffnet. Dies hat den Vorteil, einer hohen Zugriffsgeschwindigkeit und ist auch die einfachste Variante. Es gibt keine Einschränkung in der Anzahl der offenen Datenbanken bzw. offenen Verbindungen.Weiters stellt H2 einen Server Modus zur Verfügung. Dabei wird ein Server gestartet auf welchen intern eine Datenbank im eingebetteten Modus geöffnet wird. Um auf die Datenbank zu zugreifen, muss man sich mit dem Server verbinden. Die Client Applikation kann über JDBC oder ODBC API mit der Datenbank kommunizieren. Anders wie beim eingebetteten Modus können beim Server Modus mehrere Client Applikationen gleichzeitig Daten lesen und manipulieren.Der Nachteil dabei ist, dass alle Daten über TCP/IP transportiert werden müssen. Dieser zusätzliche Schritt hemmt die Geschwindigkeit des Systems. Wie auch bei dem eingebetteten Modus gibt es keine Einschränkungen in der Anzahl der offenen Datenbanken bzw. offenen Verbindungen.Der dritte Modus stellt eine Mischung aus dem eingebetteten Modus und dem Server Modus dar. Zuerst wird eine Applikation gestartet, welche sich zur Datenbank im eingebetteten Modus verbindet. Dieselbe Applikation startet einen Server, damit sich auch andere Applikationen zur Datenbank verbinden können. Die Latenz der lokalen Applikation ist sehr niedrig, da diese den eingebetteten Modus verwendet. Applikationen die den Server der Datenbank verwenden, haben eine etwas langsamere Verbindung. Über die Server API kann die lokale Applikation den Server starten bzw. stoppen.
 
 \cite{H2Adv}
 
@@ -549,25 +547,25 @@ Die ACID-Eigenschaften finden in HSQLDB wie folgt Anwendung:
 
 \subsubsection*{Verbindungsmöglichkeiten}
 
-Es gibt zwei grundsätzliche Verbindungsarten. Die \textit{in-process} Verbindung erlaub der Applikation direkt auf die Datenbank zuzugreifen. Bei dieser Variante müssen die Daten keinen Umweg über das Netzwerk machen, anders wie bei den Server Modi. Bei diesen Verbindungsmöglichkeiten findet die Kommunikation nicht Prozessintern statt, sonder wird über eine Client-Server Architektur geregelt. Der grö\ss te Nachteil bei dieser Methode ist der zusätzliche Zeitaufwand, welcher bei der Kommunikation über das Netzwerk entsteht. 
+Es gibt zwei grundsätzliche Verbindungsarten. Die \textit{in-process} Verbindung erlaubt der Applikation direkt auf die Datenbank zuzugreifen. Bei dieser Variante müssen die Daten keinen Umweg über das Netzwerk machen, anders wie bei den Server Modi. Bei diesen Verbindungsmöglichkeiten findet die Kommunikation nicht Prozessintern statt, sondern wird über eine Client-Server Architektur geregelt. Der grö\ss te Nachteil dieser Methode ist der zusätzliche Zeitaufwand, welcher bei der Kommunikation über das Netzwerk entsteht. 
 
 Wenn eine Datenbank im Server Modus gestartet wird, wird intern ein \textit{in-process} Katalog gestartet. Der Server wartet während des Betriebes auf eingehende Verbindungen. Da die Verbindung über das Netzwerk erfolgt, kann der Zugriff auch von einen anderen Computer aus erfolgen, nicht so bei der reinen \textit{in-process} Verbindung. Es wird von HSQLDB empfohlen einen Server Modus während der Entwicklungsphase zu verwenden, um die Daten von einer separaten Datenbank abzurufen.
 
-HyperSQL HSQL Server ist der bevorzugte Server Modus. Es wird ein proprietäres Protokoll für die Kommunikation verwendet, des wegen ist dies der schnellste Server Modus.
+HyperSQL HSQL Server ist der bevorzugte Server Modus, da ein proprietäres Protokoll für die Kommunikation verwendet wird.
 
-HyperSQL HTTP Server ist die zweite Möglichkeit die Datenbank im Server Modus zu starten. Dieser Modus ist für Situationen geeignet, in denen man nur über HTTP kommunizieren kann. Dieser spezielle Web Server erlaubt den JDBC Clients über HTTP zu kommunizieren. Dieser Modus sollte nur verwendet werden, wenn man auf HTTP angewiesen ist.
+HyperSQL HTTP Server ist die zweite Möglichkeit die Datenbank im Server Modus zu starten. Dieser Modus ist für Situationen geeignet, in denen man nur über HTTP kommunizieren kann. Dieser spezielle Web Server erlaubt den JDBC Clients über HTTP zu kommunizieren. 
 
 \cite{HSQLGuide}
 
 \subsection{Apache Derby}
-Apache Derby ist eine relationale Datenbank und ein Unterprojekt der Apache DB. Die gesamte Datenbank ist in Java realisiert und als Open Source Projekt verfügbar. Apache Derby bietet wie auch andere Anbieter einen eingebetteten Modus und einen Server Modus an, um sich zur Datenbank zu verbinden. In der Standardeinstellung gibt es keinen separaten Datenbank Server zu installieren oder zu warten. Das Datenformat, welches von Apache Derby verwendet wird, ist plattformunabhängig. So können diverse Datenbestände in Apache Derby ohne Rücksichtnahme auf das Zielgerät verschoben werden. Apache Derby ist ACID kompatibel und unterstützt referentielle Integrität.
+Apache Derby ist eine relationale Datenbank und ein Unterprojekt der Apache DB. Die gesamte Datenbank ist in Java realisiert und als Open Source Projekt verfügbar. Apache Derby bietet wie auch andere Anbieter einen eingebetteten Modus und einen Server Modus an, um sich zur Datenbank zu verbinden. In der Standardeinstellung kann kein separater Datenbank Server installierten oder gewartet werden. Das Datenformat, welches von Apache Derby verwendet wird, ist plattformunabhängig. So können diverse Datenbestände in Apache Derby ohne Rücksichtnahme auf das Zielgerät verschoben werden. Apache Derby ist ACID kompatibel und unterstützt referentielle Integrität.
 
 \subsubsection*{Verbindungsmöglichkeiten}
 Wie auch andere In-Memory Datenbanken bietet Apache Derby verschiedene Verbindungsmöglichkeiten an. Unter Apache Derby werden diese Verbindungsmöglichkeiten Entwicklungsoptionen genannt. Von diesen Entwicklungsoptionen stellt Apache Derby zwei zur Verfügung. 
 
 In der eingebettete Entwicklungsoption wird die Datenbank in der selben JVM wie das eigentliche Java Programm gestartet. Diese Option ist für den Endbenutzer fast nicht zu erkennen, da sich die Datenbank mit dem Java Programm automatisch startet und auch wieder beendet. Hierbei hat nur ein Benutzer Zugriff auf die Datenbank.
 
-Die Client/Server Entwicklungsoption baut auf einen Datenbankserver auf, welcher über das Netzwerk erreichbar ist. Bei dieser Variante können sich mehrere Benutzer mit der Datenbank verbinden. Auf dem Server läuft Apache Derby in einer eigenen JVM und Programme welche sich zu dem Datenbankserver verbinden laufen in verschiednen JVMs.
+Die Client/Server Entwicklungsoption baut auf einen Datenbankserver auf, welcher über das Netzwerk erreichbar ist. Bei dieser Variante können sich mehrere Benutzer mit der Datenbank verbinden. Auf dem Server läuft Apache Derby in einer eigenen JVM und Programme welche sich zu dem Datenbankserver verbinden können mit verschiednen JVMs ausgeführt werden.
 
 
  
@@ -577,7 +575,7 @@ Die Client/Server Entwicklungsoption baut auf einen Datenbankserver auf, welcher
 \section{Konzept}
 Der oben beschriebene iterative Algorithmus (siehe \ref{istImp}) soll durch eine performantere Vorgehensweise abgelöst werden. Kern des neuen Systems ist eine relationale Datenbank, im speziellen eine In-Memory Datenbank. Diese wird verwendet um die Zuordnung der Mappings aus den OPTIONAL-Knoten zu realisieren. Diese Zuordnung der Mappings entspricht einem LEFT OUTER JOIN und kann somit in einer relationalen Datenbank umgesetzt werden.
 
-Um im Folgenden diesen LEFT OUTER JOIN durchzuführen, muss davor eine geeignete Datenbank angelegt werden. Nach dem die Daten eingelesen wurden, muss aus der Struktur der Daten ein Datenbankschema abgeleitet werden. Für jeden Durchlauf bzw. für jede Datei muss individuell ein Datenbankschema erstellt werden. Das Datenbankschema umfasst hierbei das Erstellen geeigneter Tabellen und das Anlegen von Indizes. Pro Knoten der Eingabe muss eine Tabelle angelegt werden. Dabei werden keine Primärschlüssel oder Fremdschlüssel erstellt. Die Variablen aus den \textit{nodeVar} Elementen bilden die Spalten der Tabelle eines Knoten. Um den späteren LEFT OUTER JOIN effizienter zu gestallten werden für die Spalten der JOIN Bedingung Indizes erstellt.
+Um im Folgenden diesen LEFT OUTER JOIN durchzuführen, muss davor eine geeignete Datenbank angelegt werden. Nach dem die Daten eingelesen wurden, muss aus der Struktur der Daten ein Datenbankschema abgeleitet werden. Für jeden Durchlauf bzw. für jede Datei muss deshalb individuell ein Datenbankschema erstellt werden. Das Datenbankschema umfasst hierbei das Erstellen geeigneter Tabellen und das Anlegen von Indizes. Pro Knoten der Eingabe muss eine Tabelle angelegt werden. Dabei werden keine Primärschlüssel oder Fremdschlüssel erstellt. Die Variablen aus den \textit{nodeVar} Elementen bilden die Spalten der Tabelle eines Knoten. Um den späteren LEFT OUTER JOIN effizienter zu gestallten werden für die Spalten der JOIN Bedingung Indizes erstellt.
 
 Während der Erstellung des Datenbankschemas wird parallel dazu der LEFT OUTER JOIN vorbereitet. Bei der Generierung der Indizes müssen bereits die Spalten der JOIN Bedingung bekannt sein. Deswegen kann an dieser Stelle gleichzeitig der LEFT OUTER JOIN vorbereitet werden.
 
@@ -699,7 +697,44 @@ Nach dem alle Tabellen angelegt und befüllt sind, ist auch die \textit{SELECT} 
 Die Zeiterfassung dieses Systems beruht auf den selben Eingabedateien, welche in \ref{benchmarking} verwendet wurden. Für jede In-Memory Datenbank wurden drei Durchläufe ausgeführt. \\
 Am Ende wurden die Ergebnisse der Etappen aufsummiert. Weiters wurden die durchschnittlichen Zeiten der Durchläufe pro Etappe errechnet. Die Durchläufe wurde ohne Indizes und mit Indizes durchgeführt. Hierbei sind gro\ss e Differenzen erkennbar.
 
+Die Tabelle \ref{zeit} enthält die durchschnittlichen Ergebnisse der Zeitmessungen aus \ref{benchmarking} und \ref{benchNeu}. Diese Zeitmessungen sind in der Spalte \textit{Laufzeiten} zu finden. In der Spalte \textit{Differenz} wurden der Unterschied (in Sekunden) zu dem Algorithmus ohne In-Memory Datenbank der entsprechenden Datei berechnet. Weiters wurde in der Spalte \textit{Zeitersparnis} die prozentuelle Zeitersparnis zu dem Algorithmus ohne In-Memory Datenbank der entsprechenden Datei berechnet. \\
+Hier ist auch gut der Unterschied zwischen \textit{IMDB ohne Indizes} und \textit{IMDB mit Indizes} zu erkennen. Vor allem bei der Datei \textit{lubm-ex-20-17} ist ein enormer Unterschied zu erkennen.
+
 Alle Zeitangaben sind in Sekunden angegeben.
+
+\chapter{Schlussfolgerung}
+Nach Evaluierung des Ist-Zustandes und der Evaluierung des neuen Systems konnten die Ergebnisse dieser beiden Systeme verglichen werden.
+
+
+\begin{table}[]
+\caption{Zeitersparnis}
+\label{zeit}
+\begin{tabular}{@{}lllrrr@{}}
+\toprule
+Datei         & Algorithmus       & Typ    & Laufzeit & Differenz & Zeitersparnis \\ \midrule
+lubm-ex-20-15 & Ohne IMDB         &        & 14.360s  &           &               \\
+              &                   &        &          &           &               \\
+              & IMDB ohne Indizes & H2     & 12.266s  & 2.094s    & 14.58\%       \\
+              &                   & HSQLDB & 12.237s  & 2.123s    & 14.78\%       \\
+              &                   & DERBY  & 8.986s   & 5.374s    & 37.43\%       \\
+              &                   &        &          &           &               \\
+              & IMDB mit Indizes  & H2     & 8.782s   & 5.578s    & 38.84\%       \\
+              &                   & HSQLDB & 8.408s   & 5.952s    & 41.45\%       \\
+              &                   & DERBY  & 8.812s   & 5.548s    & 38.63\%       \\
+              &                   &        &          &           &               \\
+lubm-ex-20-17 & Ohne IMDB         &        & 485.998s &           &               \\
+              &                   &        &          &           &               \\
+              & IMDB ohne Indizes & H2     & 154.292s & 331.706s  & 68.25\%       \\
+              &                   & HSQLDB & 190.675s & 295.323s  & 60.77\%       \\
+              &                   & DERBY  & 356.831s & 129.168s  & 26.58\%       \\
+              &                   &        &          &           &               \\
+              & IMDB mit Indizes  & H2     & 2.929s   & 483.070s  & 99.40\%       \\
+              &                   & HSQLDB & 1.617s   & 484.381s  & 99.67\%       \\
+              &                   & DERBY  & 4.474s   & 481.524s  & 99.08\%       \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\chapter*{Appendix}
 
 \begin{lstlisting}[basicstyle=\tiny,caption={Benchmark DB \textbf{ohne} Indizes, Datei: lubm-ex-20-15.sparql.xml},label={lst:dboi15}]
 +=========================================================================================+
@@ -823,39 +858,6 @@ Alle Zeitangaben sind in Sekunden angegeben.
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \end{lstlisting}
 
-\chapter{Ergebnis}
-Nach Evaluierung des Ist-Zustandes und der Evaluierung des neuen Systems konnten die Ergebnisse dieser beiden Systeme verglichen werden.
-
-Die Tabelle \ref{zeit} enthält die durchschnittlichen Ergebnisse der Zeitmessungen aus \ref{benchmarking} und \ref{benchNeu}. Diese Zeitmessungen sind in der Spalte \textit{Laufzeiten} zu finden. In der Spalte \textit{Differenz} wurden der Unterschied (in Sekunden) zu dem Algorithmus ohne In-Memory Datenbank der entsprechenden Datei berechnet. Weiters wurde in der Spalte \textit{Zeitersparnis} die prozentuelle Zeitersparnis zu dem Algorithmus ohne In-Memory Datenbank der entsprechenden Datei berechnet. \\
-Hier ist auch gut der Unterschied zwischen \textit{IMDB ohne Indizes} und \textit{IMDB mit Indizes} zu erkennen. Vor allem bei der Datei \textit{lubm-ex-20-17} ist ein enormer Unterschied zu erkennen.
-
-\begin{table}[]
-\caption{Zeitersparnis}
-\label{zeit}
-\begin{tabular}{@{}lllrrr@{}}
-\toprule
-Datei         & Algorithmus       & Typ    & Laufzeit & Differenz & Zeitersparnis \\ \midrule
-lubm-ex-20-15 & Ohne IMDB         &        & 14.360s  &           &               \\
-              &                   &        &          &           &               \\
-              & IMDB ohne Indizes & H2     & 12.266s  & 2.094s    & 14.58\%       \\
-              &                   & HSQLDB & 12.237s  & 2.123s    & 14.78\%       \\
-              &                   & DERBY  & 8.986s   & 5.374s    & 37.43\%       \\
-              &                   &        &          &           &               \\
-              & IMDB mit Indizes  & H2     & 8.782s   & 5.578s    & 38.84\%       \\
-              &                   & HSQLDB & 8.408s   & 5.952s    & 41.45\%       \\
-              &                   & DERBY  & 8.812s   & 5.548s    & 38.63\%       \\
-              &                   &        &          &           &               \\
-lubm-ex-20-17 & Ohne IMDB         &        & 485.998s &           &               \\
-              &                   &        &          &           &               \\
-              & IMDB ohne Indizes & H2     & 154.292s & 331.706s  & 68.25\%       \\
-              &                   & HSQLDB & 190.675s & 295.323s  & 60.77\%       \\
-              &                   & DERBY  & 356.831s & 129.168s  & 26.58\%       \\
-              &                   &        &          &           &               \\
-              & IMDB mit Indizes  & H2     & 2.929s   & 483.070s  & 99.40\%       \\
-              &                   & HSQLDB & 1.617s   & 484.381s  & 99.67\%       \\
-              &                   & DERBY  & 4.474s   & 481.524s  & 99.08\%       \\ \bottomrule
-\end{tabular}
-\end{table}
 
 \backmatter
 
