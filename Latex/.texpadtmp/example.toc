@@ -32,5 +32,5 @@
 \contentsline {chapter}{\chapternumberline {5}Schlussfolgerung}{31}{chapter.5}
 \contentsline {chapter}{Abbildungsverzeichnis}{35}{section*.35}
 \contentsline {chapter}{Tabellenverzeichnis}{35}{section*.36}
-\contentsline {chapter}{List of Algorithms}{37}{chapter*.37}
+\contentsline {chapter}{Algorithmenverzeichnis}{37}{chapter*.37}
 \contentsline {chapter}{Literaturverzeichnis}{39}{section*.39}

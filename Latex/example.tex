@@ -216,17 +216,20 @@ Das Ergebnis der SPARQL Abfrage (Listing \ref{sparqlQueryExampleDB}) enthält da
 	\label{sparqlErgebnis}
 \end{figure}
 Die Arbeit beschäftigt sich im Weiteren mit der effizienten Evaluierung der Ergebnisse dieser Abfragen mit Hilfe einer In-Memory Datenbank berechnet. Im speziellen wird dafür der LEFT OUTER JOIN verwendet.
-\section*{Ziel}Die derzeitige Implementierung basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn wird der derzeitige Algorithmus beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für den derzeitigen Algorithmus, als auch als Eingabe für den zukünftigen Algorithmus.
-Die nächsten Kapitel beschäftigen sich mit dem Soll-Zustand. Im speziellen mit der Verwendung von In-Memory Datenbanken und dem Vergleich zu herkömmlichen Datenbanken.Danach wird die neue Implementierung unter der Verwendung von einer In-Memory Datenbank erläutert. Abschlie{\ss}end wird der neue Algorithmus mit dem bisherigen Algorithmus verglichen.
+\section*{Ziel}Die derzeitige Implementierung basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn in Kapitel \ref{istZustand} wird der derzeitige Algorithmus beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für den derzeitigen Algorithmus, als auch als Eingabe für den zukünftigen Algorithmus.
+Das Kapitel \ref{inMemoryDatenbanken} beschäftigen sich mit Konzepten und Anforderungen im Bereich In-Memory Datenbanken. Im speziellen mit der Verwendung von In-Memory Datenbanken und dem Vergleich zu herkömmlichen Datenbanken.
+Danach wird im Kapitel \ref{umsetzung} die neue Implementierung unter der Verwendung von einer In-Memory Datenbank erläutert. Abschlie{\ss}end wird der neue Algorithmus mit dem bisherigen Algorithmus verglichen.
 
 
-\chapter{Ist-Zustand}
+\chapter{Ist-Zustand} \label{istZustand}
 \section{Datenstruktur} \label{dataStruk}
 Der Ausgangspunkt des Algorithmus ist eine XML-Datei, diese repräsentiert die Auswertung  mehrerer Knoten in einem Well-Designed Pattern Tree (WDPT). Das Schema der XML-Datei ist unter Listing \ref{lst:xsd} definiert und wird im weiteren genauer erläutert.
 Die XML-Dateien enthält ein Hauptelement \textit{ptresult}. Diese wiederum enthält das Elemente \textit{ovar}, welche die Variablen der Projektion des WDPT abbilden \cite[S.~171]{OptMat}. Des Weiteren enthält \textit{ptresult} den Wurzelknoten des Well-Designed Pattern Tree. Dieser wird durch ein \textit{node} Element dargestellt.
 Der Wurzelknoten des Baums ist die Basis des WDPT. Alle weiteren Kindknoten stellen die Auswertung einer OPTIONAL-Klausel da. Die OPTIONAL-Klauseln können auch geschachtelt verwendet werden, infolgedessen ergibt sich eine Baumstruktur. Diese Knoten sind ebenfalls durch die Elemente \textit{node} abgebildet. Ein \textit{node} Element besteht aus genau einem \textit{variables} Element, beliebig vielen \textit{mapping} Elementen und danach beliebig vielen \textit{node} Elementen. Diese \textit{node} Elemente stellen die Kindknoten da.
 Das \textit{variables} Element enthält mehrere \textit{nodeVar} Elemente. Diese repräsentieren die Variablen, welche innerhalb der zugehörigen OPTIONAL-Klausel des Knotens verwendet werden.
 Nun zum eigentlichen Kernstück der XML-Datei. Das \textit{mapping} Element ist eine konkrete Belegung von Variablen der SPARQL-Abfrage. Diese enthalten die eigentlichen Daten. Somit enthält das \textit{var} Element die konkreten Ausprägungen der SPARQL-Variablen, der Name dieser Variable ist dazu in dem Attribut \textit{name} des \textit{var} Elements hinterlegt.\\
+
+\pagebreak
 
 \lstinputlisting[style=XML,caption={XML Schema der Eingabedatei},label={lst:xsd}]{input.xsd}
 Weiters ist unter Listing \ref{lst:xml} eine Beispiel XML-Datei angegeben, welche später als Referenz dient.
@@ -429,7 +432,7 @@ Alle Zeitangaben sind in Sekunden angegeben.
 +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \end{lstlisting}
 
-\chapter{In-Memory Datenbanken}
+\chapter{In-Memory Datenbanken} \label{inMemoryDatenbanken}
 Die folgenden Abschnitte befassen sich mit neuen Anforderungen und Konzepte im Bereich In-Memory Datenbanken. Verwendete Literatur: \cite{BookInMem}
 \section{Neue Anforderungen an Datenbanksysteme}
 Wenn man heutzutage ein von Grund auf neues Datenbanksystem entwickeln würde, hätte dieses andere Anforderungen als konventionelle Datenbanksysteme. Moderne Unternehmen arbeiten täglich mit einer Fülle von Daten, was vor ein paar Jahren noch undenkbar war. Fertigungsunternehmen sind ein Beispiel, für solche datenlastige Betriebe. Während des Fertigungsprozesses werden enorme Mengen an Daten produziert. Diese müssen oft in Echtzeit verarbeitet werden und liefern Grundlagen für weitere Entscheidungsprozesse. Dies ist nur ein Beispiel der steigenden Bedürfnisse moderner Datenbanksysteme. 
@@ -571,7 +574,7 @@ Die Client/Server Entwicklungsoption baut auf einen Datenbankserver auf, welcher
  
 \cite{ApaDoc}
 
-\chapter{Umsetzung}
+\chapter{Umsetzung} \label{umsetzung}
 \section{Konzept}
 Der oben beschriebene iterative Algorithmus (siehe \ref{istImp}) soll durch eine performantere Vorgehensweise abgelöst werden. Kern des neuen Systems ist eine relationale Datenbank, im speziellen eine In-Memory Datenbank. Diese wird verwendet um die Zuordnung der Mappings aus den OPTIONAL-Knoten zu realisieren. Diese Zuordnung der Mappings entspricht einem LEFT OUTER JOIN und kann somit in einer relationalen Datenbank umgesetzt werden.
 
@@ -733,39 +736,21 @@ lubm-ex-20-17 & Ohne IMDB         &        & 485.998s &           &             
 
 \chapter{Schlussfolgerung}
 
-\begin{itemize}
-	\item In dieser Arbeit wurde die Evaluierung von WDPT untersucht. Ausgangspunkt der Arbeit war ein bereits vorhandener Algorithmus, welcher auf einer iterativen Vorgehensweise basiert.
-	\item Die Eingabe ist eine XML-Datei, welche die Auswertung mehrerer Knoten in einem WDPT darstellt. Für dieses Format wurde ein XML Schema erstellt.
-	\item Der iterative Algorithmus wurde beschrieben und analysiert. Im speziellen wurden folgende Teilbereiche betrachtet:
-	\begin{itemize}
-		\item Kompatibilität
-		\item Maximierung
-		\item Sumsumierung 
-	\end{itemize}
-	\item Um einen Ausgangswert zu bestimmen, wurde eine Zeitmessung mit unterschiedlichen Dateien durchgeführt. 
-	\item Grundkonzepte und Funktionsweisen einer In-Memory Datenbanken wurden beschrieben. 
-	\item Es wurden drei konkrete In-Memory Datenbanken ausgewählt, welche in dem neuen Algorithmus Anwendung finden.
-	\begin{itemize}
-		\item H2 Database Engine
-		\item HyperSQL DataBase
-		\item Apache Derby 
-	\end{itemize}
-	\item Für den neuen Algorithmus wurde ein Konzept erstellt, welches auf relationalen DBMS so wie dem LEFT OUTER JOIN basiert. 
-	\item Der neue Algorithmus beruht auf diesen Kernpunkten:
-	\begin{itemize}
-		\item Identifizieren der Spalten der \textit{JOIN} Bedingung
-		\item Anlegen der Tabellen und Indizes
-		\item Einfügen der Daten
-		\item Generieren und ausführen der \textit{SELECT} Abfrage
-		\item Zurücksetzen der Datenbank
-	\end{itemize} 
-	\item Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden.
-\end{itemize}
+
+In dieser Arbeit wurde die Evaluierung von WDPT untersucht. Ausgangspunkt der Arbeit war ein bereits vorhandener Algorithmus, welcher auf einer iterativen Vorgehensweise basiert.
+Die Eingabe ist eine XML-Datei, welche die Auswertung mehrerer Knoten in einem WDPT darstellt. Für dieses Format wurde ein XML Schema erstellt.
+
+Der iterative Algorithmus wurde beschrieben und analysiert. Im speziellen wurden folgende Teilbereiche betrachtet: Kompatibilität, Maximierung und Subsumierung.
+
+Um einen Ausgangswert zu bestimmen, wurde eine Zeitmessung mit unterschiedlichen Dateien durchgeführt. 
+Danach wurden die Grundkonzepte und Funktionsweisen einer In-Memory Datenbanken beschrieben. 
+
+Im Weiteren wurden drei konkrete In-Memory Datenbanken ausgewählt, welche in dem neuen Algorithmus Anwendung finden. H2 Database Engine, HyperSQL DataBase und Apache Derby.
+Für den neuen Algorithmus wurde ein Konzept erstellt, welches auf relationalen DBMS so wie dem LEFT OUTER JOIN basiert. 
+Dementsprechend beruht der neue Algorithmus auf diesen Kernpunkten: Identifizieren der Spalten der \textit{JOIN} Bedingung, Anlegen der Tabellen und Indizes, Einfügen der Daten, Generieren und ausführen der \textit{SELECT} Abfrage.
+
+Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden.
    
- 
-
-
-
 
 \chapter*{Appendix}
 
@@ -901,8 +886,9 @@ lubm-ex-20-17 & Ohne IMDB         &        & 485.998s &           &             
 \listoftables % Starred version, i.e., \listoftables*, removes the toc entry.
 
 % Use an optional list of alogrithms.
+\renewcommand*\listalgorithmcfname{Algorithmenverzeichnis}
 \listofalgorithms
-\addcontentsline{toc}{chapter}{List of Algorithms}
+\addcontentsline{toc}{chapter}{Algorithmenverzeichnis}
 
 % Add an index.
 %\printindex
