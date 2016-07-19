@@ -444,14 +444,14 @@ Ereignisdaten sind der Kern zukünftiger Produktionsanlagen, diese sind wie folg
 
 In der Produktion von alltäglichen Produkten kommen eine Vielzahl von Sensoren zum Einsatz. Besonders in den Bereichen, heikler Produkte müssen alle Schritte der Produktion und Auslieferung dokumentiert werden. Um Produkte während dieser Prozesse genau beobachten zu können, werden RFID (Radio Frequency Identification) Tags oder zwei dimensionale Strichcodes eingesetzt. Bei jedem Schritt der Produktion bzw. der Auslieferung kommen Sensoren zum Einsatz um den Weg des Produktes zu identifizieren. 
 
-BigPoint ist eine Spieleentwickler mit dem Sitz in Deutschland. In der Spieleindustrie sind Ereignisdaten von zentraler Bedeutung. BigPoint verwendet diese Daten um in Echtzeit den Spielern in schwierigen Situationen zahlungspflichtige Hilfen anzubieten. Diese Spiele produzieren 10.000 Ereignisse pro Sekunde. Herkömmliche Datenbanken sind für diesen Anwendungszweck nur begrenzt einsetzbar. Flexible und auf den Anwendungsfall zugeschnittene Abfragen von Entwicklern können nicht interaktiv beantwortet werden. In-Memory Datenbanken werden eingesetzt, um in kürzester Zeit Entscheidungen über den Einsatz von zahlungspflichtigen Hilfen zu treffen. Es werden verschiedene Gruppen von Spielern analysiert und entschieden ob alle Spieler diese Angebote bekommen.
+BigPoint ist ein Spieleentwickler mit dem Sitz in Deutschland. In der Spieleindustrie sind Ereignisdaten von zentraler Bedeutung. BigPoint verwendet diese Daten um in Echtzeit den Spielern in schwierigen Situationen zahlungspflichtige Hilfen anzubieten. Diese Spiele produzieren 10.000 Ereignisse pro Sekunde. Herkömmliche Datenbanken sind für diesen Anwendungszweck nur begrenzt einsetzbar. Flexible und auf den Anwendungsfall zugeschnittene Abfragen von Entwicklern können nicht interaktiv beantwortet werden. In-Memory Datenbanken werden eingesetzt, um in kürzester Zeit Entscheidungen über den Einsatz von zahlungspflichtigen Hilfen zu treffen. Es werden verschiedene Gruppen von Spielern analysiert und entschieden ob alle Spieler diese Angebote bekommen.
 
 \subsection*{Strukturierte und unstrukturierte Daten}
 Man muss zwischen strukturierten und unstrukturierten Daten unterscheiden. Strukturierte Daten weisen ein Schema auf, auf Basis dessen man die Daten analysieren kann. Daten welche in relationalen Datenbanken gespeichert werden sind zum Beispiel strukturierte Daten. Im Gegensatz dazu weisen unstrukturierte Daten kein Schema auf, somit kann nicht so einfach eine Analyse der Daten vorgenommen werden, z.B.: Bilder, Videos, freie Texte, etc. Im Laufe der Zeit sind in vielen Unternehmen eine gro\ss e Menge von unstrukturierten Daten wie Berichte, Tabellen oder Textdokumente angefallen. In diesen unstrukturierten Daten verbirgt sich eine Menge an Informationen. Es besteht eine enorme Nachfrage in diesen Dokumenten schnell und flexibel nach Informationen zu suchen.
 
 In Spitälern sammeln sich gro\ss e Mengen von strukturierten und unstrukturierten Patientendaten an. In-Memory Datenbanken ermöglichen die Kombination von strukturierten und unstrukturierten Daten, so wie die Einbindung von externen Daten z.B. klinischen Studien oder Nebenwirkungen. Somit können Ärzte in Echtzeit, die benötigten Daten interaktiv kombinieren und schneller Diagnosen stellen. Dieser Prozess verringert die manuelle und zeitaufwendige Arbeit der Ärzte enorm.
 
-Auch bei Wartungsarbeiten von Flugzeugen werden In-Memory Datenbanken eingesetzt. Bei der Bearbeitung von Wartungsaufträgen fallen strukturierte wie auch unstrukturierte Daten an. Mit Hilfe der In-Memory Technologie können Korrelationen zwischen Schwachstellen erkannt werden und dies wiederum verringertndas Risiko eines Fehlers.
+Auch bei Wartungsarbeiten von Flugzeugen werden In-Memory Datenbanken eingesetzt. Bei der Bearbeitung von Wartungsaufträgen fallen strukturierte wie auch unstrukturierte Daten an. Mit Hilfe der In-Memory Technologie können Korrelationen zwischen Schwachstellen erkannt werden und dies wiederum verringerten das Risiko eines Fehlers.
 
 
 \section{Konzepte}
@@ -464,7 +464,7 @@ Ein zusätzlicher Vorteil des Hauptspeichers sind die konstanten Zugriffszeiten.
 \subsection{Spaltenorientierung}
 In herkömmlichen Datenbanken werden die Daten zeilenweise abgespeichert, in Gegensatz zu SanssouciDB. Hier werden die Daten spaltenweise abgelegt. Bei Spaltenorientierung werden alle Werte einer Spalte in benachbarten Blöcken gespeichert. Wenn die Daten zeilenorientiert abgespeichert werden, werden ganze Zeilen in benachbarten Blöcken abgelegt. Spaltenorientierung eignet sich also zum lesen von einzelnen Spalten. Vorteilhaft sind hierbei Spaltenaggregation oder Spalten-Scans.
 
-Viele Datenbanksystem verwenden spaltenorientierte Speicherung um diese Vorteile zu nutzen. Bei einem gro{\ss}teil der SQL Abfragen, werden alle Spalten abgefragt, aber es wird nur ein kleiner Teil der Spalten verwendet. Um den Vorteil der spaltenorientierten Speicherung optimal zu nutzen, sollten \textit{SELECT *} Abfragen vermieden werden. Eine Analyse von Unternehmensapplikationen hat gezeigt, das fast nie alle Spalten einer Tabelle im Endeffekt verwendet werden. Ein Beispiel dieser Analyse zeigte, dass bei einer konkreten Tabelle mit 300 Spalten, nur 17 Spalten benötigt wurden. Hier kann bei der Verwendung von Spaltenorientierung ein bedeutender Vorteil erreicht werden.
+Viele Datenbanksystem verwenden spaltenorientierte Speicherung um diese Vorteile zu nutzen. Bei einem Gro{\ss}teil der SQL Abfragen, werden alle Spalten abgefragt, aber es wird nur ein kleiner Teil der Spalten verwendet. Um den Vorteil der spaltenorientierten Speicherung optimal zu nutzen, sollten \textit{SELECT *} Abfragen vermieden werden. Eine Analyse von Unternehmensapplikationen hat gezeigt, das fast nie alle Spalten einer Tabelle im Endeffekt verwendet werden. Ein Beispiel dieser Analyse zeigte, dass bei einer konkreten Tabelle mit 300 Spalten, nur 17 Spalten benötigt wurden. Hier kann bei der Verwendung von Spaltenorientierung ein bedeutender Vorteil erreicht werden.
 
 Ein weiterer Vorteil entsteht bei der Verwendung von Indizes. Da die Daten spaltenweise angeordnet sind, können die einzelnen Spalten als Indizes verwendet werden. Nachdem alle Daten im Hauptspeicher liegen und die Daten einer Spalten nacheinander angeordnet sind, ist die Leistung eines Scan-Vorgangs meist ausreichend. Es können dennoch bestimmte Indizes angelegt werden.
 
@@ -480,7 +480,7 @@ Zur Umsetzung wurden drei In-Memory Datenbanken ausgewählt, diese werden im Fol
 
 \subsection{H2 Database Engine}
 
-Die H2 Database Engine (H2) ist ein relationalen Datenbankmanagementsystem (RDBMS), welches in Java geschrieben wurde. Der Programmcode ist Open Source und somit öffentlich zugänglich. H2 unterstützt Standard SQL und als Schnittstelle die JDBC API. Weiters kann der PostgreSQL ODBC Treiber verwendet werden.
+Die H2 Database Engine (H2) ist ein relationales Datenbankmanagementsystem (RDBMS), welches in Java geschrieben wurde. Der Programmcode ist Open Source und somit öffentlich zugänglich. H2 unterstützt Standard SQL und als Schnittstelle die JDBC API. Weiters kann der PostgreSQL ODBC Treiber verwendet werden.
 
 \subsubsection*{ACID}
 Die ACID-Eigenschaften finden in H2 wie folgt Anwendung:
@@ -552,7 +552,7 @@ Die ACID-Eigenschaften finden in HSQLDB wie folgt Anwendung:
 
 Es gibt zwei grundsätzliche Verbindungsarten. Die \textit{in-process} Verbindung erlaubt der Applikation direkt auf die Datenbank zuzugreifen. Bei dieser Variante müssen die Daten keinen Umweg über das Netzwerk machen, anders wie bei den Server Modi. Bei diesen Verbindungsmöglichkeiten findet die Kommunikation nicht Prozessintern statt, sondern wird über eine Client-Server Architektur geregelt. Der grö\ss te Nachteil dieser Methode ist der zusätzliche Zeitaufwand, welcher bei der Kommunikation über das Netzwerk entsteht. 
 
-Wenn eine Datenbank im Server Modus gestartet wird, wird intern ein \textit{in-process} Katalog gestartet. Der Server wartet während des Betriebes auf eingehende Verbindungen. Da die Verbindung über das Netzwerk erfolgt, kann der Zugriff auch von einen anderen Computer aus erfolgen, nicht so bei der reinen \textit{in-process} Verbindung. Es wird von HSQLDB empfohlen einen Server Modus während der Entwicklungsphase zu verwenden, um die Daten von einer separaten Datenbank abzurufen.
+Wenn eine Datenbank im Server Modus gestartet wird, wird intern ein \textit{in-process} Katalog gestartet. Der Server wartet während des Betriebes auf eingehende Verbindungen. Da die Verbindung über das Netzwerk erfolgt, kann der Zugriff auch von einem anderen Computer aus erfolgen, nicht so bei der reinen \textit{in-process} Verbindung. Es wird von HSQLDB empfohlen einen Server Modus während der Entwicklungsphase zu verwenden, um die Daten von einer separaten Datenbank abzurufen.
 
 HyperSQL HSQL Server ist der bevorzugte Server Modus, da ein proprietäres Protokoll für die Kommunikation verwendet wird.
 
@@ -566,7 +566,7 @@ Apache Derby ist eine relationale Datenbank und ein Unterprojekt der Apache DB. 
 \subsubsection*{Verbindungsmöglichkeiten}
 Wie auch andere In-Memory Datenbanken bietet Apache Derby verschiedene Verbindungsmöglichkeiten an. Unter Apache Derby werden diese Verbindungsmöglichkeiten Entwicklungsoptionen genannt. Von diesen Entwicklungsoptionen stellt Apache Derby zwei zur Verfügung. 
 
-In der eingebettete Entwicklungsoption wird die Datenbank in der selben JVM wie das eigentliche Java Programm gestartet. Diese Option ist für den Endbenutzer fast nicht zu erkennen, da sich die Datenbank mit dem Java Programm automatisch startet und auch wieder beendet. Hierbei hat nur ein Benutzer Zugriff auf die Datenbank.
+In der eingebetteten Entwicklungsoption wird die Datenbank in der selben JVM wie das eigentliche Java Programm gestartet. Diese Option ist für den Endbenutzer fast nicht zu erkennen, da sich die Datenbank mit dem Java Programm automatisch startet und auch wieder beendet. Hierbei hat nur ein Benutzer Zugriff auf die Datenbank.
 
 Die Client/Server Entwicklungsoption baut auf einen Datenbankserver auf, welcher über das Netzwerk erreichbar ist. Bei dieser Variante können sich mehrere Benutzer mit der Datenbank verbinden. Auf dem Server läuft Apache Derby in einer eigenen JVM und Programme welche sich zu dem Datenbankserver verbinden können mit verschiednen JVMs ausgeführt werden.
 
@@ -632,7 +632,7 @@ Bei jeder Evaluierung eines Datenbank Algorithmus werden folgende vier Schritte 
 	\item Identifizieren der Spalten der \textit{JOIN} Bedingung
 	\item Anlegen der Tabellen
 	\item Einfügen der Daten
-	\item Generieren und ausführen der \textit{SELECT} Abfrage
+	\item Generieren und Ausführen der \textit{SELECT} Abfrage
 	\item Zurücksetzen der Datenbank
 \end{enumerate}
 
@@ -694,11 +694,11 @@ SELECT T1.Z1, T1.Y1, T0.X1
 	ON T3.X2=T0.X2;
 \end{lstlisting}
 
-Nach dem alle Tabellen angelegt und befüllt sind, ist auch die \textit{SELECT} Abfrage fertig generiert und kann ausgeführt werden. Jetzt müssen die Daten noch maximiert werden. Dieser Algorithmus wurde schon bei der iterativen Vorgehensweise verwendet (siehe \ref{maxMapPar} Maximierung). Nach diesen Schritt ist das Ergebnis identisch mit dem aus der iterativen Vorgehensweise (siehe \ref{istImp}).
+Nach dem alle Tabellen angelegt und befüllt sind, ist auch die \textit{SELECT} Abfrage fertig generiert und kann ausgeführt werden. Jetzt müssen die Daten noch maximiert werden. Dieser Algorithmus wurde schon bei der iterativen Vorgehensweise verwendet (siehe \ref{maxMapPar} Maximierung). Nach diesem Schritt ist das Ergebnis identisch mit dem aus der iterativen Vorgehensweise (siehe \ref{istImp}).
 
 \section{Benchmarking} \label{benchNeu}
 Die Zeiterfassung dieses Systems beruht auf den selben Eingabedateien, welche in \ref{benchmarking} verwendet wurden. Für jede In-Memory Datenbank wurden drei Durchläufe ausgeführt. \\
-Am Ende wurden die Ergebnisse der Etappen aufsummiert. Weiters wurden die durchschnittlichen Zeiten der Durchläufe pro Etappe errechnet. Die Durchläufe wurde ohne Indizes und mit Indizes durchgeführt. Hierbei sind gro\ss e Differenzen erkennbar.
+Am Ende wurden die Ergebnisse der Etappen aufsummiert. Weiters wurden die durchschnittlichen Zeiten der Durchläufe pro Etappe errechnet. Die Durchläufe wurden ohne Indizes und mit Indizes durchgeführt. Hierbei sind gro\ss e Differenzen erkennbar.
 
 Die Tabelle \ref{zeit} enthält die durchschnittlichen Ergebnisse der Zeitmessungen aus \ref{benchmarking} und \ref{benchNeu}. Diese Zeitmessungen sind in der Spalte \textit{Laufzeiten} zu finden. In der Spalte \textit{Differenz} wurden der Unterschied (in Sekunden) zu dem Algorithmus ohne In-Memory Datenbank der entsprechenden Datei berechnet. Weiters wurde in der Spalte \textit{Zeitersparnis} die prozentuelle Zeitersparnis zu dem Algorithmus ohne In-Memory Datenbank der entsprechenden Datei berechnet. \\
 Hier ist auch gut der Unterschied zwischen \textit{IMDB ohne Indizes} und \textit{IMDB mit Indizes} zu erkennen. Vor allem bei der Datei \textit{lubm-ex-20-17} ist ein enormer Unterschied zu erkennen.
@@ -740,16 +740,16 @@ lubm-ex-20-17 & Ohne IMDB         &        & 485.998s &           &             
 In dieser Arbeit wurde die Evaluierung von WDPT untersucht. Ausgangspunkt der Arbeit war ein bereits vorhandener Algorithmus, welcher auf einer iterativen Vorgehensweise basiert.
 Die Eingabe ist eine XML-Datei, welche die Auswertung mehrerer Knoten in einem WDPT darstellt. Für dieses Format wurde ein XML Schema erstellt.
 
-Der iterative Algorithmus wurde beschrieben und analysiert. Im speziellen wurden folgende Teilbereiche betrachtet: Kompatibilität, Maximierung und Subsumierung.
+Der iterative Algorithmus wurde beschrieben und analysiert. Im speziellen wurden folgende Teilbereiche betrachtet: Kompatibilität, Maximierung und Subsumierung.
 
 Um einen Ausgangswert zu bestimmen, wurde eine Zeitmessung mit unterschiedlichen Dateien durchgeführt. 
 Danach wurden die Grundkonzepte und Funktionsweisen einer In-Memory Datenbanken beschrieben. 
 
-Im Weiteren wurden drei konkrete In-Memory Datenbanken ausgewählt, welche in dem neuen Algorithmus Anwendung finden. H2 Database Engine, HyperSQL DataBase und Apache Derby.
+Im Weiteren wurden drei konkrete In-Memory Datenbanken ausgewählt, welche in dem neuen Algorithmus Anwendung finden: H2 Database Engine, HyperSQL DataBase und Apache Derby.
 Für den neuen Algorithmus wurde ein Konzept erstellt, welches auf relationalen DBMS so wie dem LEFT OUTER JOIN basiert. 
-Dementsprechend beruht der neue Algorithmus auf diesen Kernpunkten: Identifizieren der Spalten der \textit{JOIN} Bedingung, Anlegen der Tabellen und Indizes, Einfügen der Daten, Generieren und ausführen der \textit{SELECT} Abfrage.
+Dementsprechend beruht der neue Algorithmus auf diesen Kernpunkten: Identifizieren der Spalten der \textit{JOIN} Bedingung, Anlegen der Tabellen und Indizes, Einfügen der Daten, Generieren und Ausführen der \textit{SELECT} Abfrage.
 
-Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden.
+Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden. Der im Rahmen dieser Bachelorarbeit implementierte Algorithmus ist durch die Verwendung einer In-Memory Datenbank um bis zu 160-mal schneller als der iterative Algorithmus.
    
 
 \chapter*{Appendix}

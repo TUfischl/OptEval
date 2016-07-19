@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.2.2)  18 JUL 2016 14:52
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.2.2)  19 JUL 2016 15:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1751,8 +1751,8 @@ Package babel Info: Redefining ngerman shorthand "|
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 532.
 
-Overfull \hbox (9.30623pt too wide) in paragraph at lines 537--538
-\T1/pxr/m/n/10.95 Die H2 Da-ta-ba-se En-gi-ne (H2) ist ein re-la-tio-na-len Da-ten-bank-ma-nage-ment-sys-tem (RDBMS),
+Overfull \hbox (7.57617pt too wide) in paragraph at lines 537--538
+\T1/pxr/m/n/10.95 Die H2 Da-ta-ba-se En-gi-ne (H2) ist ein re-la-tio-na-les Da-ten-bank-ma-nage-ment-sys-tem (RDBMS),
  []
 
 Package babel Info: Redefining ngerman shorthand "|
@@ -1880,7 +1880,6 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 799.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 799.
-Missing character: There is no ̈ in font p1xr!
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 817.
 Package babel Info: Redefining ngerman shorthand "~
