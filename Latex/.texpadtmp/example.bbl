@@ -7,11 +7,18 @@ Shqiponja Ahmetaj, Wolfgang Fischl, Markus Kröll, Reinhard Pichler, Mantas
 \newblock The challenge of optional matching in sparql.
 \newblock 2016.
 
-\bibitem[AFP{\etalchar{+}}15]{CertainAnswers}
-Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Šimkus, and
+\bibitem[AFP{\etalchar{+}}15]{DBLP:conf/www/AhmetajFPSS15}
+Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Simkus, and
   Sebastian Skritek.
-\newblock Towards reconciling sparql and certain answers.
-\newblock 2015.
+\newblock Towards reconciling {SPARQL} and certain answers.
+\newblock In {\em Proc.\ {WWW} 2015}, pages 23--33. {ACM}, 2015.
+
+\bibitem[AFP{\etalchar{+}}16]{ahmetaj2015wwwext}
+Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Simkus, and
+  Sebastian Skritek.
+\newblock Towards reconciling {SPARQL} and certain answers --- extended
+  version.
+\newblock unpublished extension of \cite{DBLP:conf/www/AhmetajFPSS15}, 2016.
 
 \bibitem[Apa15]{ApaDoc}
 Apache.
@@ -19,17 +26,42 @@ Apache.
 \newblock \url{https://db.apache.org/derby/manuals/index.html}, 2015.
 \newblock [Online; accessed 01.04.2016].
 
+\bibitem[BPS15]{DBLP:conf/pods/BarceloPS15}
+Pablo Barcel{\'{o}}, Reinhard Pichler, and Sebastian Skritek.
+\newblock Efficient evaluation and approximation of well-designed pattern
+  trees.
+\newblock In {\em Proc.\ {PODS} 2015}, pages 131--144. {ACM}, 2015.
+
 \bibitem[Eng16]{H2Adv}
 H2~Database Engine.
 \newblock {H2 Advanced}.
 \newblock \url{http://www.h2database.com/html/advanced.html}, 2016.
 \newblock [Online; accessed 31.03.2016].
 
+\bibitem[GPH05]{Guo2005158}
+Yuanbo Guo, Zhengxiang Pan, and Jeff Heflin.
+\newblock Lubm: A benchmark for \{OWL\} knowledge base systems.
+\newblock {\em Web Semantics: Science, Services and Agents on the World Wide
+  Web}, 3(2–3):158 -- 182, 2005.
+\newblock Selcted Papers from the International Semantic Web Conference, 2004
+  ISWC, 20043rd. International Semantic Web Conference, 2004.
+
+\bibitem[Gro14]{rdfSite}
+RDF~Working Group.
+\newblock {Resource Description Framework (RDF}).
+\newblock \url{https://www.w3.org/RDF/}, 2014.
+\newblock [Online; accessed 31.08.2016].
+
 \bibitem[Gro15]{HSQLGuide}
 The HSQL~Development Group.
 \newblock {HyperSQL User Guide}.
 \newblock \url{http://hsqldb.org/doc/2.0/guide/index.html}, 2015.
 \newblock [Online; accessed 31.03.2016].
+
+\bibitem[LPPS13]{LPPS2013}
+Andr{\'e}s Letelier, Jorge P{\'e}rez, Reinhard Pichler, and Sebastian Skritek.
+\newblock Static analysis and optimization of semantic web queries.
+\newblock {\em {ACM} Trans. Database Syst.}, 38(4):25, 2013.
 
 \bibitem[Ora16]{AddBatch}
 Oracle.
@@ -39,10 +71,21 @@ Oracle.
   2016.
 \newblock [Online; accessed 06.04.2016].
 
+\bibitem[PAG09]{PAG09}
+Jorge P{\'e}rez, Marcelo Arenas, and Claudio Gutierrez.
+\newblock Semantics and complexity of {SPARQL}.
+\newblock {\em {ACM} Trans. Database Syst.}, 34(3), 2009.
+
 \bibitem[Pla13]{BookInMem}
 Hasso Plattner.
 \newblock {\em A Course in In-Memory Data Management: The Inner Mechanics of
   In-Memory Databases}.
 \newblock Springer, 2013.
+
+\bibitem[PS08]{SPARQL}
+Eric Prud$'$hommeaux and Andy Seaborne.
+\newblock {SPARQL Query Language for RDF}.
+\newblock {W3C} {R}ecommendation, W3C, 2008.
+\newblock \url{http://www.w3.org/TR/rdf-sparql-query/}.
 
 \end{thebibliography}
