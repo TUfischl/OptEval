@@ -2,10 +2,12 @@
 \begin{thebibliography}{AFK{\etalchar{+}}16}
 
 \bibitem[AFK{\etalchar{+}}16]{OptMat}
-Shqiponja Ahmetaj, Wolfgang Fischl, Markus Kröll, Reinhard Pichler, Mantas
-  Šimkus, and Sebastian Skritek.
-\newblock The challenge of optional matching in sparql.
-\newblock 2016.
+Shqiponja Ahmetaj, Wolfgang Fischl, Markus Kr{\"{o}}ll, Reinhard Pichler,
+  Mantas Simkus, and Sebastian Skritek.
+\newblock The challenge of optional matching in {SPARQL}.
+\newblock In {\em Foundations of Information and Knowledge Systems - 9th
+  International Symposium, FoIKS 2016, Linz, Austria, March 7-11, 2016.
+  Proceedings}, pages 169--190, 2016.
 
 \bibitem[AFP{\etalchar{+}}15]{DBLP:conf/www/AhmetajFPSS15}
 Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Simkus, and

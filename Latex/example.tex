@@ -194,7 +194,7 @@ SELECT Gebirge.A, Gebirge.B, ErstbesteigungWinter.D, Kontinent.E
 
 Ähnlich dazu verwendet man im Semantic Web die Abfragesprache SPARQL. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language} und beruht auf dem Datenmodel RDF (Resource Description Framework). RDF ist das Standard Datenmodell des Sematic Web und ist eine Empfehlung des W3C (World Wide Web Consortium). 
 
-Grundsätzlich ist SPARQL ein graphenbasierte Abfragesprache, welche aus drei Teilen besteht: Dem Musterabgleich, der Modifikation der Lösung und der Ausgabe. Einzeln betrachtet scheinen diese Funktionen relativ simpel, doch die Kombination macht SPARQL zu einer komplexen Sprache. In P{\'e}rez et al. 2009 \cite{PAG09} wurde dieser Themenbereich behandelt und die Klasse der \textit{well-designed SPARQL graph patterns} wurde eingeführt. Diese weisen unteranderem gute Eigenschaften für Abfrage Evaluierungen auf.
+Grundsätzlich ist SPARQL ein graphenbasierte Abfragesprache, welche aus drei Teilen besteht: Dem Musterabgleich, der Lösungsmodifikation und der Ausgabe. Einzeln betrachtet scheinen diese Funktionen relativ simpel, doch die Kombination macht SPARQL zu einer komplexen Sprache. In P{\'e}rez et al. 2009 \cite{PAG09} wurde dieser Themenbereich behandelt und die Klasse der \textit{well-designed SPARQL graph patterns} wurde eingeführt. Diese weisen unteranderem gute Eigenschaften für Abfrage Evaluierungen auf.
 
 In Leteleir et al. 2013 \cite{LPPS2013} wurde eine Baumdarstellung von SPARQL Abfragen eingeführt, die sogennaten SPARQL \textit{pattern trees} und im speziellen die \textit{well-designed pattern trees} (WDPTs). Die Baumdarstellung der Abfrage spielt eine zentrale Rolle für Optimierungen. Eine besondere Bedeutung in SPARQL hat der OPTIONAL Operator. Diese Operation ermöglicht, Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Teilergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern bleiben Teil der Lösung. In Leteleir et al. 2013 \cite{LPPS2013} wird hervorgehoben, dass mehr als 45\% der Abfragen auf dem SPARQL endpoint DBPedia den OPTIONAL Operator verwenden.
 
@@ -223,9 +223,9 @@ Das Ergebnis der SPARQL Abfrage (Listing \ref{sparqlQueryExampleDB}) enthält da
 	\label{sparqlErgebnis}
 \end{figure}
 
-Conjunctive queries (Select-From-Where Abfragen) sind die Grundlage der heutigen DBMS. Diese Art von Abfragen haben ein Problem mit unvollständigen bzw. semistrukturierten Daten. Wenn eine Abfrage nicht exakt mit den Daten übereinstimmt, kann keine Antwort ermittelt werden. Hier kommt wiederum der OPTIONAL Operator zur Anwendung. Dieser entspricht in der relationalen Algebra grundsätzlich dem LEFT OUTER JOIN (Barcelo et al. 2015 \cite{DBLP:conf/pods/BarceloPS15}). 
+Conjunctive queries (Select-From-Where Abfragen) sind die Grundlage der heutigen DBMS. Diese Art von Abfragen haben ein Problem mit unvollständigen bzw. semistrukturierten Daten. Wenn eine Abfrage nicht exakt mit den Daten übereinstimmt, kann keine Antwort ermittelt werden. Hier kommt wiederum der OPTIONAL Operator zur Anwendung. Dieser entspricht in der relationalen Algebra dem LEFT OUTER JOIN (Barcelo et al. 2015 \cite{DBLP:conf/pods/BarceloPS15}). 
 Die Arbeit beschäftigt sich im Weiteren mit der effizienten Evaluierung der WDPTs. Diese Evaluierung wird mit Hilfe eines DBMS und des LEFT OUTER JOIN realisiert. Um eine möglichst effiziente Auswertung zu ermöglichen wird eine In-Memory Datenbank verwendet. In-Memory Datenbanken haben den Vorteil, dass die Daten nur im Arbeitsspeicher gehalten werden und somit schneller Ergebnisse liefern können. 
-\section*{Ziel}Die derzeitige Implementierung des Algorithmus \cite{DBLP:conf/www/AhmetajFPSS15} basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn in Kapitel \ref{istZustand} wird die derzeitige Implementierung beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für die derzeitige und zukünftige Implementierung.
+\section*{Ziel}Die derzeitige Implementierung des Algorithmus \textit{Top-Down Evaluation} \cite{OptMat} basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn in Kapitel \ref{istZustand} wird die derzeitige Implementierung beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für die derzeitige und zukünftige Implementierung.
 Das Kapitel \ref{inMemoryDatenbanken} beschäftigt sich mit Konzepten und Anforderungen im Bereich In-Memory Datenbanken. 
 Danach wird im Kapitel \ref{umsetzung} die neue Implementierung unter der Verwendung von einer In-Memory Datenbank erläutert. Abschlie{\ss}end wird der neue Algorithmus mit dem bisherigen Algorithmus verglichen.
 
@@ -421,7 +421,23 @@ Die Zeitmessung des aktuellen Systems beruht auf mehreren Etappen, in welchen ü
 	\item MaxSet - Die Maximierung des Ergebnisses
 \end{enumerate}
 
-Es wurden jeweils drei Durchläufe erfasst. Am Ende wurden die Ergebnisse der Etappen aufsummiert. Weiters wurden die durchschnittlichen Zeiten der Durchläufe pro Etappe errechnet.
+Es wurden jeweils drei Durchläufe erfasst. Am Ende wurden die Ergebnisse der Etappen aufsummiert. Weiters wurden die durchschnittlichen Zeiten der Durchläufe pro Etappe errechnet. Die Rohdaten sind im Kapitel \ref{apendix} zu finden.
+
+\begin{lstlisting}[basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-15.sparql.xml},label={lst:bi15}]
++=======================================================================+
+| Einlesen        | Evaluierung     | Maximierung     | Summe           | 
++=======================================================================+
+| 0.185869        | 7.136303        | 7.037891        | 14.360063       |
++=======================================================================+
+\end{lstlisting}
+
+\begin{lstlisting}[basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-17.sparql.xml},label={lst:bi17}]
++=======================================================================+
+| Einlesen        | Evaluierung     | Maximierung     | Summe           | 
++=======================================================================+
+| 1.022490        | 484.785088      | 0.190920        | 485.998499      |
++=======================================================================+
+\end{lstlisting}
 
 Diese Dateien wurden zum Test herangezogen:
 \begin{itemize}
@@ -447,26 +463,10 @@ Diese Dateien wurden zum Test herangezogen:
 	\end{itemize}
 \end{itemize}
 
-Es fällt auf, dass die Phase Evaluierung den grö\ss ten Optimierungsbedarf aufweist. Bei der kleineren Datei lubm-ex-20-15.sparql.xml benötigt die Evaluierung nur knapp länger als die Maximierung. Bei der grö\ss eren Datei lubm-ex-20-17.sparql.xml ist die Maximierung zu vernachlässigen, da diese Phase nur ca. 0,04\% der Gesamtdauer in Anspruch nimmt. Weiters fällt auf, dass bei steigender Dateigrö\ss e die Phase Einlesen nicht so stark zunimmt wie die Phase Evaluierung.
+Es fällt auf, dass die Phase Evaluierung den grö\ss ten Optimierungsbedarf aufweist. Bei der kleineren Datei lubm-ex-20-15.sparql.xml benötigt die Evaluierung nur knapp länger als die Maximierung. Bei der grö\ss eren Datei lubm-ex-20-17.sparql.xml ist die Maximierung zu vernachlässigen, da diese Phase nur ca. 0,04\% der Gesamtdauer in Anspruch nimmt. Weiters fällt auf, dass bei steigender Dateigrö\ss e die Dauer der Phase Einlesen nicht so stark wächst wie die Phase Evaluierung.
 
 Aus \textit{LUBM: A benchmark for OWL knowledge base systems} \cite{Guo2005158} und \textit{Towards Reconciling {SPARQL} and Certain Answers --- Extended Version.} \cite{ahmetaj2015wwwext} wurden die oben angeführten Dateien generiert.
-Alle Zeitangaben sind in Sekunden angegeben.
-
-\begin{lstlisting}[basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-15.sparql.xml},label={lst:bi15}]
-+=======================================================================+
-| Einlesen        | Evaluierung     | Maximierung     | Summe           | 
-+=======================================================================+
-| 0.185869        | 7.136303        | 7.037891        | 14.360063       |
-+=======================================================================+
-\end{lstlisting}
-
-\begin{lstlisting}[basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-17.sparql.xml},label={lst:bi17}]
-+=======================================================================+
-| Einlesen        | Evaluierung     | Maximierung     | Summe           | 
-+=======================================================================+
-| 1.022490        | 484.785088      | 0.190920        | 485.998499      |
-+=======================================================================+
-\end{lstlisting}
+Alle Zeitangaben sind in Sekunden angegeben.v
 
 \chapter{In-Memory Datenbanken} \label{inMemoryDatenbanken}
 Die folgenden Abschnitte befassen sich mit neuen Anforderungen und Konzepten im Bereich In-Memory Datenbanken. Verwendete Literatur: \cite{BookInMem}
@@ -792,7 +792,7 @@ Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten
 
 
 
-\chapter*{Appendix}
+\chapter*{Appendix} \label{apendix}
 
 \begin{lstlisting}[float,basicstyle=\tiny,caption={Benchmark ITERATIVE, Datei: lubm-ex-20-15.sparql.xml},label={lst:bi15raw}]
 +=================================================================================================+

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.2.2)  31 AUG 2016 18:48
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.2.2)  1 SEP 2016 08:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1704,20 +1704,20 @@ Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 468.
 Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 468.
-LaTeX Font Info:    Try loading font information for OMS+pxr on input line 481.
+LaTeX Font Info:    Try loading font information for OMS+pxr on input line 497.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/pxfonts/omspxr.fd
 File: omspxr.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    Font shape `OMS/pxr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/pxsy/m/n' tried instead on input line 481.
+(Font)              Font shape `OMS/pxsy/m/n' tried instead on input line 497.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 511.
+(babel)             in language  on input line 520.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 511.
+(babel)             in language  on input line 520.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 511.
+(babel)             in language  on input line 520.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 511.
+(babel)             in language  on input line 520.
  [17]
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 524.
@@ -1883,21 +1883,21 @@ Package babel Info: Redefining ngerman shorthand "~
  [31]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 809.
+               Default added (so using `tbp') on input line 807.
 
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 838.
+(babel)             in language  on input line 836.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 838.
+(babel)             in language  on input line 836.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 838.
+(babel)             in language  on input line 836.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 838.
+(babel)             in language  on input line 836.
 [32]
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 838.
+(babel)             in language  on input line 836.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 838.
+(babel)             in language  on input line 836.
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 856.
 Package babel Info: Redefining ngerman shorthand "~
@@ -2019,16 +2019,15 @@ Package babel Info: Redefining ngerman shorthand "~
 (babel)             in language  on input line 2.
 
 bibitemlist
-Missing character: There is no ̌ in font p1xr!
 Missing character: There is no – in font p1xr!
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 73.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 73.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining ngerman shorthand "|
-(babel)             in language  on input line 73.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining ngerman shorthand "~
-(babel)             in language  on input line 73.
+(babel)             in language  on input line 67.
 [43])
 Package babel Info: Redefining ngerman shorthand "|
 (babel)             in language  on input line 1032.
@@ -2063,10 +2062,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 27481 strings out of 493706
- 424133 string characters out of 6145770
- 877797 words of memory out of 5000000
- 30318 multiletter control sequences out of 15000+600000
+ 27482 strings out of 493706
+ 424142 string characters out of 6145770
+ 871844 words of memory out of 5000000
+ 30319 multiletter control sequences out of 15000+600000
  67937 words of font info for 128 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
  62i,24n,94p,1814b,1919s stack positions out of 5000i,500n,10000p,200000b,80000s
