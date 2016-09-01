@@ -789,7 +789,9 @@ Dementsprechend beruht der neue Algorithmus auf diesen Kernpunkten: Identifizier
 
 Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden. Der im Rahmen dieser Bachelorarbeit implementierte Algorithmus ist durch die Verwendung einer In-Memory Datenbank um bis zu 160-mal schneller als der iterative Algorithmus.
    
+Der Teilbereich der Maximierung wurde aus dem iterativen Algorithmus übernommen und nicht verändert. An dieser Stelle besteht noch Optimierungspotential. Bei der kleineren XML-Datei lubm-ex-20-15 macht diese Phase ca. 50\% der Gesamtdauer aus. Eine Möglichkeit wäre die Optimierung ebenfalls mit Hilfe der In-Memory Datenbank durchzuführen. Dazu müsste eine bzw. mehrere geeignete SQL Abfragen erstellt werden, welche die Maximierung übernehmen. Somit könnte der komplette Ablauf effizient über die In-Memory Datenbank abgewickelt werden.
 
+Beim Anlegen der Tabellen in der In-Memory Datenbank werden Indizes angelegt, um die spätere SQL Abfrage zu optimieren. Abhängig von der verwendeten In-Memory Datenbank könnte man hier die Wahl der indizierten Spalten auf die Eingabedaten abstimmen. Ebenfalls könnte bei der Wahl des Indextyps noch Optimierungspotential bestehen. Besonders bei gro\ss en Datenmengen könnten diese Optimierungen eine Rolle spielen.
 
 
 \chapter*{Appendix} \label{apendix}
