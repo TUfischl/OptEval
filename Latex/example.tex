@@ -26,6 +26,8 @@
 \usepackage{listings, color}
 \usepackage{pxfonts}
 \usepackage{csvsimple}
+\usepackage{braket}
+\usepackage{ifsym}
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Michael Heinzl} % The author name without titles.
@@ -191,12 +193,12 @@ SELECT Gebirge.A, Gebirge.B, ErstbesteigungWinter.D, Kontinent.E
 	WHERE Höhe.C = "8611"
 \end{lstlisting}
 
-
-Ähnlich dazu verwendet man im Semantic Web die Abfragesprache SPARQL. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language} und beruht auf dem Datenmodel RDF (Resource Description Framework). RDF ist das Standard Datenmodell des Sematic Web und ist eine Empfehlung des W3C (World Wide Web Consortium). 
+Conjunctive queries (Select-From-Where Abfragen) sind die Grundlage der heutigen DBMS. Diese Art von Abfragen haben ein Problem mit unvollständigen bzw. semistrukturierten Daten. Wenn eine Abfrage nicht exakt mit den Daten übereinstimmt, kann keine Antwort ermittelt werden. Dieses Problem wird in der Abfragesprache SPARQL thematisiert. (Barcelo et al. 2015 \cite{DBLP:conf/pods/BarceloPS15}) 
+Im Semantic Web wird die Abfragesprache SPARQL verwendet. SPARQL steht für \textit{SPARQL Protocol And RDF Query Language} und beruht auf dem Datenmodel RDF (Resource Description Framework). RDF ist das Standard Datenmodell des Sematic Web und ist eine Empfehlung des W3C (World Wide Web Consortium). 
 
 Grundsätzlich ist SPARQL ein graphenbasierte Abfragesprache, welche aus drei Teilen besteht: Dem Musterabgleich, der Lösungsmodifikation und der Ausgabe. Einzeln betrachtet scheinen diese Funktionen relativ simpel, doch die Kombination macht SPARQL zu einer komplexen Sprache. In P{\'e}rez et al. 2009 \cite{PAG09} wurde dieser Themenbereich behandelt und die Klasse der \textit{well-designed SPARQL graph patterns} wurde eingeführt. Diese weisen unteranderem gute Eigenschaften für Abfrage Evaluierungen auf.
 
-In Leteleir et al. 2013 \cite{LPPS2013} wurde eine Baumdarstellung von SPARQL Abfragen eingeführt, die sogennaten SPARQL \textit{pattern trees} und im speziellen die \textit{well-designed pattern trees} (WDPTs). Die Baumdarstellung der Abfrage spielt eine zentrale Rolle für Optimierungen. Eine besondere Bedeutung in SPARQL hat der OPTIONAL Operator. Diese Operation ermöglicht, Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Teilergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern bleiben Teil der Lösung. In Leteleir et al. 2013 \cite{LPPS2013} wird hervorgehoben, dass mehr als 45\% der Abfragen auf dem SPARQL endpoint DBPedia den OPTIONAL Operator verwenden.
+Eine besondere Bedeutung in SPARQL hat der OPTIONAL Operator. Diese Operation ermöglicht, Abfragen zu formulieren, welche das Ergebnis um gewisse Teile erweitert falls diese verfügbar sind. Dabei werden die Teilergebnisse bei denen es nicht zutrifft, nicht verworfen, sondern bleiben Teil der Lösung. In Leteleir et al. 2013 \cite{LPPS2013} wird hervorgehoben, dass mehr als 45\% der Abfragen auf dem SPARQL endpoint DBPedia den OPTIONAL Operator verwenden. Zusammen mit dem AND Operator kann das \{AND, OPT\}-Fragment als Baum dargestellt werden. In Leteleir et al. 2013 \cite{LPPS2013} wurde eine Baumdarstellung von SPARQL Abfragen eingeführt, die sogennaten SPARQL \textit{pattern trees} und im speziellen die \textit{well-designed pattern trees} (WDPTs). Die Baumdarstellung der Abfrage spielt eine zentrale Rolle für Optimierungen. 
 
 In Listing \ref{sparqlQueryExampleDB} wird gezeigt wie man durch den Einsatz des OPTIONAL Operators auch Teilergebnisse einer Abfrage erhält.
 
@@ -223,19 +225,51 @@ Das Ergebnis der SPARQL Abfrage (Listing \ref{sparqlQueryExampleDB}) enthält da
 	\label{sparqlErgebnis}
 \end{figure}
 
-Conjunctive queries (Select-From-Where Abfragen) sind die Grundlage der heutigen DBMS. Diese Art von Abfragen haben ein Problem mit unvollständigen bzw. semistrukturierten Daten. Wenn eine Abfrage nicht exakt mit den Daten übereinstimmt, kann keine Antwort ermittelt werden. Hier kommt wiederum der OPTIONAL Operator zur Anwendung. Dieser entspricht in der relationalen Algebra dem LEFT OUTER JOIN (Barcelo et al. 2015 \cite{DBLP:conf/pods/BarceloPS15}). 
-Die Arbeit beschäftigt sich im Weiteren mit der effizienten Evaluierung der WDPTs. Diese Evaluierung wird mit Hilfe eines DBMS und des LEFT OUTER JOIN realisiert. Um eine möglichst effiziente Auswertung zu ermöglichen wird eine In-Memory Datenbank verwendet. In-Memory Datenbanken haben den Vorteil, dass die Daten nur im Arbeitsspeicher gehalten werden und somit schneller Ergebnisse liefern können. 
-\section*{Ziel}Die derzeitige Implementierung des Algorithmus \textit{Top-Down Evaluation} \cite{OptMat} basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn in Kapitel \ref{istZustand} wird die derzeitige Implementierung beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für die derzeitige und zukünftige Implementierung.
+In dieser Arbeit gehen wir davon aus, dass die einzelnen Knoten des WDPT ausgewertet sind. Dies ermöglicht uns, dass unser Algorithmus unabhängig von der in den Knoten verwendeten Abfragesprache ist. So ist es auch möglich nicht nur den SPARQL Musterabgleich in den Knoten zu verwenden, sondern es können auch SPJ-Abfragen (Select-Projection-Join Abfragen) oder relationale Daten formuliert werden. Dies wurde erst kürzlich vorgeschlagen (PODS '15: Barcelo et al. Efficient Evaluation and Approximation of Well-designed Pattern Trees \cite{DBLP:conf/pods/BarceloPS15}). In WDPT werden die ausgewerteten Knoten mit Hilfe des OPTIONAL Operators zusammengeführt. Derzeit wird dafür der Top-Down-Algorithmus \cite{LPPS2013} in einer iterativen Variante implementiert \cite{OptMat}.
+Diese Arbeit beschäftigt sich mit der effizienten Auswertung der WDPTs. Diese Auswertung wird mit Hilfe eines DBMS und des LEFT OUTER JOIN realisiert. Um eine möglichst effiziente Auswertung zu ermöglichen wird eine In-Memory Datenbank verwendet. In-Memory Datenbanken haben den Vorteil, dass die Daten nur im Arbeitsspeicher gehalten werden und somit schneller Ergebnisse liefern können. 
+\section*{Ziel}Die derzeitige Implementierung \cite{OptMat} des Algorithmus \textit{Top-Down Evaluation} \cite{LPPS2013} basiert auf einem einfachen iterativen Vorgehen. Das Ziel ist die Implementierung eines Algorithmus, welcher unter Zuhilfenahme einer In-Memory Datenbank die Leistung verbessert und somit die Durchlaufzeit verringert. Bei diesen Tests kommen verschiedene In-Memory Datenbanken zum Einsatz, um für diesen speziellen Anwendungsfall eine geeignete Implementierung auszuwählen.\section*{Aufbau der Arbeit}Die Arbeit ist folgenderma{\ss}en aufgebaut. Zu Beginn in Kapitel \ref{basisdef} werden Basisdefinitionen erläutert. In Kapitel \ref{istZustand} wird die derzeitige Implementierung beschrieben und analysiert. Im speziellen wird die Leistung des derzeitigen Algorithmus als Orientierungswert für den späteren Vergleich herangezogen. Des Weiteren wird die Datenstruktur der Eingabedaten erläutert, diese Daten dienen als Eingabe für die derzeitige und zukünftige Implementierung.
 Das Kapitel \ref{inMemoryDatenbanken} beschäftigt sich mit Konzepten und Anforderungen im Bereich In-Memory Datenbanken. 
 Danach wird im Kapitel \ref{umsetzung} die neue Implementierung unter der Verwendung von einer In-Memory Datenbank erläutert. Abschlie{\ss}end wird der neue Algorithmus mit dem bisherigen Algorithmus verglichen.
 
-\chapter{Basisdefinitionen}
+\chapter{Basisdefinitionen} \label{basisdef}
 \paragraph{RDF}
 Resource Description Framework (RDF) ist ein Datenmodell für den Datenaustausch im Web. Die Grundstruktur begünstigt das Zusammenführen von Daten, auch wenn sich die zugrundeliegenden Schemen unterscheiden. Ein weiterer Vorteil liegt darin, dass einfach Änderungen am Schema vorgenommen werden können ohne, dass sich der Benutzer anpassen muss. RDF baut auf der Struktur von URIs auf. URIs werden verwendet, um ein Verknüpfung und deren Enden zu identifizieren. Diese Verknüpfung ergibt ein Tripel.
+
 $U$ ist eine abzählbar unendliche Menge aus URIs. Ein RDF Tripel $t$ ist jedes Tupel $t \in U \times U \times U$. Ein RDF Graph $G$ ist jene Menge $G \subseteq U \times U \times U$ aus Tripeln. Leere Knoten sind nicht zulässig. \\ \cite{rdfSite}  
 
 \paragraph{SPARQL}
-SPARQL Protocol And RDF Query Language (SPARQL) ist eine graphenbasierte Abfragesprache für RDF.  Sei $V$ eine unendliche Menge an Variablen. $U \cap V = \emptyset$ Variablen werden mit einem führenden Fragezeichen markiert z.B. ?x. Ein SPARQL Tripel $t$ ist ein Tupel in $(U \cup V) \times (U \cup V) \times (U \cup V)$.  
+SPARQL Protocol And RDF Query Language (SPARQL) ist eine graphenbasierte Abfragesprache für RDF. Grundsätzlich besteht SPARQL aus diesen drei Teilen: Musterabgleich, Lösungsmodifikation und Ausgabe.
+
+Der Musterabgleich beschäftigt sich unter anderem mit dem Abgleich von Mustern in Graphen, wie z.B. optionale Muster, Vereinigung von Muster oder Filterung von Muster. Die Lösungsmodifikation macht es uns möglich, nach der Auswertung die Daten mit klassischen Operationen wie z.B. \textit{Projektion}, \textit{distict}, \textit{limit} oder \textit{offset} zu bearbeiten. Die Ausgabe kann verschiedene Typen annehmen: Ja/Nein Abfragen, Selektion von Werten von Variablen, welche mit einem Muster übereinstimmen, Konstruktion neuer Tripel und Beschreibung von Ressourcen.
+
+Um SPARQL genauer zu erläutern, muss eine gewisse Terminologie eingeführt werden.
+ Sei $V$ eine unendliche Menge an Variablen. $U \cap V = \emptyset$ Variablen werden mit einem führenden Fragezeichen markiert z.B. ?x. Ein SPARQL Tripel $t$ ist ein Tupel in $(U \cup V) \times (U \cup V) \times (U \cup V)$. $I$, $B$ und $L$ (IRIs, leere Knoten und Literale) sind paarweise disjunkt. Die Vereinigung $I \cup B \cup L$ ist $T$. Ein \textit{Mapping} $\mu$ von $V$ nach $T$ ist eine partielle Funktion $\mu : V \rightarrow T$. $\mu (t)$ symbolisiert die Ersetzung der Variablen im Tripel $t$ entsprechend zu $\mu$. Die Domain von $\mu$, dom($\mu$), ist das Subset von $V$ in dem $\mu$ definiert ist. Zwei Mappings $\mu_1$ und $\mu_2$ sind \textit{kompatibel}, wenn für alle $x \in dom(\mu_1) \cap dom(\mu_2)$, ist der Fall, dass $\mu(x) = \mu(x)$, das hei\ss t wenn $\mu_1 \cup \mu_2$ auch ein Mapping ist. Das leere Mapping ist mit jeden anderen Mapping kompatibel. Ebenfalls sind zwei Mappings mit disjunkten Domains kompatibel. $\Omega_1$ und $\Omega_2$ sind Mengen aus Mappings. JOIN, UNION und DIFFERENCE dieser Mengen sind wie folgt definiert:
+
+ $\Omega_1 \Join \Omega_2 = \Set{ \mu_1 \cup \mu_2 | \mu_1 \in \Omega_1, \mu_2 \in \Omega_2 \ \text{sind kompatibel Mappings} }$,
+
+ $\Omega_1 \cup \ \Omega_2 = \Set{ \mu | \mu \in \Omega_1 \ or \ \mu \in \Omega_2 }$,
+
+ $\Omega_1 \backslash \ \Omega_2 = \Set{ \mu \in \Omega_1 | \text{für alle} \ \mu' \in \Omega_2, \mu \ \text{und} \ \mu' \ \text{sind nicht kompatibel} }$.
+
+Beruhend auf diesen Operationen ist der LEFT OUTER JOIN wie folgt definiert:
+
+$\Omega_1 {\tiny \textifsym{d|><|}} \ \Omega_2 = (\Omega_1 \Join \Omega_2) \cup (\Omega_1 \backslash \ \Omega_2)$
+
+
+Nun können wir die Semantik der \textit{graph pattern} Ausdrücke als Funktion $\llbracket \cdot \rrbracket_D$ darstellen. Diese Funktion nimmt als Parameter ein Pattern und gibt eine Menge von Mappings zurück. $D$ bezeichnet die zugrunde liegende RDF Datenmenge und $t$ ein \textit{triple pattern}. Die Auswertung des \textit{graph pattern} über $D$ wird folgenderma\ss en definiert:
+
+$\llbracket t \rrbracket_D = \Set{ \mu | dom(\mu) = var(t) \ und \ \mu(t) \in D } \ \text{, wobei} \ var(t) \ \text{die Menge von Variablen in} \ t \ \text{ist.}$ 
+
+Nun können wir die SPARQL Operatoren \textit{AND}, \textit{OPT} und \textit{UNION} wie folgt definieren, wobei $P_1$ und $P_2$ \textit{graph pattern} sind:
+
+$\llbracket (P_1 \ AND \ P_2) \rrbracket_D = \llbracket P_1 \rrbracket_D \Join \llbracket P_2 \rrbracket_D$
+
+$\llbracket (P_1 \ OPT \ P_2) \rrbracket_D = \llbracket P_1 \rrbracket_D \ \textifsym{d|><|} \ \llbracket P_2 \rrbracket_D$
+
+$\llbracket (P_1 \ UNION \ P_2) \rrbracket_D = \llbracket P_1 \rrbracket_D \cup \llbracket P_2 \rrbracket_D$
+
+
+
 
 \begin{lstlisting}[language=Sparql,caption={SPARQL Beispiel},frame = single,label={sparqlQueryExample}]
 SELECT ?A, ?B, ?D
@@ -245,13 +279,13 @@ SELECT ?A, ?B, ?D
 
 Das Listing \ref{sparqlQueryExample} zeigt ein Beispiel einer SPARQL Abfrage. Der SELECT Teil wählt die Variablen für das Ergebnis aus. Im WHERE Teil wird das Anfragemuster dargestellt, dieses verwendet die Tripel Syntax. Der Punkt repräsentiert eine AND Verknüpfung. Der OPTIONAL Operator fügt die Teilergebnisse nur hinzu, wenn diese vorhanden sind.
 
-\cite{SPARQL}
+\cite{SPARQL,PAG09}
 
 
 \paragraph{WDPT}
-Ein Graph welcher nur die Operatoren AND und OPT enthält ist in OPT Normalform, wenn die OPTIONAL Operatoren nicht im Geltungsbereich eines AND Operator vorkommt. Es wurde gezeigt, dass jeder \textit{well-designed graph pattern} in OPT Normalform umgewandelt werden kann. Ein \textit{pattern tree} (PT) $X$ ist ein Paar aus $(T,P)$ wobei $T = (V,E,r)$ ein ungeordneter Baum ist und $P = \{P_n \, | \, n \in V\}$ ist die Beschriftung der Knoten in $V$ ist. Ein \textit{well-designed pattern tree} ist ein \textit{pattern tree }$X = (T,P)$, welcher für jede Variable $?x \in vars(X)$, die Knoten $\{n \in V(X)\, | \, ?x \in vars(n)\}$ einen verbunden Subgraphen beinhalten. 
+Ein \textit{pattern tree} (PT) $X$ ist ein Paar aus $(T,P)$ wobei $T = (V,E,r)$ ein ungeordneter Baum ist und $P = \{P_n \, | \, n \in V\}$ ist die Beschriftung der Knoten in $V$. Ein \textit{well-designed pattern tree} ist ein \textit{pattern tree }$X = (T,P)$, welcher für jede Variable $?x \in vars(X)$, die Knoten $\{n \in V(X)\, | \, ?x \in vars(n)\}$ einen verbunden Subgraphen beinhalten. Ein \textit{well-designed pattern tree} kann in eine SPARQL Abfrage umgewandelt werden. Weiters ist anzumerken, dass die Reihenfolge der Kindknoten keine Rolle spielt. Das folgt aus der Äquivalenz $\left( \left( P_1 OPT \ P_2 \right) OPT \ P_3 \right) \equiv \left( \left( P_1 OPT \ P_3 \right) OPT \ P_2 \right)$.
 
-\cite{DBLP:conf/www/AhmetajFPSS15}
+\cite{LPPS2013}
 
 \chapter{Ist-Zustand} \label{istZustand}
 \section{Datenstruktur} \label{dataStruk}
@@ -789,7 +823,7 @@ Dementsprechend beruht der neue Algorithmus auf diesen Kernpunkten: Identifizier
 
 Nach Evaluierung des neuen Systems konnten die Ergebnisse mit den Ausgangswerten verglichen werden. Der im Rahmen dieser Bachelorarbeit implementierte Algorithmus ist durch die Verwendung einer In-Memory Datenbank um bis zu 160-mal schneller als der iterative Algorithmus.
    
-Der Teilbereich der Maximierung wurde aus dem iterativen Algorithmus übernommen und nicht verändert. An dieser Stelle besteht noch Optimierungspotential. Bei der kleineren XML-Datei lubm-ex-20-15 macht diese Phase ca. 50\% der Gesamtdauer aus. Eine Möglichkeit wäre die Optimierung ebenfalls mit Hilfe der In-Memory Datenbank durchzuführen. Dazu müsste eine bzw. mehrere geeignete SQL Abfragen erstellt werden, welche die Maximierung übernehmen. Somit könnte der komplette Ablauf effizient über die In-Memory Datenbank abgewickelt werden.
+\paragraph{Ausblick} Der Teilbereich der Maximierung wurde aus dem iterativen Algorithmus übernommen und nicht verändert. An dieser Stelle besteht noch Optimierungspotential. Bei der kleineren XML-Datei lubm-ex-20-15 macht diese Phase ca. 50\% der Gesamtdauer aus. Eine Möglichkeit wäre die Optimierung ebenfalls mit Hilfe der In-Memory Datenbank durchzuführen. Dazu müsste eine bzw. mehrere geeignete SQL Abfragen erstellt werden, welche die Maximierung übernehmen. Somit könnte der komplette Ablauf effizient über die In-Memory Datenbank abgewickelt werden.
 
 Beim Anlegen der Tabellen in der In-Memory Datenbank werden Indizes angelegt, um die spätere SQL Abfrage zu optimieren. Abhängig von der verwendeten In-Memory Datenbank könnte man hier die Wahl der indizierten Spalten auf die Eingabedaten abstimmen. Ebenfalls könnte bei der Wahl des Indextyps noch Optimierungspotential bestehen. Besonders bei gro\ss en Datenmengen könnten diese Optimierungen eine Rolle spielen.
 

@@ -8,35 +8,36 @@
 \contentsline {chapter}{\chapternumberline {2}Basisdefinitionen}{5}{chapter.2}
 \contentsline {paragraph}{RDF}{5}{section*.10}
 \contentsline {paragraph}{SPARQL}{5}{section*.11}
-\contentsline {paragraph}{WDPT}{6}{section*.12}
-\contentsline {chapter}{\chapternumberline {3}Ist-Zustand}{7}{chapter.3}
-\contentsline {section}{\numberline {3.1}Datenstruktur}{7}{section.3.1}
-\contentsline {section}{\numberline {3.2}Implementierung}{11}{section.3.2}
-\contentsline {paragraph}{Einlesen}{11}{section*.14}
-\contentsline {paragraph}{Vereinigung}{11}{section*.16}
-\contentsline {paragraph}{Kompatibilität}{11}{section*.17}
-\contentsline {paragraph}{Maximierung}{14}{section*.22}
-\contentsline {section}{\numberline {3.3}Benchmarking}{17}{section.3.3}
-\contentsline {chapter}{\chapternumberline {4}In-Memory Datenbanken}{19}{chapter.4}
-\contentsline {section}{\numberline {4.1}Neue Anforderungen an Datenbanksysteme}{19}{section.4.1}
-\contentsline {section}{\numberline {4.2}Konzepte}{21}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Verwendung des Hauptspeichers}{21}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Spaltenorientierung}{21}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Aktive und passive Daten}{22}{subsection.4.2.3}
-\contentsline {section}{\numberline {4.3}Konkrete In-Memory Datenbanken}{22}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}H2 Database Engine}{22}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}HyperSQL DataBase}{24}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Apache Derby}{26}{subsection.4.3.3}
-\contentsline {chapter}{\chapternumberline {5}Umsetzung}{27}{chapter.5}
-\contentsline {section}{\numberline {5.1}Konzept}{27}{section.5.1}
-\contentsline {section}{\numberline {5.2}Implementierung}{28}{section.5.2}
-\contentsline {paragraph}{Identifizieren der Spalten der \textit {JOIN} Bedingung}{29}{section*.33}
-\contentsline {paragraph}{Anlegen der Tabellen}{30}{section*.34}
-\contentsline {paragraph}{Einfügen der Daten}{31}{section*.35}
-\contentsline {paragraph}{Generieren und ausführen der \textit {SELECT} Abfrage}{31}{section*.36}
-\contentsline {section}{\numberline {5.3}Benchmarking}{31}{section.5.3}
-\contentsline {chapter}{\chapternumberline {6}Schlussfolgerung}{33}{chapter.6}
-\contentsline {chapter}{Abbildungsverzeichnis}{39}{section*.45}
-\contentsline {chapter}{Tabellenverzeichnis}{39}{section*.46}
-\contentsline {chapter}{Algorithmenverzeichnis}{41}{chapter*.47}
-\contentsline {chapter}{Literaturverzeichnis}{43}{section*.49}
+\contentsline {paragraph}{WDPT}{7}{section*.12}
+\contentsline {chapter}{\chapternumberline {3}Ist-Zustand}{9}{chapter.3}
+\contentsline {section}{\numberline {3.1}Datenstruktur}{9}{section.3.1}
+\contentsline {section}{\numberline {3.2}Implementierung}{13}{section.3.2}
+\contentsline {paragraph}{Einlesen}{13}{section*.14}
+\contentsline {paragraph}{Vereinigung}{13}{section*.16}
+\contentsline {paragraph}{Kompatibilität}{13}{section*.17}
+\contentsline {paragraph}{Maximierung}{16}{section*.22}
+\contentsline {section}{\numberline {3.3}Benchmarking}{19}{section.3.3}
+\contentsline {chapter}{\chapternumberline {4}In-Memory Datenbanken}{21}{chapter.4}
+\contentsline {section}{\numberline {4.1}Neue Anforderungen an Datenbanksysteme}{21}{section.4.1}
+\contentsline {section}{\numberline {4.2}Konzepte}{23}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Verwendung des Hauptspeichers}{23}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Spaltenorientierung}{23}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Aktive und passive Daten}{24}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Konkrete In-Memory Datenbanken}{24}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}H2 Database Engine}{24}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}HyperSQL DataBase}{26}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Apache Derby}{28}{subsection.4.3.3}
+\contentsline {chapter}{\chapternumberline {5}Umsetzung}{29}{chapter.5}
+\contentsline {section}{\numberline {5.1}Konzept}{29}{section.5.1}
+\contentsline {section}{\numberline {5.2}Implementierung}{30}{section.5.2}
+\contentsline {paragraph}{Identifizieren der Spalten der \textit {JOIN} Bedingung}{31}{section*.33}
+\contentsline {paragraph}{Anlegen der Tabellen}{32}{section*.34}
+\contentsline {paragraph}{Einfügen der Daten}{33}{section*.35}
+\contentsline {paragraph}{Generieren und ausführen der \textit {SELECT} Abfrage}{33}{section*.36}
+\contentsline {section}{\numberline {5.3}Benchmarking}{33}{section.5.3}
+\contentsline {chapter}{\chapternumberline {6}Schlussfolgerung}{35}{chapter.6}
+\contentsline {paragraph}{Ausblick}{35}{section*.38}
+\contentsline {chapter}{Abbildungsverzeichnis}{41}{section*.46}
+\contentsline {chapter}{Tabellenverzeichnis}{41}{section*.47}
+\contentsline {chapter}{Algorithmenverzeichnis}{43}{chapter*.48}
+\contentsline {chapter}{Literaturverzeichnis}{45}{section*.50}
