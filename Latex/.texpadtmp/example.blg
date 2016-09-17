@@ -8,43 +8,43 @@ refers to entry "DBLP:conf/foiks/2016", which doesn't exist
 Warning--I didn't find a database entry for "DBLP:conf/foiks/2016"
 You've used 14 entries,
             2543 wiz_defined-function locations,
-            650 strings with 7087 characters,
-and the built_in function-call counts, 5536 in all, are:
-= -- 550
+            655 strings with 7370 characters,
+and the built_in function-call counts, 5742 in all, are:
+= -- 580
 > -- 283
 < -- 9
 + -- 100
 - -- 98
-* -- 360
-:= -- 930
+* -- 390
+:= -- 955
 add.period$ -- 51
 call.type$ -- 14
 change.case$ -- 93
 chr.to.int$ -- 14
 cite$ -- 14
-duplicate$ -- 208
-empty$ -- 390
+duplicate$ -- 209
+empty$ -- 406
 format.name$ -- 115
-if$ -- 1138
+if$ -- 1180
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 8
 newline$ -- 81
 num.names$ -- 42
-pop$ -- 104
+pop$ -- 100
 preamble$ -- 1
 purify$ -- 107
 quote$ -- 0
-skip$ -- 180
+skip$ -- 179
 stack$ -- 0
-substring$ -- 221
-swap$ -- 40
+substring$ -- 283
+swap$ -- 38
 text.length$ -- 9
 text.prefix$ -- 6
 top$ -- 0
 type$ -- 108
 warning$ -- 0
-while$ -- 47
+while$ -- 50
 width$ -- 20
-write$ -- 194
+write$ -- 198
 (There was 1 error message)

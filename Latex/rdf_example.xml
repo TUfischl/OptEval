@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ptresult>
+  <node> <!-- ?A Gebirge ?B . ?A Höhe "8611" -->
+    <mapping>
+      <var name="?A">K2</var>
+      <var name="?B">Karakorum</var>
+    </mapping>
+
+    <node> <!-- OPTIONAL { ?A ErstbesteigungWinter ?D } -->
+    </node>
+
+    <node> <!-- OPTIONAL { ?B Kontinent ?E }  -->
+      <mapping>
+        <var name="?B">Karakorum</var>
+        <var name="?E">Asien</var>
+      </mapping>
+    </node>
+
+  </node>
+</ptresult>

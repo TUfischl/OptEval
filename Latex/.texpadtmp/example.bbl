@@ -10,10 +10,11 @@ Shqiponja Ahmetaj, Wolfgang Fischl, Markus Kr{\"{o}}ll, Reinhard Pichler,
   Proceedings}, pages 169--190, 2016.
 
 \bibitem[AFP{\etalchar{+}}15]{DBLP:conf/www/AhmetajFPSS15}
-Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Simkus, and
+Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas \v{S}imkus, and
   Sebastian Skritek.
 \newblock Towards reconciling {SPARQL} and certain answers.
-\newblock In {\em Proc.\ {WWW} 2015}, pages 23--33. {ACM}, 2015.
+\newblock In {\em Proceedings of the 24th International Conference on World
+  Wide Web}, WWW '15, pages 23--33, New York, NY, USA, 2015. ACM.
 
 \bibitem[AFP{\etalchar{+}}16]{ahmetaj2015wwwext}
 Shqiponja Ahmetaj, Wolfgang Fischl, Reinhard Pichler, Mantas Simkus, and
@@ -29,10 +30,12 @@ Apache.
 \newblock [Online; accessed 01.04.2016].
 
 \bibitem[BPS15]{DBLP:conf/pods/BarceloPS15}
-Pablo Barcel{\'{o}}, Reinhard Pichler, and Sebastian Skritek.
+Pablo Barcelo, Reinhard Pichler, and Sebastian Skritek.
 \newblock Efficient evaluation and approximation of well-designed pattern
   trees.
-\newblock In {\em Proc.\ {PODS} 2015}, pages 131--144. {ACM}, 2015.
+\newblock In {\em Proceedings of the 34th ACM SIGMOD-SIGACT-SIGAI Symposium on
+  Principles of Database Systems}, PODS '15, pages 131--144, New York, NY, USA,
+  2015. ACM.
 
 \bibitem[Eng16]{H2Adv}
 H2~Database Engine.
@@ -45,8 +48,8 @@ Yuanbo Guo, Zhengxiang Pan, and Jeff Heflin.
 \newblock Lubm: A benchmark for \{OWL\} knowledge base systems.
 \newblock {\em Web Semantics: Science, Services and Agents on the World Wide
   Web}, 3(2–3):158 -- 182, 2005.
-\newblock Selcted Papers from the International Semantic Web Conference, 2004
-  ISWC, 20043rd. International Semantic Web Conference, 2004.
+\newblock Selected Papers from the International Semantic Web Conference, 2004
+  ISWC, 2004 3rd. International Semantic Web Conference, 2004.
 
 \bibitem[Gro14]{rdfSite}
 RDF~Working Group.
@@ -63,7 +66,7 @@ The HSQL~Development Group.
 \bibitem[LPPS13]{LPPS2013}
 Andr{\'e}s Letelier, Jorge P{\'e}rez, Reinhard Pichler, and Sebastian Skritek.
 \newblock Static analysis and optimization of semantic web queries.
-\newblock {\em {ACM} Trans. Database Syst.}, 38(4):25, 2013.
+\newblock {\em ACM Trans. Database Syst.}, 38(4):25:1--25:45, December 2013.
 
 \bibitem[Ora16]{AddBatch}
 Oracle.
@@ -76,7 +79,7 @@ Oracle.
 \bibitem[PAG09]{PAG09}
 Jorge P{\'e}rez, Marcelo Arenas, and Claudio Gutierrez.
 \newblock Semantics and complexity of {SPARQL}.
-\newblock {\em {ACM} Trans. Database Syst.}, 34(3), 2009.
+\newblock {\em ACM Trans. Database Syst.}, 34(3):16:1--16:45, September 2009.
 
 \bibitem[Pla13]{BookInMem}
 Hasso Plattner.
