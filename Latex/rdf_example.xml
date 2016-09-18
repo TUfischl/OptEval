@@ -6,9 +6,6 @@
       <var name="?B">Karakorum</var>
     </mapping>
 
-    <node> <!-- OPTIONAL { ?A ErstbesteigungWinter ?D } -->
-    </node>
-
     <node> <!-- OPTIONAL { ?B Kontinent ?E }  -->
       <mapping>
         <var name="?B">Karakorum</var>
